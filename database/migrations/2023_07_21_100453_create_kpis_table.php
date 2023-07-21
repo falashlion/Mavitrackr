@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('kpis', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
             $table->string('title');
-            $table->uuid('strategic_domains_id');
-            $table->foreign('strategic_domains_id')->references('id')->on('strategic_domains')->onDelete('cascade');
+            $table->unsignedBigInteger('kpas_id');
+            $table->foreign('kpas_id')->references('id')->on('kpas')->onDelete('cascade');
             $table->timestamps();
         });
     }

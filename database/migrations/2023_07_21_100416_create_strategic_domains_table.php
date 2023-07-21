@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('strategic_domains', function (Blueprint $table) {
-            $table->increments('id');
-            $table->enum('strategic_domains', ['Financial', 'Customer', 'Process', 'People']);
+            $table->increments('id')->primary();
+            $table->enum('title', ['Financial', 'Customer', 'Process', 'People']);
             $table->timestamps();
         });
     }

@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class kpis extends Model
 {
     use HasFactory;
+    public function kpas()
+    {
+        return $this->hasMany(kpas::class);
+    }
 }
