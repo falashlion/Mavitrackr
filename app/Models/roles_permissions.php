@@ -4,11 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class job_titles extends Model
+class roles_permissions extends Pivot
 {
     use HasFactory;
-    public function users(){
-        return $this->hasMany(users::class);
-    }
+    protected $table = 'roles_permissions';
 }

@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class feedback extends Model
 {
     use HasFactory;
+    public function kpis(){
+        return $this->hasMany(kpis::class);
+    }
 }

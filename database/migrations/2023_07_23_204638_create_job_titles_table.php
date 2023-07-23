@@ -4,7 +4,10 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+ /**
+  * This carries a list of all jobs in the mavitrackr tool
+  */
+ class CreatesJob_titlesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,6 +16,9 @@ return new class extends Migration
     {
         Schema::create('job_titles', function (Blueprint $table) {
             $table->id();
+            $table->string('title')->unique();
+            $table->unsignedBigInteger('users_id')->nullable();
+            $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

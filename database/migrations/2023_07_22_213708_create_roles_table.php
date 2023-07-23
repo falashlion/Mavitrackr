@@ -4,16 +4,17 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
- class CreateStrategicdomainsTable extends Migration
+class CreateRolesTable extends Migration
 {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('strategic_domains', function (Blueprint $table) {
+        Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->enum('title', ['Financial', 'Customer', 'Process', 'People']);
+            $table->string('title');
+            $table->text('description');
             $table->timestamps();
         });
     }
@@ -23,6 +24,6 @@ use Illuminate\Support\Facades\Schema;
      */
     public function down(): void
     {
-        Schema::dropIfExists('strategic_domains');
+        Schema::dropIfExists('roles');
     }
 };
