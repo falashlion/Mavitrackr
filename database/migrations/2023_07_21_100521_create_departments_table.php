@@ -14,9 +14,6 @@ use Illuminate\Support\Facades\Schema;
         Schema::create('departments', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->boolean('manager');
-            $table->unsignedBigInteger('users_id');
-            $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

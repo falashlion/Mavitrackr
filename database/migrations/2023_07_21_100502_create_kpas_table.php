@@ -15,9 +15,8 @@ use Illuminate\Support\Facades\Schema;
                 $table->id();
                 $table->string('title');
                 $table->unsignedBigInteger('strategic_domains_id');
-                $table->foreign('strategic_domains_id')->references('id')->on('strategic_domains')->onDelete('cascade');
                 $table->timestamps();
-
+                $table->foreign('strategic_domains_id')->references('id')->on('strategic_domains')->onDelete('cascade');
         });
     }
 

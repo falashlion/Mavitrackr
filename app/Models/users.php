@@ -20,8 +20,11 @@ class users extends Model
     {
         return $this->belongsToMany(roles::class);
     }
-    public function job_titles()
+    /**
+     * Summary of positions
+     */
+    public function positions()
     {
-        return $this->belongsToMany(job_titles::class);
+        return $this->belongsToMany(positions::class);
     }
 }

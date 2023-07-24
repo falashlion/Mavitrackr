@@ -11,17 +11,17 @@ use Illuminate\Support\Facades\Schema;
      */
     public function up(): void
     {
-        Schema::table('kpis', function (Blueprint $table) {
+        Schema::create('kpis', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->unsignedBigInteger('kpas_id');
             $table->foreign('kpas_id')->references('id')->on('kpas')->onDelete('cascade');
             $table->unsignedBigInteger('users_id');
             $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
-            $table->enum('indicators', ['Unsatifactory', 'Partial', 'Achieve', 'Exceed', 'Exceptional'])->nullable();
+            $table->json('indicators');
             $table->decimal('weight', 5, 2)->nullable();
             $table->integer('weighted_average_score')->nullable();
-            $table->integer('score');
+            $table->integer('score')->nullable();
             $table->timestamps();
     });
     }

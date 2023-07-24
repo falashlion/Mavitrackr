@@ -14,17 +14,19 @@ use Illuminate\Support\Facades\Schema;
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('user_matricule')->unique();
-            $table->string('Password', 60);
-            $table->rememberToken();
-            $table->string('profile_image');
+            $table->string('Password');
+            $table->string('profile_image')->nullable();
             $table->string('first_name');
             $table->string('last_name');
             $table->string('phone')->unique();
-            $table->string('adresse');
-            $table->unsignedBigInteger('job_titles_id');
-            $table->foreign('job_titles_id')->references('id')->on('job_titles')->onDelete('cascade');
-            $table->enum('gender', ['Male','Female','Other']);
+            $table->string('address')->nullable();
+            $table->boolean('is_manager')->default(false);
+            $table->enum('gender', ['Male','Female']);
             $table->string('email')->unique();
+            $table->unsignedBigInteger('departments_id');
+            $table->unsignedBigInteger('positions_id');
+            $table->foreign('departments_id')->references('id')->on('departments')->onDelete('cascade');
+            $table->foreign('positions_id')->references('id')->on('positions')->onDelete('cascade');
             $table->timestamps();
         });
     }
