@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\V1\userController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,11 +20,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['prefix' =>'V1', 'middleware' => 'api'], function ($router) {
-    Route::get('/users', [userController::class], 'userController@index');
+Route::group(['prefix' =>'V1', 'middleware' => 'api'], function () {
+    Route::get('/users', [userController::class, 'index']);
 
 });
-
 Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'

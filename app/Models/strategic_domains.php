@@ -10,6 +10,6 @@ class strategic_domains extends Model
     use HasFactory;
     public function kpas()
     {
-        return $this->belongsTo(kpas::class);
+        return $this->hasMany(kpas::class);
     }
 }
