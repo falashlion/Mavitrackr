@@ -3,6 +3,7 @@
 use App\Http\Controllers\V1\userController;
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -23,3 +24,4 @@ Route::get('/', function () {
 
 });
 */
+

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\V1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class departmentsController extends Controller
+class strategic_domainsController extends Controller
 {
     public function index()
     {

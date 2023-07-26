@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(['prefix' =>'V1', 'middleware' => 'api'], function () {
     Route::get('/users', [userController::class, 'index']);
+    Route::post('/register',[userController::class, 'register']);
 
 });
 Route::group([
