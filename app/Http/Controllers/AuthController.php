@@ -1,9 +1,13 @@
 <?php
 namespace App\Http\Controllers;
+//use App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
+use App\Models\departments;
 use App\Models\users;
 use Illuminate\Http\Request;
-//use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 //use Validator;
 
 class AuthController extends Controller
@@ -13,91 +17,168 @@ class AuthController extends Controller
      *
      * @return void
      */
-    /*public function __construct() {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+   public function __construct() {
+       $this->middleware('auth:api', ['except' => ['login', 'register', 'getusers', 'getdepartments']]);
     }
-    */
+
     /**
      * Get a JWT via given credentials.
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login(Request $request){
-    	/*$validator = Validator::make($request->all(), [
-            'user_matricule' => 'required|string',
-            'password' => 'required|string|min:6',
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-        if (! $token = auth()->attempt($validator->validated())) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-        return $this->createNewToken($token);
-        */
-        $creds = $request->only(['user_matricule', 'Password']);
-        if(!$token = auth()->attempt($creds)){
-            return response()->json(["Error" => "Invalid user_matricule/Password"], 401);
-        };
-        return response()->json(['token'=>$token]);
+    public function register(Request $request){
 
-    }
+        $validatedData = $request->validate([
+            'user_matricule' => 'required|string',
+            'Password'=>'required|string',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'email' => 'required|email',
+            'profile_image'=> 'string',
+            'phone' =>'numeric',
+            'address' =>'string',
+            'gender'=> 'string',
+            'department_id'=> 'string',
+            'job_title_id'=> 'numeric',
+            'date_of_birth'=>'numeric'
+        ]);
+
+        dd($validatedData);
+            $user= users::create([
+                'user_matricule' => $validatedData['user_matricule'],
+                'Password' => Hash::make($validatedData['Password']),
+               'first_name' => $validatedData['first_name'],
+               'last_name' => $validatedData['last_name'],
+               'email' => $validatedData['email'],
+               'profile_image' => $validatedData['profile_image'],
+               'phone' => $validatedData['phone'],
+               'address' => $validatedData['address'],
+               'gender' => $validatedData['gender'],
+                'department_id'=> $validatedData['department_id'],
+                'job_title_id'=> $validatedData['job_title_id'],
+                'date_of_birth' => $validatedData['date_of_birth'],
+
+        ]);
+         return response()->json([
+            'status'=> 'success',
+            'message'=> 'user successfully created',
+            'user'=> $user,
+
+         ]);
+        /*
+        $token = Auth::login($user);
+
+            'authorization' => [
+                'token' => $token,
+                'type' => 'bearer',
+            ]
+            ]);
+            */
+            }
+
+
     /**
      * Register a User.
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    /*public function register(Request $request)
-        $user = users::create(array_merge(
-                    $validator->validated(),
-                    ['password' => bcrypt($request->password)]
-                ));
+    public function login(Request $request)
+    {
+        $request->validate([
+            'user_matricule' => 'required|string',
+            'Password'=>'required|string',
+        ]);
+        $credentials = $request->only('user_matricule', 'Password');
+
+        $token = Auth::attempt($credentials);
+        if(!$token){
+            return response()->json([
+                'status'=>'error',
+                'message'=>'Unauthorized',
+            ], 401);
+        }
+
+        $user= Auth::user();
         return response()->json([
-            'message' => 'User successfully registered',
-            'user' => $user
-        ], 201);
+            'status'=>'success',
+            'user'=> $user,
+            'authorisation'=>[
+                'token' => $token,
+                'type'=> 'bearer',
+            ]
+            ]);
+
+
+
+
     }
-    */
+
     /**
      * Log the user out (Invalidate the token).
      *
      * @return \Illuminate\Http\JsonResponse
      */
     public function logout() {
-        auth()->logout();
+
         return response()->json(['message' => 'User successfully signed out']);
     }
-    /*
-     * Refresh a token.
-     *
-     * @return \Illuminate\Http\JsonResponse
 
-    public function refresh() {
-        return $this->createNewToken(auth()->$this->refresh());
-    }
-    */
-    /**
-     * Get the authenticated User.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
+
     public function userProfile() {
         return response()->json(auth()->user());
     }
-    /**
-     * Get the token array structure.
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    /*protected function createNewToken($token){
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->$this->factory()->getTTL() * 60,
-            'user' => auth()->user()
+    public function getusers(){
+        $user = users::all();
+         return response()->json([
+             'status' => 'success',
+             'users' => $user,
+         ]);
+        }/*
+    public function updateusers(Request $request, $id){
+        $user= users::Find($id);
+        if(!$user) {
+            return response()->json([
+                'status'=> 'error',
+                'message' =>'department could not found',
+            ], 404);
+        }
+
+        $validatedData = $request->validate([
+            'user_matricule' => 'required|string',
+            'Password'=>'required|string',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'email' => 'required|email',
+            'profile_image'=> 'string',
+            'phone' =>'numeric',
+            'address' =>'string',
+            'gender'=> 'string',
+            'department_id'=> 'string',
+            'job_title_id'=> 'numeric',
+            'date_of_birth'=>'numeric',
+
         ]);
 
-    }*/
+        dd($validatedData);
+                 $user ->update([
+                'user_matricule' => $validatedData['user_matricule'],
+                'Password' => Hash::make($validatedData['Password']),
+               'first_name' => $validatedData['first_name'],
+               'last_name' => $validatedData['last_name'],
+               'email' => $validatedData['email'],
+               'profile_image' => $validatedData['profile_image'],
+               'phone' => $validatedData['phone'],
+               'address' => $validatedData['address'],
+               'gender' => $validatedData['gender'],
+                'department_id'=> $validatedData['department_id'],
+                'job_title_id'=> $validatedData['job_title_id'],
+                'date_of_birth' => $validatedData['date_of_birth'],
+        ]);
+        return response()->json([
+            "status"=>"success",
+            "message"=> "User successfully updated",
+        ]);
+
+        }*/
 }
+
