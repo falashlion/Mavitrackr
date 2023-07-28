@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\departmentController;
+use App\Http\Controllers\positionsController;
+use App\Http\Controllers\objectivesController;
 use App\Http\Controllers\AuthController;
 use App\Models\departments;
 use Illuminate\Http\Request;
@@ -55,4 +57,16 @@ Route::group([
 ], function(){
 Route::get('/departments', [departmentController::class, 'getdepartments']);
 Route::post('/departments', [departmentController::class, 'createdepartments']);
+Route::put('/departments/{id}', [departmentController::class, 'updatedepartments']);
+Route::delete('/departments/{id}',[departmentController::class,'deletedepartments'] );
+// jobtitle endpoints
+Route::get('/job_titles', [positionsController::class, 'getpositions']);
+Route::post('/job_titles', [positionsController::class, 'createpositions']);
+Route::put('/job_titles/{id}', [positionsController::class, 'updatepositions']);
+Route::delete('/job_titles/{id}',[positionsController::class,'deletepositions'] );
+// stratergic domains endpoints
+Route::get('/strategic_domains', [objectivesController::class, 'getstrategic_domains']);
+Route::post('/strategic_domains', [objectivesController::class, 'createstrategic_domains']);
+Route::put('/strategic_domains/{id}', [objectivesController::class,'updatestrategic_domains']);
+Route::delete('/strategic_domains/{id}',[objectivesController::class,'deletestrategic_domains']);
 });

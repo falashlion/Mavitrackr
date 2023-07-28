@@ -9,6 +9,10 @@ class departments extends Model
 {
     use HasFactory;
 
+    protected $fillable =[
+
+    ];
+
     public function users(){
         return $this->hasMany(users::class); //one to many relationship with the user model
     }

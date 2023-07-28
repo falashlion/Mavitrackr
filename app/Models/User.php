@@ -2,15 +2,18 @@
 
 namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+//use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class users extends Authenticatable  implements JWTSubject
+class User extends Authenticatable  implements JWTSubject
 {
     use HasFactory, Notifiable ;
 
+    private string $user_matricule;
+
+    protected $table = 'users';
     protected $fillable =[
         'Password',
         'user_matricule',
@@ -34,7 +37,6 @@ class users extends Authenticatable  implements JWTSubject
         'is_manager' => 'boolean',
     ];
 
-
     public function kpis(){
         return $this->hasMany(kpis::class);
     }
@@ -52,7 +54,7 @@ class users extends Authenticatable  implements JWTSubject
      */
     public function positions()
     {
-        return $this->belongsToMany(positions::class, 'positions_id');
+        return $this->belongsTo(positions::class, 'positions_id');
     }
 
  /**
@@ -61,7 +63,7 @@ class users extends Authenticatable  implements JWTSubject
      * @return mixed
      */
     public function getJWTIdentifier() {
-        return $this->getKey();
+        return $this->user_matricule;
     }
     /**
      * Return a key value array, containing any custdatabase/migrations/2023_07_25_104727_users.phpom claims to be added to the JWT.

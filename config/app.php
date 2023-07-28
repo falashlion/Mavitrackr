@@ -163,6 +163,9 @@ return [
         /*
          * Application Service Providers...
          */
+
+        //App\Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
+
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
@@ -184,6 +187,11 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'JWTAuth' => App\Tymon\JWTAuth\Facades\JWTAuth::class,
+    'JWTFactory' => App\Tymon\JWTAuth\Facades\JWTFactory::class,
     ])->toArray(),
+
+    // config/app.php
+
 
 ];

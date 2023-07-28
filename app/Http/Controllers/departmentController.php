@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 
 class departmentController extends Controller
 {
-  /*  public function getdepartments(){
+    public function getdepartments(){
         $department  = departments::all();
          return response()->json([
              'status' => 'success',
@@ -21,8 +21,8 @@ class departmentController extends Controller
             'title' => 'required|string'
             ]);
 
-            dd($validatedData);
-            $department = departments::create([
+            //dd($validatedData);
+            $department = departments::insert([
                 "title"   =>  $validatedData['title'],
             ]);
         }
@@ -65,7 +65,7 @@ class departmentController extends Controller
                 $departments ->delete();
 
                 return response()->json([
-                    "status" => "sucess",
+                    "status" => "success",
                     "message" => "department successfully deleted ",
                 ]);
 
@@ -73,5 +73,5 @@ class departmentController extends Controller
 
 
 
-        }*/
+        }
 }

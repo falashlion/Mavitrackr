@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\position;
+use App\Http\Controllers\Controller;
 class positionsController extends Controller
 {
-     /*  public function getpositions(){
-        $position  = positions::all();
+      public function getpositions(){
+        $position  = position::all();
          return response()->json([
              'status' => 'success',
-             'users' => $department,
+             'users' => $position,
          ]);
         }
 
@@ -19,18 +20,18 @@ class positionsController extends Controller
             'title' => 'required|string'
             ]);
 
-            dd($validatedData);
-            $department = departments::create([
+            //dd($validatedData);
+            $position = position::insert([
                 "title"   =>  $validatedData['title'],
             ]);
         }
         public function updatepositions(Request $request, $id){
 
-            $departments = departments::Find($id);
-            if(!$departments) {
+            $positions = position::Find($id);
+            if(!$positions) {
                 return response()->json([
                     'status'=> 'error',
-                    'message' =>'department could not found',
+                    'message' =>'positions could not found',
                 ], 404);
             }
 
@@ -38,38 +39,38 @@ class positionsController extends Controller
                 'title' => 'required|string'
                 ]);
                 dd($validatedData);
-                $departments->update([
+                $positions->update([
                     "title"=> $validatedData["title"],
                 ]) ;
                 return response() -> json ([
                     "status"=>"updated",
-                    "message"=> "department updated",
+                    "message"=> "position updated",
                 ]);
 
         }
 
         public function deletepositions(Request $request, $id){
 
-            $departments = departments::Find($id);
+            $position = position::Find($id);
 
 
 
-            if (!$departments ) {
+            if (!$position ) {
                 return response()->json([
-                    "status"=> "notfound",
-                    "message"=> "department was not round"
+                    "status"=> "Notfound",
+                    "message"=> "position was not round"
                 ], 404);
             }
-                $departments ->delete();
+                $position ->delete();
 
                 return response()->json([
                     "status" => "sucess",
-                    "message" => "department successfully deleted ",
+                    "message" => "position successfully deleted ",
                 ]);
 
 
 
 
 
-        }*/
+        }
 }
