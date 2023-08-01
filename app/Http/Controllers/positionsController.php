@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\position;
+use App\Models\Position;
 use App\Http\Controllers\Controller;
 class positionsController extends Controller
 {
       public function getpositions(){
-        $position  = position::all();
+        $position  = Position::all();
          return response()->json([
              'status' => 'success',
              'users' => $position,
@@ -21,13 +21,17 @@ class positionsController extends Controller
             ]);
 
             //dd($validatedData);
-            $position = position::insert([
+            $position = Position::insert([
                 "title"   =>  $validatedData['title'],
             ]);
+            return response ()-> json ( [
+                "status"    =>"success",
+                "data"      => $position,
+                "Message"   =>"job title  created successfully."]);
         }
         public function updatepositions(Request $request, $id){
 
-            $positions = position::Find($id);
+            $positions = Position::Find($id);
             if(!$positions) {
                 return response()->json([
                     'status'=> 'error',
@@ -38,7 +42,7 @@ class positionsController extends Controller
             $validatedData = $request-> validate([
                 'title' => 'required|string'
                 ]);
-                dd($validatedData);
+               // dd($validatedData);
                 $positions->update([
                     "title"=> $validatedData["title"],
                 ]) ;
@@ -51,7 +55,7 @@ class positionsController extends Controller
 
         public function deletepositions(Request $request, $id){
 
-            $position = position::Find($id);
+            $position = Position::Find($id);
 
 
 

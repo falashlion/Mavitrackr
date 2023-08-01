@@ -15,13 +15,13 @@ use Illuminate\Support\Facades\Schema;
             $table->id();
             $table->string('title');
             $table->unsignedBigInteger('kpas_id');
-            $table->foreign('kpas_id')->references('id')->on('kpas')->onDelete('cascade');
             $table->unsignedBigInteger('users_id');
-            $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
-            $table->json('indicators');
+            $table->json('indicators')->nullable();
             $table->decimal('weight', 5, 2)->nullable();
             $table->integer('weighted_average_score')->nullable();
             $table->integer('score')->nullable();
+            $table->foreign('kpas_id')->references('id')->on('kpas')->onDelete('cascade');
+            $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
     });
     }

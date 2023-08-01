@@ -3,6 +3,7 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 //use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -32,29 +33,35 @@ class User extends Authenticatable  implements JWTSubject
     protected $hidden =[
         'Password',
     ];
+    //$value = 'Password';
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['Password'] = Hash::make($value);
+    }
 
     protected $casts = [
         'is_manager' => 'boolean',
     ];
 
-    public function kpis(){
-        return $this->hasMany(kpis::class);
+    public function Kpi(){
+        return $this->hasMany(Kpi::class);
     }
 
-    public function departments(){
-        return $this->belongsTo(departments::class, 'departments_id');
+    public function Department(){
+        return $this->belongsTo(Department::class, 'departments_id');
     }
 
-    public function roles()
+    public function Role()
     {
-        return $this->belongsToMany(roles::class);
+        return $this->belongsToMany(Role::class);
     }
     /**
      * Summary of positions
      */
-    public function positions()
+    public function Position()
     {
-        return $this->belongsTo(positions::class, 'positions_id');
+        return $this->belongsTo(Position::class, 'positions_id');
     }
 
  /**

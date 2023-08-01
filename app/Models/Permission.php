@@ -5,15 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class strategic_domains extends Model
+class Permission extends Model
 {
     use HasFactory;
 
+    protected $table = 'permissions';
+
     protected $fillable =[
-        'title',
+        '',
     ];
-    public function kpas()
+    public function Role()
     {
-        return $this->hasMany(kpas::class);
+        return $this->belongsToMany(Role::class);
     }
 }

@@ -5,16 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class departments extends Model
+class Feedback extends Model
 {
     use HasFactory;
+    protected $table = 'feedbacks';
 
     protected $fillable =[
-
+        'comment',
+        'kpis_id'
     ];
-
-    public function users(){
-        return $this->hasMany(users::class); //one to many relationship with the user model
+    public function Kpi(){
+        return $this->hasMany(Kpi::class);
     }
-
 }

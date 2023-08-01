@@ -4,9 +4,10 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
+// use Illuminate\Support\Facades\Validator;
+// use Tymon\JWTAuth\Exceptions\JWTException;
+// use Tymon\JWTAuth\Facades\JWTAuth;
 //use Symfony\Component\HttpFoundation\Response;
 
 
@@ -17,9 +18,9 @@ class AuthController extends Controller
      *
      * @return void
      */
-//    public function __construct() {
-//        $this->middleware('auth:api', ['except' => ['login', 'register', 'getusers', 'getdepartments', 'createdepartments', 'updatedepartments', 'deletedepartments']]);
-//     }
+   public function __construct() {
+       $this->middleware('auth:api', ['except' => ['login', 'register', 'getusers', 'getdepartments', 'createdepartments', 'updatedepartments', 'deletedepartments', 'getusersbyid']]);
+    }
 
     /**
      * Get a JWT via given credentials.
@@ -81,12 +82,17 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $validate = $request->validate([
-            // 'user_matricule' => 'required|string',
-            'password'=>'required|string',
-            'email' => 'string',
+            'user_matricule' => 'required|string',
+            'Password'=>'required|string',
+            // 'email' => 'string',
         ]);
-        dd(auth('api')->attempt($validate));
-        if(!$JWT_token = auth('api')->attempt($validate)){
+        //dd(auth('api')->attempt($validate));
+        // if(!$JWT_token = auth('api')->attempt($validate)){
+            //dd($validate);
+            $credentials = $request->only('user_matricule', 'Password');
+            //$JWT_token = $validate->createToken()->JWTToken();
+
+            if(!$JWT_token = Auth::attempt($credentials)){
 
             return response()->json([
                 'status'=>'error',
@@ -105,6 +111,7 @@ class AuthController extends Controller
 
 
      }
+
 
     /**
      * Log the user out (Invalidate the token).
@@ -126,13 +133,28 @@ class AuthController extends Controller
              'status' => 'success',
              'users' => $user,
          ]);
-        }/*
+        }
+
+    public function getusersbyid(Request $request, $id){
+        $user= User::Find($id);
+        if (!$user ) {
+            return response()->json([
+                'status'=> 'error',
+                'message' =>'user id  could not found',
+            ], 404);
+        }
+        $user = User::get();
+        return response()->json([
+            "status" => "success",
+            "data"=> $user,
+        ]);
+    }
     public function updateusers(Request $request, $id){
-        $user= users::Find($id);
+        $user= User::Find($id);
         if(!$user) {
             return response()->json([
                 'status'=> 'error',
-                'message' =>'department could not found',
+                'message' =>'user id  could not found',
             ], 404);
         }
 
@@ -152,7 +174,7 @@ class AuthController extends Controller
 
         ]);
 
-        dd($validatedData);
+        //dd($validatedData);
                  $user ->update([
                 'user_matricule' => $validatedData['user_matricule'],
                 'Password' => Hash::make($validatedData['Password']),
@@ -167,11 +189,18 @@ class AuthController extends Controller
                 'job_title_id'=> $validatedData['job_title_id'],
                 'date_of_birth' => $validatedData['date_of_birth'],
         ]);
+
         return response()->json([
             "status"=>"success",
             "message"=> "User successfully updated",
+            "user" => $user,
         ]);
 
-        }*/
+        }
+
+
+        // password reset endpoints
+
+
 }
 

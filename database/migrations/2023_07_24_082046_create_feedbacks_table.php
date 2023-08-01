@@ -13,7 +13,7 @@ class CreateFeedbacksTable extends Migration
     {
         Schema::create('feedbacks', function (Blueprint $table) {
             $table->string('comment');
-            $table->unsignedBigInteger('kpis_id');
+            $table->unsignedBigInteger('kpis_id')->nullable();
             $table->foreign('kpis_id')->references('id')->on('kpis')->onDelete('cascade');
             $table->timestamps();
         });
