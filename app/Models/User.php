@@ -12,11 +12,11 @@ class User extends Authenticatable  implements JWTSubject
 {
     use HasFactory, Notifiable ;
 
-    private string $user_matricule;
+    // private string $user_matricule;
 
     protected $table = 'users';
     protected $fillable =[
-        'Password',
+        'password',
         'user_matricule',
         'profile_image',
         'first_name',
@@ -31,13 +31,13 @@ class User extends Authenticatable  implements JWTSubject
     ];
 
     protected $hidden =[
-        'Password',
+        'password',
     ];
     //$value = 'Password';
 
     public function setPasswordAttribute($value)
     {
-        $this->attributes['Password'] = Hash::make($value);
+        $this->attributes['password'] = Hash::make($value);
     }
 
     protected $casts = [

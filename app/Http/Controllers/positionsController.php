@@ -61,7 +61,7 @@ class positionsController extends Controller
 
             if (!$position ) {
                 return response()->json([
-                    "status"=> "Notfound",
+                    "status"=> "Not found",
                     "message"=> "position was not round"
                 ], 404);
             }

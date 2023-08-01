@@ -24,7 +24,7 @@ class UserFactory extends Factory
     {
         return [
             'user_matricule' => $this->faker->unique()->regexify('[A-Za-z0-9]{10}'),
-            'password' => bcrypt('password'), // Change this if you have specific password requirements
+            'password' => $this->faker->password, // Change this if you have specific password requirements
             'profile_image' => null, // Set a default value for profile_image if needed
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
@@ -39,6 +39,7 @@ class UserFactory extends Factory
             'positions_id' => null, // Set appropriate values for foreign keys
             'created_at' => now(),
             'updated_at' => now(),
+
         ];
     }
 }

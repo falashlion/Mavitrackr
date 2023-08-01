@@ -4,6 +4,7 @@ use App\Http\Controllers\departmentController;
 use App\Http\Controllers\positionsController;
 use App\Http\Controllers\objectivesController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ForgotPasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,18 +37,20 @@ Route::group([
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/user-profile',[AuthController::class,  'userProfile']);
-    Route::get('/user/{id}', [AuthController::class, 'getusersbyid']);
+    // Route::get('/user/{id}', [AuthController::class, 'getusersbyid']);
+    Route::get('/departments/{id}/manager', [departmentController::class, 'getmanagerbyid']);
+    Route::get('/user', [AuthController::class, 'getusers']);
+    Route::get('/user/{id}', [AuthController::class, 'getusersbyid'])->name('users.getuserid');
+    Route::delete('/user/{id}', [AuthController::class, 'deleteuser']);
 
-    //useraccount endpoints
-    //Route::get('/user', [AuthController::class, 'getusers']);
+
 });
 
 Route::group([
     'middleware' => 'api',
 ], function(){
-Route::get('/user', [AuthController::class, 'getusers']);
-Route::get('/user/{id}', [AuthController::class, 'getusersbyid']);
-Route::get('/departments/{id}/manager', [departmentController::class, 'getmanagerbyid']);
+
+
 });
 
 
@@ -100,4 +103,13 @@ Route::post('/Kpis/{id}/feedback ', [objectivesController::class, 'createfeedbac
 Route::put('/Kpis/{id}/feedback ', [objectivesController::class,'updatefeedback']);
 Route::delete('/Kpis/{id}/feedback ',[objectivesController::class,'deletefeedback']);
 
+
+//password reset endpoints
+Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
+Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
+Route::get('reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
+Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
+
 });
+
+
