@@ -8,6 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Feedback extends Model
 {
     use HasFactory;
+
+    protected $hidden =[
+        'created_at',
+        'updated_at',
+        'kpis_id',
+        ];
     protected $table = 'feedbacks';
 
     protected $fillable =[

@@ -72,9 +72,21 @@ class positionsController extends Controller
                     "message" => "position successfully deleted ",
                 ]);
 
+        }
+        public function getpositionsbyid(Request $request, $id){
 
-
-
+            $position= Position::Find($id);
+        if (!$position ) {
+            return response()->json([
+                'status'=> 'error',
+                'message' =>'job title id could not found',
+            ], 404);
+        }
+        $position -> get();
+        return response()->json([
+            "status" => "success",
+            "data"=> $position,
+        ]);
 
         }
 }

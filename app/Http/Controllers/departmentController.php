@@ -64,7 +64,7 @@ class departmentController extends Controller
             "data"=> $department,
         ]);
     }
-    public function getdepartments(){
+    public function getdepartments(Request $request){
         $department  = Department::all();
          return response()->json([
              'status' => 'success',
@@ -130,9 +130,65 @@ class departmentController extends Controller
                     "message" => "department successfully deleted ",
                 ]);
 
+        }
+        // endpoints for manager data
 
+        public function getmanager(Request $request, $id){
 
+            $user = User::find($id);
 
+            // dd($user);
+            if(!$user){
+                return response ()-> json ( [
+                    "status" => 'error',
+                    "message" => ' user not found']);
+                }
 
+            $manager = User::select("*")
+            ->where([
+                ['is_manager',"=", true,],
+                ['departments_id' ,"=", $user->departments_id]
+            ])->get();
+
+            if(!$manager){
+                return response ()-> json ( [
+                    "status" => 'error',
+                    "message" =>' department not found' ] );
+            }
+
+            return response()->json([
+                "status"=>"success",
+                "data"=>$manager,
+
+            ]);
+
+        }
+
+        public function getdirectreports(Request $request, $id){
+            # code...
+            $user=User::find($id) ;
+            if(!$user){
+                return response ()-> json ( [
+                    "status" => 'error',
+                    "message" => ' user not found']);
+                }
+
+            $manager = User::select("*")
+            ->where([
+                ['is_manager',"=", false,],
+                ['departments_id' ,"=", $user->departments_id]
+            ])->get();
+
+            if(!$manager){
+                return response ()-> json ( [
+                    "status" => 'error',
+                    "message" =>' department not found' ] );
+            }
+
+            return response()->json([
+                "status"=>"success",
+                "data"=>$manager,
+
+            ]);
         }
 }

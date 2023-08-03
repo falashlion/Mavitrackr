@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class StrategicDomain extends Model
 {
+    protected $hidden =[
+    'created_at',
+    'updated_at',
+    ];
+
     use HasFactory;
     protected $table = 'strategic_domains';
     protected $fillable =[

@@ -32,15 +32,15 @@ Route::group([
     'middleware' => 'api',
     //prefix' => 'api',
 ], function () {
-    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/user-profile',[AuthController::class,  'userProfile']);
-    // Route::get('/user/{id}', [AuthController::class, 'getusersbyid']);
     Route::get('/departments/{id}/manager', [departmentController::class, 'getmanagerbyid']);
     Route::get('/user', [AuthController::class, 'getusers']);
     Route::get('/user/{id}', [AuthController::class, 'getusersbyid'])->name('users.getuserid');
+    Route::put('/user/{id}', [AuthController::class, 'updateusers']);
     Route::delete('/user/{id}', [AuthController::class, 'deleteuser']);
 
 
@@ -69,6 +69,7 @@ Route::get('/job_titles', [positionsController::class, 'getpositions']);
 Route::post('/job_titles', [positionsController::class, 'createpositions']);
 Route::put('/job_titles/{id}', [positionsController::class, 'updatepositions']);
 Route::delete('/job_titles/{id}',[positionsController::class,'deletepositions'] );
+Route::get('/job_titles/{id}',[positionsController::class,'getpositionsbyid'] );
 // stratergic domains endpoints
 Route::get('/strategic_domains', [objectivesController::class, 'getstrategic_domains']);
 Route::post('/strategic_domains', [objectivesController::class, 'createstrategic_domains']);
@@ -88,11 +89,12 @@ Route::get('/Kpis', [objectivesController::class, 'getKpi']);
 Route::post('/Kpis', [objectivesController::class, 'createKpi']);
 Route::put('/Kpis/{id}', [objectivesController::class,'updateKpi']);
 Route::delete('/Kpis/{id}',[objectivesController::class,'deleteKpi']);
+Route::get('/Kpis/{id}',[objectivesController::class,'getKpibyid']);
 
 // key performance indicatoras scoring
 
 Route::get('/Kpis/scoring ', [objectivesController::class, 'getKpiscore']);
-Route::post('/Kpis/scoring ', [objectivesController::class, 'createKpiscore']);
+// Route::post('/Kpis/{id}/scoring ', [objectivesController::class, 'createKpiscore']);
 Route::put('/Kpis/{id}/scoring ', [objectivesController::class,'updateKpiscore']);
 Route::delete('/Kpis/{id}/scoring ',[objectivesController::class,'deleteKpiscore']);
 Route::get('/Kpis/{id}/scoring ',[objectivesController::class, 'getKpibyid']);
@@ -102,13 +104,18 @@ Route::get('/Kpis/feedback ', [objectivesController::class, 'getfeedback']);
 Route::post('/Kpis/{id}/feedback ', [objectivesController::class, 'createfeedback']);
 Route::put('/Kpis/{id}/feedback ', [objectivesController::class,'updatefeedback']);
 Route::delete('/Kpis/{id}/feedback ',[objectivesController::class,'deletefeedback']);
+Route::get('/Kpis/{id}/feedback', [objectivesController::class, 'getfeedbackbyKpiid']);
 
 
 //password reset endpoints
-Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
-Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
-Route::get('reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
-Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
+// Route::get('/forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
+Route::post('/forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
+// Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
+Route::post('/reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
+
+// manager endpoints
+Route::get('/user/{id}/manager', [departmentController::class, 'getmanager']);
+Route::get('/user/manager/{id}', [departmentController::class, 'getdirectreports']);
 
 });
 

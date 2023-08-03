@@ -9,6 +9,10 @@ class Roles extends Model
 {
 
     use HasFactory;
+    protected $hidden =[
+        'created_at',
+        'updated_at',
+        ];
     protected $table = 'roles';
     public function Permission()
     {

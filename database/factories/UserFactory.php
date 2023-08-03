@@ -35,8 +35,8 @@ class UserFactory extends Factory
             'email' => $this->faker->unique()->safeEmail,
             'email_verified_at' => now(),
             'remember_token' => Str::random(10),
-            'departments_id' => null, // Set appropriate values for foreign keys
-            'positions_id' => null, // Set appropriate values for foreign keys
+            'departments_id' => $this->faker->numberBetween(1, 10),// Set appropriate values for foreign keys
+            'positions_id' => $this->faker->numberBetween(1, 10), // Set appropriate values for foreign keys
             'created_at' => now(),
             'updated_at' => now(),
 

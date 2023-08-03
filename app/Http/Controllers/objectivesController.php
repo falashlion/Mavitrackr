@@ -58,7 +58,7 @@ class objectivesController extends Controller
             if(!$strategic_domains) {
                 return response()->json([
                     'status'=> 'error',
-                    'message' =>'department could not found',
+                    'message' =>'strategic domain could not found',
                 ], 404);
             }
 
@@ -106,15 +106,40 @@ class objectivesController extends Controller
              'users' => $feedback,
          ]);
         }
+        // public function getfeedbackbyKpiid(Request $request, $id){
+        //     $Kpi= Kpi::Find($id);
+        //     if (!$Kpi) {
+        //         return response()->json([
+        //             'status'=> 'error',
+        //             'message' =>'key performance indicators could not found',
+        //         ], 404);
+        //     }
+        //     $Kpi -> get();
+        //     return response()->json([
+        //         "status" => "success",
+        //         "data"=> $Kpi,
+        //     ]);
+        // }
+        public function getfeedbackbyKpiid(Request $request, $id){
+            $feedback = Feedback::Where('kpis_id', $id)->get();
+            if ($feedback->isEmpty()) {
+                return response()->json([
+                    'status'=> 'error',
+                    'message' =>'feedback for this key performance indicator could not be found',
+                ], 404);
+            }
 
+            return response()->json([
+                "status" => "success",
+                "data"=> $feedback,
+            ]);
+        }
         public function createfeedback(Request $request, $id){
             $Kpi = Kpi::Find($id);
 
             $validatedData = $request-> validate([
             'comment' => 'required|string'
             ]);
-
-            //dd($validatedData);
             $feedback = Feedback::insert([
                 "comment"   =>  $validatedData['comment'],
             ]);
@@ -150,9 +175,6 @@ class objectivesController extends Controller
         public function deletefeedback(Request $request, $id){
 
             $feedback = Feedback::Find($id);
-
-
-
             if (!$feedback ) {
                 return response()->json([
                     "status"=> "notfound",
@@ -165,11 +187,6 @@ class objectivesController extends Controller
                     "status" => "success",
                     "message" => "feedback successfully deleted ",
                 ]);
-
-
-
-
-
         }
 
     //endpoints for kpas
@@ -257,7 +274,7 @@ class objectivesController extends Controller
 
     //endpoints for kpis
     public function getKpi(){
-        //$Kpi  = Kpi::all();
+        // $Kpi  = Kpi::all();
         $Kpi = Kpi::select('title')->get();
          return response()->json([
              'status' => 'success',
@@ -285,14 +302,14 @@ class objectivesController extends Controller
             $validatedData = $request-> validate([
             'title' => 'required|string',
             'kpas_id' => 'integer',
-            'user_id' => 'integer'
+            'users_id' => 'integer',
             ]);
 
-            //dd($validatedData);
+
             $Kpi = Kpi::insert([
                 "title"   =>  $validatedData['title'],
                 "kpas_id"     =>  $validatedData ['kpas_id'],
-                "user_id"     =>  $validatedData ['user_id']
+                "users_id"     =>  $validatedData ['users_id'],
             ]);
             return response ()-> json ( [
                 "status"    =>"success",
@@ -314,7 +331,7 @@ class objectivesController extends Controller
             'kpas_id' => 'integer',
             'user_id' => 'integer'
                 ]);
-                //dd($validatedData);
+
                 $Kpi->update([
                 "title"   =>  $validatedData['title'],
                 "kpas_id"     =>  $validatedData ['kpas_id'],
@@ -354,26 +371,34 @@ class objectivesController extends Controller
                  'key performance indicator' => $Kpi,
              ]);
             }
-        public function createKpiscore(Request $request){
-            $validatedData = $request-> validate([
-            'indicators' => 'required|integer',
-            'weight' => 'required|decimal',
-            'score' => 'required|numeric',
-            'weighted_average_score' => 'interger'
-            ]);
+        // public function createKpiscore(Request $request, $id){
 
-            //dd($validatedData);
-            $Kpi = Kpi::insert([
-                "indicators"   =>  $validatedData['indicators'],
-                "weight"     =>  $validatedData ['weight'],
-                "score"     =>  $validatedData ['score'],
-                "weighted_average_score"     =>  $validatedData ['weighted_average_score'],
-            ]);
-            return response ()-> json ( [
-                "status"    =>"success",
-                "data"      => $Kpi,
-                "Message"   =>"key performance indicator score created successfully."], 201);
-        }
+        //     $Kpi = Kpi::Find($id);
+        //     if(!$Kpi) {
+        //         return response()->json([
+        //             'status'=> 'error',
+        //             'message' =>'key performance indicator  score could not be found',
+        //         ], 404);
+        //     }
+        //     $validatedData = $request-> validate([
+        //     'indicators' => 'required|integer',
+        //     'weight' => 'required|decimal:1,1',
+        //     'score' => 'required|numeric',
+        //     'weighted_average_score' => 'integer'
+        //     ]);
+
+        //     //dd($validatedData);
+        //     $Kpi = Kpi::insert([
+        //         "indicators"   =>  $validatedData['indicators'],
+        //         "weight"     =>  $validatedData ['weight'],
+        //         "score"     =>  $validatedData ['score'],
+        //         "weighted_average_score"     =>  $validatedData ['weighted_average_score'],
+        //     ]);
+        //     return response ()-> json ( [
+        //         "status"    =>"success",
+        //         "data"      => $Kpi,
+        //         "Message"   =>"key performance indicator score created successfully."], 201);
+        // }
 
 
         public function updateKpiscore(Request $request, $id){
@@ -388,9 +413,9 @@ class objectivesController extends Controller
 
             $validatedData = $request-> validate([
                 'indicators' => 'required|integer',
-                'weight' => 'required|decimal',
-                'score' => 'required|decimal',
-                'weighted_average_score' => 'interger'
+                'weight' => 'required|integer',
+                'score' => 'required|integer',
+                'weighted_average_score' => 'integer'
                 ]);
                 //dd($validatedData);
                 $Kpi->update([

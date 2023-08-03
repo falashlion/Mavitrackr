@@ -30,10 +30,16 @@ class User extends Authenticatable  implements JWTSubject
         'positions_id',
     ];
 
-    protected $hidden =[
-        'password',
-    ];
-    //$value = 'Password';
+    // protected $hidden =[
+    //     'password',
+    //     'departments_id',
+    //     'positions_id',
+    //     'created_at',
+    //     'updated_at',
+    //     'remember_token',
+    //     'email_verified_at',
+    // ];
+
 
     public function setPasswordAttribute($value)
     {
@@ -45,7 +51,7 @@ class User extends Authenticatable  implements JWTSubject
     ];
 
     public function Kpi(){
-        return $this->hasMany(Kpi::class);
+        return $this->hasMany(Kpi::class, 'kpis_id');
     }
 
     public function Department(){
@@ -64,6 +70,10 @@ class User extends Authenticatable  implements JWTSubject
         return $this->belongsTo(Position::class, 'positions_id');
     }
 
+
+        public function managers(){
+            return $this->hasMany(User::class)->where('is_manager', true);
+        }
  /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *

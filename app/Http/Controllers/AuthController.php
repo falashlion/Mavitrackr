@@ -5,10 +5,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-// use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
-//use Symfony\Component\HttpFoundation\Response;
+
 
 
 class AuthController extends Controller
@@ -19,7 +18,7 @@ class AuthController extends Controller
      * @return void
      */
    public function __construct() {
-       $this->middleware('auth:api', ['except' => ['login', 'register', 'deleteuser', 'getusers', 'getdepartments', 'createdepartments', 'updatedepartments', 'deletedepartments', 'getusersbyid']]);
+       $this->middleware('auth:api', ['except' => ['login', 'submitResetPasswordForm', 'updateusers', 'logout', 'register', 'deleteuser', 'getusers', 'getdepartments', 'createdepartments', 'updatedepartments', 'deletedepartments', 'getusersbyid']]);
     }
 
     /**
@@ -40,12 +39,10 @@ class AuthController extends Controller
             'phone' =>'numeric',
             'address' =>'string',
             'gender'=> 'string',
-            // 'department_id'=> 'integer',
-            // 'job_title_id'=> 'interger',
-            // 'date_of_birth'=>'numeric'
+            'departments_id'=> 'integer',
+            'positions_id'=> 'integer',
         ]);
 
-        //dd($validatedData);
             $user= User::create([
                 'user_matricule' => $validatedData['user_matricule'],
                 'password' => ($validatedData['password']),
@@ -56,23 +53,20 @@ class AuthController extends Controller
                'phone' => $validatedData['phone'],
                'address' => $validatedData['address'],
                'gender' => $validatedData['gender'],
-                // 'department_id'=> $validatedData['department_id'],
-                // 'job_title_id'=> $validatedData['job_title_id'],
-                // 'date_of_birth' => $validatedData['date_of_birth'],
+               'departments_id'=> $validatedData[ 'departments_id'],
+               'positions_id'=> $validatedData['positions_id'],
 
         ]);
 
 
 
-        // if ($this->token){
-        //     return $this->login($request);
-        // }
-        $token  = Auth::login($user);
+
+        // $token  = Auth::login($user);
          return response()->json([
             'status'=> 'success',
             'message'=> 'user successfully created',
             'user'=> $user,
-            'token' => $token
+            // 'token' => $token
 
          ]);
             }
@@ -89,13 +83,9 @@ class AuthController extends Controller
         $validate = $request->validate([
             'user_matricule' => 'required|string',
             'password'=>'required|string',
-            // 'email' => 'string',
         ]);
 
-
-
             $credentials = $request->only('user_matricule', 'password');
-            // dd(Auth::attempt($credentials));
             $token = Auth::attempt($credentials);
             if(!$token ){
 
@@ -169,16 +159,16 @@ class AuthController extends Controller
             'phone' =>'numeric',
             'address' =>'string',
             'gender'=> 'string',
-            'department_id'=> 'string',
-            'job_title_id'=> 'numeric',
-            'date_of_birth'=>'numeric',
+            'departments_id'=> 'integer',
+            'positions_id'=> 'integer',
+
 
         ]);
 
 
-                 $user ->update([
-                'user_matricule' => $validatedData['user_matricule'],
-                'password' => ($validatedData['Password']),
+               $user ->update([
+               'user_matricule' => $validatedData['user_matricule'],
+               'password' => ($validatedData['password']),
                'first_name' => $validatedData['first_name'],
                'last_name' => $validatedData['last_name'],
                'email' => $validatedData['email'],
@@ -186,9 +176,8 @@ class AuthController extends Controller
                'phone' => $validatedData['phone'],
                'address' => $validatedData['address'],
                'gender' => $validatedData['gender'],
-                'department_id'=> $validatedData['department_id'],
-                'job_title_id'=> $validatedData['job_title_id'],
-                'date_of_birth' => $validatedData['date_of_birth'],
+               'departments_id'=> $validatedData[ 'departments_id'],
+               'positions_id'=> $validatedData['positions_id'],
         ]);
 
         return response()->json([
@@ -203,8 +192,6 @@ class AuthController extends Controller
         public function deleteuser(Request $request, $id){
 
             $user = User::Find($id);
-
-
 
             if (!$user ) {
                 return response()->json([
@@ -225,7 +212,6 @@ class AuthController extends Controller
 
         }
 
-        // password reset endpoints
 
 
 }

@@ -10,6 +10,12 @@ class Kpa extends Model
     use HasFactory;
     protected $table = 'kpas';
 
+    protected $hidden =[
+        'created_at',
+        'updated_at',
+        'strategic_domains_id',
+        ];
+
     protected $fillable =[
 
         'title',

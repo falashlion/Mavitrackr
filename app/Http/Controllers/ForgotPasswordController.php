@@ -17,16 +17,7 @@ use Illuminate\Http\RedirectResponse;
 
 class ForgotPasswordController extends Controller
 {
-    /**
-     * Display the form to request a password reset link.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function showForgetPasswordForm()
-    {
-        // return view('auth.forgetPassword');
-        return response()->json('forgoten password');
-    }
+
 
     /**
      * Send a password reset link to the given user.
@@ -48,9 +39,10 @@ class ForgotPasswordController extends Controller
             'created_at' => Carbon::now(),
         ]);
 
-        Mail::send('email.forgetPassword', ['token' => $token], function ($message) use ($request) {
+        Mail::send([], [], function ($message) use ($request, $token) {
             $message->to($request->email);
             $message->subject('Reset Password');
+            $message->setBody("click the following link to reset your passaword:". url('/user. $token'));
         });
 
         return back()->with('message', 'We have e-mailed your password reset link!');
@@ -101,7 +93,7 @@ class ForgotPasswordController extends Controller
         }
 
         $user = User::where('email', $request->email)
-            ->update(['password' => Hash::make($request->password)]);
+            ->update(['password' => ($request->password)]);
 
         DB::table('password_reset_tokens')
             ->where(['email' => $request->email, 'token' => $request->token])
