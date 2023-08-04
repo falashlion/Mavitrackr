@@ -106,20 +106,7 @@ class objectivesController extends Controller
              'users' => $feedback,
          ]);
         }
-        // public function getfeedbackbyKpiid(Request $request, $id){
-        //     $Kpi= Kpi::Find($id);
-        //     if (!$Kpi) {
-        //         return response()->json([
-        //             'status'=> 'error',
-        //             'message' =>'key performance indicators could not found',
-        //         ], 404);
-        //     }
-        //     $Kpi -> get();
-        //     return response()->json([
-        //         "status" => "success",
-        //         "data"=> $Kpi,
-        //     ]);
-        // }
+
         public function getfeedbackbyKpiid(Request $request, $id){
             $feedback = Feedback::Where('kpis_id', $id)->get();
             if ($feedback->isEmpty()) {

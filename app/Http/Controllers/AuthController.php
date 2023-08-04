@@ -41,6 +41,7 @@ class AuthController extends Controller
             'gender'=> 'string',
             'departments_id'=> 'integer',
             'positions_id'=> 'integer',
+            'is_manager' => 'boolean',
         ]);
 
             $user= User::create([
@@ -55,6 +56,7 @@ class AuthController extends Controller
                'gender' => $validatedData['gender'],
                'departments_id'=> $validatedData[ 'departments_id'],
                'positions_id'=> $validatedData['positions_id'],
+               'is_manager' => $validatedData['is_manager'],
 
         ]);
 
@@ -95,10 +97,13 @@ class AuthController extends Controller
             ], 401);
         }
 
+        $user = Auth::user();
+
          return response()->json([
             "status" => 'success',
             "message" => 'login successful',
-            "token" => $token
+            "token" => $token,
+            "data" => $user
          ]);
         }
 
