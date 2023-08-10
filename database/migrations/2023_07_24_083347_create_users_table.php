@@ -31,6 +31,11 @@ use Illuminate\Support\Facades\Schema;
             $table->foreign('positions_id')->references('id')->on('positions')->onDelete('cascade');
             $table->timestamps();
         });
+        // Schema::create('users', function (Blueprint $table) {
+
+        //     $table->string('role');
+
+        // });
     }
 
     /**

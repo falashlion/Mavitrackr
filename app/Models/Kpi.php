@@ -23,18 +23,19 @@ class Kpi extends Model
             'score',
             'weight',
             'indicators',
+            'status',
         ];
 
     protected $table = 'kpis';
-    public function Kpa()
+    public function kpa()
     {
         return $this->belongsTo(Kpa::class);
     }
 
-    public function User(){
+    public function user(){
         return $this->belongsTo(User::class);
     }
-    public function Feedback(){
+    public function feedback(){
         return $this->belongsTo(Feedback::class);
     }
 }

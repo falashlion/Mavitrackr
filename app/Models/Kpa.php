@@ -22,10 +22,10 @@ class Kpa extends Model
         'strategic_domains_id'
     ];
 
-    public function StrategicDomain(){
+    public function strategicDomain(){
         return $this->belongsTo(StrategicDomain::class); //one to many relationship with strategic_domains model.
     }
-    public function Kpi(){
+    public function kpi(){
         return $this->hasMany(Kpi::class);
     }
 }

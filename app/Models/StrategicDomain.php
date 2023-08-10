@@ -5,8 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class StrategicDomain extends Model
 {
+    use HasFactory ;
     protected $hidden =[
     'created_at',
     'updated_at',
@@ -17,7 +19,7 @@ class StrategicDomain extends Model
     protected $fillable =[
         'title',
     ];
-    public function Kpa()
+    public function kpa()
     {
         return $this->hasMany(Kpa::class);
     }

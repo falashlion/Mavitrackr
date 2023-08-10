@@ -18,7 +18,7 @@ class Department extends Model
         'title',
     ];
 
-    public function User(){
+    public function user(){
         return $this->hasMany(User::class); //one to many relationship with the user model
     }
 

@@ -12,10 +12,14 @@ use App\Models\Kpi;
 class objectivesController extends Controller
 {
 
+    // public function __construct()
+    // {
+    //     $this->middleware('jwt.verify');
+    // }
 
     //endpoints for StrategicDomain
     public function getstrategic_domains(){
-        $strategic_domains  = StrategicDomain::all();
+        $strategic_domains  = StrategicDomain::paginate(10);
          return response()->json([
              'status' => 'success',
              'users' => $strategic_domains,
@@ -100,7 +104,7 @@ class objectivesController extends Controller
 
     // enpoints for feeedback
     public function getfeedback(){
-        $feedback  = Feedback::all();
+        $feedback  = Feedback::paginate(10);
          return response()->json([
              'status' => 'success',
              'users' => $feedback,
@@ -178,7 +182,7 @@ class objectivesController extends Controller
 
     //endpoints for kpas
     public function getKpa(){
-        $Kpa = Kpa::all();
+        $Kpa = Kpa::paginate(10);
         //$Kpa = Kpa::select('title')->get();
 
          return response()->json([
@@ -262,7 +266,7 @@ class objectivesController extends Controller
     //endpoints for kpis
     public function getKpi(){
         // $Kpi  = Kpi::all();
-        $Kpi = Kpi::select('title')->get();
+        $Kpi = Kpi::select('title')->paginate(10);
          return response()->json([
              'status' => 'success',
              'users' => $Kpi,
@@ -352,13 +356,59 @@ class objectivesController extends Controller
         // kpi scoring endpoints
 
         public function getKpiscore(){
-            $Kpi  = Kpi::all();
+            $Kpi  = Kpi::paginate(10);
              return response()->json([
                  'status' => 'success',
                  'key performance indicator' => $Kpi,
              ]);
             }
-        // public function createKpiscore(Request $request, $id){
+public function updateKpiscore(Request $request, $id)
+{
+    $Kpi = Kpi::find($id);
+    if (!$Kpi) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Key performance indicator score could not be found',
+        ], 404);
+    }
+
+    $validatedData = $request->validate([
+        // 'indicators' => 'required|array',
+        // 'indicators.*' => 'required|string',
+        'weight' => 'required|numeric',
+        // 'weights.*.percentage' => 'required|numeric',
+        'score' => 'required|numeric',
+        // 'scores.*.score' => 'required|numeric',
+    ]);
+
+    // Perform the calculations to update the weighted average score
+    $weights = Kpi::get($validatedData['weight']);
+    $scores = Kpi::get($validatedData['score']);
+
+    $total_weight = $weights->sum('percentage');
+    $weighted_sum = $weights->zip($scores)->sum(function ($pair) {
+        return $pair[0]['percentage'] * $pair[1]['score'];
+    });
+
+    $weighted_average = $total_weight > 0 ? $weighted_sum / $total_weight : null;
+
+    // Update the KPI with the new values
+    $Kpi->update([
+        // 'indicators' => $validatedData['indicators'],
+        'weight' => $weights->toArray(),
+        'score' => $scores->toArray(),
+        'weighted_average_score' => $weighted_average,
+    ]);
+
+    return response()->json([
+        'status' => 'updated',
+        'message' => 'Key performance indicator scores are updated',
+        'Kpiscore' => $Kpi,
+    ]);
+}
+
+
+        // public function updateKpiscore(Request $request, $id){
 
         //     $Kpi = Kpi::Find($id);
         //     if(!$Kpi) {
@@ -367,57 +417,27 @@ class objectivesController extends Controller
         //             'message' =>'key performance indicator  score could not be found',
         //         ], 404);
         //     }
-        //     $validatedData = $request-> validate([
-        //     'indicators' => 'required|integer',
-        //     'weight' => 'required|decimal:1,1',
-        //     'score' => 'required|numeric',
-        //     'weighted_average_score' => 'integer'
-        //     ]);
 
-        //     //dd($validatedData);
-        //     $Kpi = Kpi::insert([
+        //     $validatedData = $request-> validate([
+        //         'indicators' => 'required|integer',
+        //         'weight' => 'required|integer',
+        //         'score' => 'required|integer',
+        //         'weighted_average_score' => 'integer'
+        //         ]);
+        //         //dd($validatedData);
+        //         $Kpi->update([
         //         "indicators"   =>  $validatedData['indicators'],
         //         "weight"     =>  $validatedData ['weight'],
         //         "score"     =>  $validatedData ['score'],
         //         "weighted_average_score"     =>  $validatedData ['weighted_average_score'],
-        //     ]);
-        //     return response ()-> json ( [
-        //         "status"    =>"success",
-        //         "data"      => $Kpi,
-        //         "Message"   =>"key performance indicator score created successfully."], 201);
+        //         ]) ;
+        //         return response() -> json ([
+        //             "status"=>"updated",
+        //             "message"=> "key performance indicator scores are updated",
+        //             "Kpiscore" => $Kpi,
+        //         ]);
+
         // }
-
-
-        public function updateKpiscore(Request $request, $id){
-
-            $Kpi = Kpi::Find($id);
-            if(!$Kpi) {
-                return response()->json([
-                    'status'=> 'error',
-                    'message' =>'key performance indicator  score could not be found',
-                ], 404);
-            }
-
-            $validatedData = $request-> validate([
-                'indicators' => 'required|integer',
-                'weight' => 'required|integer',
-                'score' => 'required|integer',
-                'weighted_average_score' => 'integer'
-                ]);
-                //dd($validatedData);
-                $Kpi->update([
-                "indicators"   =>  $validatedData['indicators'],
-                "weight"     =>  $validatedData ['weight'],
-                "score"     =>  $validatedData ['score'],
-                "weighted_average_score"     =>  $validatedData ['weighted_average_score'],
-                ]) ;
-                return response() -> json ([
-                    "status"=>"updated",
-                    "message"=> "key performance indicator scores are updated",
-                    "Kpiscore" => $Kpi,
-                ]);
-
-        }
 
         public function deleteKpiscore(Request $request, $id){
 

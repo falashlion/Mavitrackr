@@ -6,11 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable  implements JWTSubject
 {
-    use HasFactory, Notifiable ;
+    use HasFactory, Notifiable, HasApiTokens, HasRoles ;
 
     // private string $user_matricule;
 
@@ -30,15 +32,15 @@ class User extends Authenticatable  implements JWTSubject
         'positions_id',
     ];
 
-    // protected $hidden =[
-    //     'password',
-    //     'departments_id',
-    //     'positions_id',
-    //     'created_at',
-    //     'updated_at',
-    //     'remember_token',
-    //     'email_verified_at',
-    // ];
+    protected $hidden =[
+        'password',
+        'departments_id',
+        'positions_id',
+        'created_at',
+        'updated_at',
+        'remember_token',
+        'email_verified_at',
+    ];
 
 
     public function setPasswordAttribute($value)
@@ -50,22 +52,22 @@ class User extends Authenticatable  implements JWTSubject
         'is_manager' => 'boolean',
     ];
 
-    public function Kpi(){
+    public function kpi(){
         return $this->hasMany(Kpi::class, 'kpis_id');
     }
 
-    public function Department(){
+    public function department(){
         return $this->belongsTo(Department::class, 'departments_id');
     }
 
-    public function Role()
+    public function roles()
     {
-        return $this->belongsToMany(Role::class);
+        return $this->belongsToMany(Role::class, Access::class);
     }
     /**
      * Summary of positions
      */
-    public function Position()
+    public function position()
     {
         return $this->belongsTo(Position::class, 'positions_id');
     }
@@ -81,6 +83,7 @@ class User extends Authenticatable  implements JWTSubject
      */
     public function getJWTIdentifier() {
         return $this->user_matricule;
+
     }
     /**
      * Return a key value array, containing any custdatabase/migrations/2023_07_25_104727_users.phpom claims to be added to the JWT.

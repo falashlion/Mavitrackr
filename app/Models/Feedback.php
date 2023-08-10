@@ -20,7 +20,7 @@ class Feedback extends Model
         'comment',
         'kpis_id'
     ];
-    public function Kpi(){
+    public function kpi(){
         return $this->hasMany(Kpi::class);
     }
 }

@@ -6,6 +6,8 @@ use App\Models\Department;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Tymon\JWTAuth\Facades\JWTAuth;
+
 
 class departmentController extends Controller
 {
@@ -13,10 +15,14 @@ class departmentController extends Controller
 
     // manager endpoints
 
+    // public function __construct()
+    // {
+    //     $this->middleware('auth.role');
+    // }
+
     public function getmanagerbyid(Request $request, $id){
 
         $managerdata = Department::with('User:first_name,last_name,profile_image')->get();
-
         $department= Department::Find($id);
         if (!$department ) {
             return response()->json([
@@ -65,7 +71,7 @@ class departmentController extends Controller
         ]);
     }
     public function getdepartments(Request $request){
-        $department  = Department::all();
+        $department  = Department::paginate(10);
          return response()->json([
              'status' => 'success',
              'users' => $department,
@@ -137,14 +143,14 @@ class departmentController extends Controller
 
             $user = User::find($id);
 
-            // dd($user);
+
             if(!$user){
                 return response ()-> json ( [
                     "status" => 'error',
                     "message" => ' user not found']);
                 }
 
-            $manager = User::select("*")
+            $manager = User::select("*")//"first_name", "last_name", "profile_image")
             ->where([
                 ['is_manager',"=", true,],
                 ['departments_id' ,"=", $user->departments_id]
@@ -165,7 +171,8 @@ class departmentController extends Controller
         }
 
         public function getdirectreports(Request $request, $id){
-            # code...
+
+            // $user = JWTAuth::parseToken()->authenticate();
             $user=User::find($id) ;
             if(!$user){
                 return response ()-> json ( [

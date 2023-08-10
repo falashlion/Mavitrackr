@@ -1,12 +1,14 @@
 <?php
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
+use App\Models\Access;
 use App\Models\User;
+use App\Models\Roles;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Cookie;
 
 
 
@@ -17,9 +19,13 @@ class AuthController extends Controller
      *
      * @return void
      */
-   public function __construct() {
-       $this->middleware('auth:api', ['except' => ['login', 'submitResetPasswordForm', 'updateusers', 'logout', 'register', 'deleteuser', 'getusers', 'getdepartments', 'createdepartments', 'updatedepartments', 'deletedepartments', 'getusersbyid']]);
-    }
+//    public function __construct() {
+//        $this->middleware('auth:api', ['except' => ['login', 'submitResetPasswordForm', 'updateusers', 'logout', 'register', 'deleteuser', 'getusers', 'getdepartments', 'createdepartments', 'updatedepartments', 'deletedepartments', 'getusersbyid']]);
+//     }
+// public function __construct()
+//     {
+//         $this->middleware('auth:api', ['except' => ['login', 'register']]);
+//     }
 
     /**
      * Get a JWT via given credentials.
@@ -42,6 +48,7 @@ class AuthController extends Controller
             'departments_id'=> 'integer',
             'positions_id'=> 'integer',
             'is_manager' => 'boolean',
+
         ]);
 
             $user= User::create([
@@ -63,12 +70,13 @@ class AuthController extends Controller
 
 
 
-        // $token  = Auth::login($user);
+
          return response()->json([
             'status'=> 'success',
             'message'=> 'user successfully created',
             'user'=> $user,
-            // 'token' => $token
+            'role' => $user->roles()->get()->pluck(['title']),
+
 
          ]);
             }
@@ -99,12 +107,15 @@ class AuthController extends Controller
 
         $user = Auth::user();
 
+        $cookies = Cookie::make('jwt', $token, 60 * 24);
+
          return response()->json([
-            "status" => 'success',
-            "message" => 'login successful',
-            "token" => $token,
+            'status' => 'success',
+            'message' => 'login successful',
+            // "token" => $cookies,
+            "token_type" => 'bearer',
             "data" => $user
-         ]);
+         ])->withCookie($cookies);
         }
 
 
@@ -115,36 +126,48 @@ class AuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function logout() {
+        Auth::logout();
 
-        return response()->json(['message' => 'User successfully signed out']);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'User successfully signed out']);
     }
 
 
     // public function userProfile() {
-    //     return response()->json(auth()->user());
+    //     return response()->json(auth()->user());New_Query_1691587139195
     // }
     public function getusers(){
-        $user = User::all();
+
+        $user = JWTAuth::parseToken()->authenticate();
+        $user = User::paginate(10);
+
          return response()->json([
              'status' => 'success',
              'users' => $user,
+            //  "role" => $user->roles()->get()->pluck(['title']),
          ]);
         }
 
     public function getusersbyid(Request $request, $id){
-        $user= User::find($id);
+        $user = User::find($id);
         if (!$user ) {
             return response()->json([
                 'status'=> 'error',
                 'message' =>'user id  could not found',
             ], 404);
         }
+       $data = [
+        'user' => $user,
+        'role' => $user->roles()->get()->pluck(['title']),
+       ];
 
         return response()->json([
-            "status" => "success",
-            "data"=> $user,
+            'status' => 'success',
+            'data'=> $data,
         ]);
     }
+
     public function updateusers(Request $request, $id){
         $user= User::Find($id);
         if(!$user) {
@@ -189,6 +212,7 @@ class AuthController extends Controller
             "status"=>"success",
             "message"=> "User successfully updated",
             "user" => $user,
+            'role' => $user->roles()->get()->pluck(['title']),
         ]);
 
         }
@@ -216,8 +240,19 @@ class AuthController extends Controller
 
 
         }
-
-
+// public function user(){
+//     return 'Authenticated user';
+// }
+public function refresh()
+    {
+        return response()->json([
+            'user' => Auth::user(),
+            'authorisation' => [
+                'token' => Auth::refresh(),
+                'type' => 'bearer',
+            ]
+        ]);
+    }
 
 }
 

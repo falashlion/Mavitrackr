@@ -17,10 +17,11 @@ class Permission extends Model
     protected $table = 'permissions';
 
     protected $fillable =[
-        '',
+        'title',
+        'description'
     ];
-    public function Role()
+    public function roles()
     {
-        return $this->belongsToMany(Role::class);
+        return $this->belongsToMany(Role::class,Permit::class);
     }
 }
