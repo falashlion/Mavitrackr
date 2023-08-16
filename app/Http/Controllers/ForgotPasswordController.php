@@ -19,10 +19,10 @@ class ForgotPasswordController extends Controller
 {
 
 
-    public function __construct()
-    {
-        $this->middleware('auth.role');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth.role');
+    // }
     /**
      * Send a password reset link to the given user.
      *

@@ -3,12 +3,14 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Access;
 use App\Models\User;
-use App\Models\Roles;
+use App\Models\Role;
+use App\Models\Position;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Cookie;
+
 
 
 
@@ -48,7 +50,6 @@ class AuthController extends Controller
             'departments_id'=> 'integer',
             'positions_id'=> 'integer',
             'is_manager' => 'boolean',
-
         ]);
 
             $user= User::create([
@@ -96,7 +97,9 @@ class AuthController extends Controller
         ]);
 
             $credentials = $request->only('user_matricule', 'password');
-            $token = Auth::attempt($credentials);
+            $user = User::where('user_matricule', '=', $credentials['user_matricule'])->first();
+            $rolePermissions = $user->roles()->get();
+            $token = Auth::attempt($credentials,$rolePermissions);
             if(!$token ){
 
             return response()->json([
@@ -104,18 +107,33 @@ class AuthController extends Controller
                 'message'=>'invalid user_matricule and password',
             ], 401);
         }
-
+        // dd($token);
         $user = Auth::user();
+        $roles = $user->roles()->get()->pluck('title');
+        $position = $user->position()->get()->pluck('title');
+        $department = $user->department()->get()->pluck('title');
 
-        $cookies = Cookie::make('jwt', $token, 60 * 24);
+    $data = [
+        'user' => $user,
+        'roles' => $roles,
+        'position' => $position,
+        'department' => $department,
+    ];
 
+    $customClaims= [
+        'role' => $roles,
+    ];
+
+
+    $token = JWTAuth::claims($customClaims)->attempt($credentials);
+        // dd($token);
          return response()->json([
             'status' => 'success',
             'message' => 'login successful',
-            // "token" => $cookies,
-            "token_type" => 'bearer',
-            "data" => $user
-         ])->withCookie($cookies);
+            'token' => $token,
+            'token_type' => "bearer",
+            'data' => $data,
+         ]);
         }
 
 
@@ -139,13 +157,17 @@ class AuthController extends Controller
     // }
     public function getusers(){
 
-        $user = JWTAuth::parseToken()->authenticate();
+        //  $user = JWTAuth::parseToken()->authenticate();
         $user = User::paginate(10);
+
+        $data = [
+            'user' => $user,
+            // 'role' => $user->roles()->get()->pluck(['title']),
+           ];
 
          return response()->json([
              'status' => 'success',
-             'users' => $user,
-            //  "role" => $user->roles()->get()->pluck(['title']),
+             'data' => $data,
          ]);
         }
 

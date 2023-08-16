@@ -8,10 +8,10 @@ use App\Http\Controllers\Controller;
 class positionsController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware('auth.role');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth.role');
+    // }
       public function getpositions(){
         $position  = Position::all();
          return response()->json([

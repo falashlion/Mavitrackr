@@ -37,8 +37,8 @@ function () {
 
 
 Route::group([
-    'middleware' => 'api',
-    //prefix' => 'api',
+    'middleware' => ['jwt.verify']
+
 ],
 function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -64,7 +64,9 @@ Route::group([
 //departments endpoints
 
 Route::group([
-    'middleware' => 'api',//jwt.verify'
+
+    'middleware' => ['jwt.verify']
+
 ], function(){
 Route::get('/departments', [departmentController::class, 'getdepartments']);
 Route::post('/departments', [departmentController::class, 'createdepartments']);

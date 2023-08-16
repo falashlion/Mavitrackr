@@ -19,7 +19,7 @@ class Position extends Model
     protected $fillable =[
         'title',
     ];
-    public function user(){
-        return $this->hasMany(User::class);
+    public function users(){
+        return $this->hasMany(User::class, 'positions_id');
     }
 }
