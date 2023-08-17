@@ -52,8 +52,8 @@ class AuthController extends Controller
 
         ]);
 
-        $fileName = time() . '.' .$request->image->extension();
-        $request->image->storeAs('public/images', $fileName);
+        $fileName = time() . '.' .$request->profile_image->extension();
+        $request->profile_image->storeAs('public/images', $fileName);
 
             $user= User::create([
                 'user_matricule' => $validatedData['user_matricule'],
@@ -61,7 +61,7 @@ class AuthController extends Controller
                'first_name' => $validatedData['first_name'],
                'last_name' => $validatedData['last_name'],
                'email' => $validatedData['email'],
-               'profile_image'=> $validatedData['profile_image'],
+               'profile_image'=> $validatedData[$fileName],
                'phone' => $validatedData['phone'],
                'address' => $validatedData['address'],
                'gender' => $validatedData['gender'],
