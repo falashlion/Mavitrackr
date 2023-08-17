@@ -15,46 +15,40 @@ class departmentController extends Controller
 
     // manager endpoints
 
-    // public function __construct()
-    // {
-    //     $this->middleware('auth.role');
+
+    // public function getmanagerbyid(Request $request, $id){
+
+    //     $managerdata = Department::with('User:first_name,last_name,profile_image')->get();
+    //     $department= Department::Find($id);
+    //     if (!$department ) {
+    //         return response()->json([
+    //             'status'=> 'error',
+    //             'message' =>'department could not found',
+    //         ], 404);
+    //     }
+    //     $manager = $department->where('is_manager', true)->first();
+
+    //     if(!$manager) {
+    //         return response()->json([
+    //             "status" => "error",
+    //             "message" => "No manager found for this department"
+    //         ]);
+    //     }
+    //     if ($manager->id != $request->user()->id) {
+    //         return response()->json([
+    //             'status' => 'error',
+    //             'message' => 'you are not authorized to access this resource',
+    //         ], 403);
+    //     }
+
+    //     $department -> get();
+    //     return response()->json([
+    //         "status" => "success",
+    //         "data"=>$managerdata ,
+    //     ]);
     // }
 
-    public function getmanagerbyid(Request $request, $id){
 
-        $managerdata = Department::with('User:first_name,last_name,profile_image')->get();
-        $department= Department::Find($id);
-        if (!$department ) {
-            return response()->json([
-                'status'=> 'error',
-                'message' =>'department could not found',
-            ], 404);
-        }
-        $manager = $department->where('is_manager', true)->first();
-
-        if(!$manager) {
-            return response()->json([
-                "status" => "error",
-                "message" => "No manager found for this department"
-            ]);
-        }
-        if ($manager->id != $request->user()->id) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'you are not authorized to access this resource',
-            ], 403);
-        }
-
-        $department -> get();
-        return response()->json([
-            "status" => "success",
-            "data"=>$managerdata ,
-        ]);
-    }
-
-    // public function managerResponse(User $user){
-    //     $managerdata = $user->with('first_name', 'last_name', 'profile_image');
-    // }
 
     public function getdepartmentsbyid(Request $request, $id){
         $department= Department::Find($id);
@@ -83,7 +77,6 @@ class departmentController extends Controller
             'title' => 'required|string'
             ]);
 
-            //dd($validatedData);
             $department = Department::insert([
                 "title"   =>  $validatedData['title'],
             ]);
@@ -139,7 +132,7 @@ class departmentController extends Controller
         }
         // endpoints for manager data
 
-        public function getmanager(Request $request, $id){
+        public function getmanager($id){
 
             $user = User::find($id);
 

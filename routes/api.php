@@ -123,8 +123,8 @@ Route::post('/forget-password', [ForgotPasswordController::class, 'submitForgetP
 Route::post('/reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
 
 // manager endpoints
-Route::get('/user/{id}/manager', [departmentController::class, 'getmanager']);
-Route::get('/user/manager/{id}', [departmentController::class, 'getdirectreports']);
+Route::get('/user/{id}/manager', [departmentController::class, 'getmanager'])->name('manager');
+Route::get('/user/manager/{id}', [departmentController::class, 'getdirectreports'])->name('managerReport');
 
 });
 
