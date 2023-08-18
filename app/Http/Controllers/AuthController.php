@@ -61,7 +61,7 @@ class AuthController extends Controller
                'first_name' => $validatedData['first_name'],
                'last_name' => $validatedData['last_name'],
                'email' => $validatedData['email'],
-               'profile_image'=> $validatedData[$fileName],
+               'profile_image'=>$fileName,
                'phone' => $validatedData['phone'],
                'address' => $validatedData['address'],
                'gender' => $validatedData['gender'],
@@ -111,8 +111,8 @@ class AuthController extends Controller
         $roles = $user->roles()->get()->pluck('title');
         $position = $user->position()->get()->pluck('title');
         $department = $user->department()->get()->pluck('title');
-        $departmentController = (new departmentController);
          $managers= (new departmentController)->getmanager($user->id);
+        //  $managerData= $managers->get()->pluck($user->['profile_image','last_name','first_name']);
 
     $data = [
         'user' => $user,
@@ -121,15 +121,7 @@ class AuthController extends Controller
         'department' => $department,
         'manager' => $managers,
     ];
-    // $user = [
-    //     'user' => $user,
-    //     'roles' => $roles,
-    //     'position' => $position,
-    //     'department' => $department,
-    //     'manager' => $managers,
-    //     'token' => $token,
-    //     'token_type' => "bearer",
-    // ];
+
 
     $customClaims= [
         'role' => $roles,
@@ -141,7 +133,6 @@ class AuthController extends Controller
             'status' => 'success',
             'message' => 'login successful',
             'token' => $token,
-            'token_type' => "bearer",
             'data' => $data,
          ]);
         }

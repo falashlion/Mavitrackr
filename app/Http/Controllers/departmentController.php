@@ -143,7 +143,7 @@ class departmentController extends Controller
                     "message" => ' user not found']);
                 }
 
-            $manager = User::select("*")//"first_name", "last_name", "profile_image")
+            $manager = User::select("first_name", "last_name", "profile_image")
             ->where([
                 ['is_manager',"=", true,],
                 ['departments_id' ,"=", $user->departments_id]

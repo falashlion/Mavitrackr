@@ -16,10 +16,16 @@ class Department extends Model
     protected $table = 'departments';
     protected $fillable =[
         'title',
+        'manager_id',
     ];
 
-    public function user(){
+    public function users(){
         return $this->hasMany(User::class); //one to many relationship with the user model
+    }
+
+    public function manager()
+    {
+        return $this->hasOne(User::class);
     }
 
 }
