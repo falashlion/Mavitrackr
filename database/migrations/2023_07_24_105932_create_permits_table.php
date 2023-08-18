@@ -16,8 +16,8 @@ class CreatePermitsTable extends Migration
             $table->uuid('uuid')->nullable();
             $table->unsignedBigInteger('role_id');
             $table->unsignedBigInteger('permission_id');
-            $table->foreign('permissions_id')->references('id')->on('permissions')->onDelete('cascade');
-            $table->foreign('roles_id')->references('id')->on('roles')->onDelete('cascade');
+            $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
             $table->timestamps();
         });
     }
