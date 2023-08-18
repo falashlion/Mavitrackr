@@ -75,7 +75,7 @@ class AuthController extends Controller
             'status'=> 'success',
             'message'=> 'user successfully created',
             'user'=> $user,
-            'role' => $user->roles()->get()->pluck(['title']),
+            // 'role' => $user->roles()->get()->pluck(['title']),
             // Response::HTTP_CREATED
 
          ]);
@@ -112,7 +112,7 @@ class AuthController extends Controller
         $position = $user->position()->get()->pluck('title');
         $department = $user->department()->get()->pluck('title');
          $managers= (new departmentController)->getmanager($user->id);
-        //  $managerData= $managers->get()->pluck($user->['profile_image','last_name','first_name']);
+
 
     $data = [
         'user' => $user,

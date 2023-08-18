@@ -37,7 +37,7 @@ function () {
 
 
 Route::group([
-    'middleware' => ['jwt.verify']
+    // 'middleware' => ['jwt.verify']
 
 ],
 function () {
@@ -65,7 +65,7 @@ Route::group([
 
 Route::group([
 
-    'middleware' => ['jwt.verify']
+    // 'middleware' => ['jwt.verify']
 
 ], function(){
 Route::get('/departments', [departmentController::class, 'getdepartments']);
