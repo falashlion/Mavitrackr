@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Schema;
     {
         Schema::create('kpis', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->nullable();
             $table->string('title');
             $table->unsignedBigInteger('kpas_id');
             $table->unsignedBigInteger('users_id');

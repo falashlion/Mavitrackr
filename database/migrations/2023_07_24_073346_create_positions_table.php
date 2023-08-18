@@ -4,16 +4,17 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
- class  CreateDepartmentsTable  extends Migration
+class CreatePositionsTable extends Migration
 {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('departments', function (Blueprint $table) {
+        Schema::create('positions', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->uuid('uuid')->nullable();
+            $table->string('title')->unique();
             $table->timestamps();
         });
     }
@@ -23,6 +24,6 @@ use Illuminate\Support\Facades\Schema;
      */
     public function down(): void
     {
-        Schema::dropIfExists('departments');
+        Schema::dropIfExists('positions');
     }
 };

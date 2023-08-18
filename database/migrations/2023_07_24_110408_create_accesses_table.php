@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Schema;
     {
         Schema::create('accesses', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->nullable();
             $table->unsignedBigInteger('users_id');
             $table->unsignedBigInteger('roles_id');
             $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');

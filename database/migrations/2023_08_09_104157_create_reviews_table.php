@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->nullable();
             $table-> string('form_name');
             $table-> unsignedBigInteger('user_id');
             $table-> string('status');
             $table->dateTime('duedate_author');
             $table->dateTime('duedate_manager');
             $table->timestamps();
-            $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

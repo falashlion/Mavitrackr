@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Schema;
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->nullable();
             $table->string('user_matricule')->unique();
             $table->string('password');
             $table->string('profile_image')->nullable();
