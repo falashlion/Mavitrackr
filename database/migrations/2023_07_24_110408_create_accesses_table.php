@@ -14,10 +14,10 @@ use Illuminate\Support\Facades\Schema;
         Schema::create('accesses', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->nullable();
-            $table->unsignedBigInteger('users_id');
-            $table->unsignedBigInteger('roles_id');
-            $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('roles_id')->references('id')->on('roles')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('role_id');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('role_id')->references('id')->on('roles');
             $table->timestamps();
         });
     }

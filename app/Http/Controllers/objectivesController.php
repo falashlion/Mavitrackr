@@ -445,7 +445,7 @@ public function updateKpiscore(Request $request, $id)
 
             if (!$Kpi) {
                 return response()->json([
-                    "status"=> "notfound",
+                    "status"=> "not found",
                     "message"=> "key performance indicator's score was not found"
                 ], 404);
             }
