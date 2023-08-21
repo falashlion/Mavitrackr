@@ -16,12 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\LoginRequest;
 use App\Repositories\UserRepository;
-
-
-
-
-
-
+use Illuminate\Http\JsonResponse;
 
 class AuthController extends Controller
 {
@@ -53,7 +48,20 @@ class AuthController extends Controller
 
     public function getUserById($id) {
         $user = $this->userRepository->getUserById($id);
-        return response()->json(['user' => $user]);
+        $roles = $this->roles()->only('title');
+        $position = $user->position()->only('title');
+        $department = $user->department()->only('title');
+        $managerData = $user->department->manager->only('first_name', 'id', 'last_name', 'profile_image');
+
+        $data = [
+            'user' => $user,
+            'role'=> $roles,
+            'position' => $position,
+            'department' => $department,
+            'manager'=> $managerData,
+
+        ];
+        return response()->json(['data' => $data]);
     }
 
     public function updateUser($id, Request $request) {
@@ -68,6 +76,20 @@ class AuthController extends Controller
 
     public function getUsers() {
         $users = $this->userRepository->getAllUsers();
+        $user = Auth::user();
+        // $roles = $user->roles->pluck('title');
+        // $position = $user->position->title;
+        // $departmentManagerID = $user->department->title;
+        // $managerData = $user->department->manager->id;
+        // $departmentManager=[$departmentManagerID];
+
+    $data = [
+        'user' => $user,
+        // 'role'=> $roles,
+        // 'position' => $position,
+        // 'department'=> $departmentManager,
+
+    ];
         return response()->json(['users' => $users]);
     }
 
@@ -79,36 +101,34 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request, departmentController $id)
     {
-            $credentials = $request->only('user_matricule', 'password');
-            $user = User::where('user_matricule', '=', $credentials['user_matricule'])->first();
-            $rolePermissions = $user->roles()->get();
-            $token = Auth::attempt($credentials, $rolePermissions);
-            if(!$token ){
+        $credentials = $request->validated();
+
+        if(!$token = Auth::attempt($credentials) ){
 
             return response()->json([
                 'status'=>'error',
                 'message'=>'invalid user_matricule and password',
-            ], 401);
+            ], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
         $user = Auth::user();
-        $roles = $user->roles()->get()->pluck('title');
-        $position = $user->position()->get()->pluck('title');
-        $department = $user->department()->get()->pluck('title');
-
-
+        // $roles = $user->roles->pluck('title');
+        $position = $user->position->title;
+        $departmentManagerID = $user->department->title;
+        $managerData = $user->department->manager->id;
+        $departmentManager=[$departmentManagerID];
 
     $data = [
         'user' => $user,
-        'role'=> $roles,
-        'position' => $position,
-        'department' => $department,
+        'roles'=> $user->roles->pluck('title'),
+        // 'position' => $position,
+        'department'=> $departmentManager,
 
     ];
 
 
     $customClaims= [
-        'role' => $roles,
+        // 'role' => $roles,
     ];
 
     $token = JWTAuth::claims($customClaims)->attempt($credentials);

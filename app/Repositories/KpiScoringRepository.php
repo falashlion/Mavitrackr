@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-interface KpiRepositoryInterface
+interface KpiScoringRepository
 {
     public function getAllKpi();
 

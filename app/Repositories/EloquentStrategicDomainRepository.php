@@ -8,7 +8,7 @@ class EloquentStrategicDomainRepository implements StrategicDomainRepository
 {
     public function getAll()
     {
-        return StrategicDomain::paginate(10);
+        return StrategicDomain::all();
     }
 
     public function getById($id)

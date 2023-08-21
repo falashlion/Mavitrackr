@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-interface KpaRepositoryInterface
+interface KpaRepository
 {
     public function getAllKpa();
 

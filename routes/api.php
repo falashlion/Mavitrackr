@@ -6,6 +6,9 @@ use App\Http\Controllers\positionsController;
 use App\Http\Controllers\objectivesController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\KpaController;
+use App\Http\Controllers\KpiController;
+use App\Http\Controllers\KpiScoringController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -70,23 +73,23 @@ Route::put('/strategic_domains/{id}', [objectivesController::class,'updatestrate
 Route::delete('/strategic_domains/{id}',[objectivesController::class,'deletestrategic_domains']);
 Route::get('/strategic_domains/{id}',[objectivesController::class,'getStrategicDomainById']);
 // key performance areas endpoints
-Route::get('/Kpas', [objectivesController::class, 'getKpa']);
-Route::post('/Kpas', [objectivesController::class, 'createKpa']);
-Route::put('/Kpas/{id}', [objectivesController::class,'updateKpa']);
-Route::delete('/Kpas/{id}',[objectivesController::class,'deleteKpa']);
-Route::get('/Kpas/{id}',[objectivesController::class,'getKpabyid']);
+Route::get('/Kpas', [KpaController::class, 'getKpa']);
+Route::post('/Kpas', [KpaController::class, 'createKpa']);
+Route::put('/Kpas/{id}', [KpaController::class,'updateKpa']);
+Route::delete('/Kpas/{id}',[KpaController::class,'deleteKpa']);
+Route::get('/Kpas/{id}',[KpaController::class,'getKpabyid']);
 // key performance indicators endpoints
-Route::get('/Kpis', [objectivesController::class, 'getKpi']);
-Route::post('/Kpis', [objectivesController::class, 'createKpi']);
-Route::put('/Kpis/{id}', [objectivesController::class,'updateKpi']);
-Route::delete('/Kpis/{id}',[objectivesController::class,'deleteKpi']);
-Route::get('/Kpis/{id}',[objectivesController::class,'getKpibyid']);
+Route::get('/Kpis', [KpiController::class, 'getKpi']);
+Route::post('/Kpis', [KpiController::class, 'createKpi']);
+Route::put('/Kpis/{id}', [KpiController::class,'updateKpi']);
+Route::delete('/Kpis/{id}',[KpiController::class,'deleteKpi']);
+Route::get('/Kpis/{id}',[KpiController::class,'getKpibyid']);
 // key performance indicatoras scoring
-Route::get('/Kpis/scoring ', [objectivesController::class, 'getKpiscore']);
-Route::post('/Kpis/{id}/scoring ', [objectivesController::class, 'updateKpiscore']);
-Route::patch('/Kpis/{id}/scoring ', [objectivesController::class,'updateKpiscore']);
-Route::delete('/Kpis/{id}/scoring ',[objectivesController::class,'deleteKpiscore']);
-Route::get('/Kpis/{id}/scoring ',[objectivesController::class, 'getKpibyid']);
+Route::get('/Kpis/scoring', [KpiScoringController::class, 'getKpiScoring']);
+Route::post('/Kpis/{id}/scoring', [KpiScoringController::class, 'updateKpiScoring']);
+Route::put('/Kpis/{id}/scoring', [KpiScoringController::class,'updateKpisScoring']);
+Route::delete('/Kpis/{id}/scoring',[KpiScoringController::class,'deleteKpiScoring']);
+Route::get('/Kpis/{id}/scoring',[KpiScoringController::class, 'getKpiScoringbyid']);
 
 // feedbacks endpoints
 Route::get('/Kpis/feedback ', [FeedbackController::class, 'getfeedback']);

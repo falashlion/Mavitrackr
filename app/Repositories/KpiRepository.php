@@ -2,36 +2,15 @@
 
 namespace App\Repositories;
 
-use App\Models\Kpi;
-
-class KpiRepository implements KpiRepositoryInterface
+interface KpiRepository
 {
-    public function getAllKpi()
-    {
-        return Kpi::paginate(10);
-    }
+    public function getAllKpi();
 
-    public function getKpiById($id)
-    {
-        return Kpi::findOrFail($id);
-    }
+    public function getKpiById($id);
 
-    public function createKpi($data)
-    {
-        return Kpi::create($data);
-    }
+    public function createKpi($data);
 
-    public function updateKpi($id, $data)
-    {
-        $kpi = Kpi::findOrFail($id);
-        $kpi->update($data);
-        return $kpi;
-    }
+    public function updateKpi($id, $data);
 
-    public function deleteKpi($id)
-    {
-        $kpi = Kpi::findOrFail($id);
-        $kpi->delete();
-        return true;
-    }
+    public function deleteKpi($id);
 }

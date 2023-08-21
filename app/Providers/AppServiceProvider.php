@@ -2,9 +2,13 @@
 
 namespace App\Providers;
 
+use App\Repositories\EloquentFeedbackRepository;
+use App\Repositories\EloquentKpiRepository;
+use App\Repositories\EloquentKpiScoringRepository;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\UserRepository;
 use App\Repositories\EloquentUserRepository;
+use App\Repositories\EloquentKpaRepository;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -20,16 +24,24 @@ class AppServiceProvider extends ServiceProvider
             \App\Repositories\EloquentDepartmentRepository::class
         );
         $this->app->bind(
+            \App\Repositories\KpiRepository::class, EloquentKpiRepository::class
+        );
+        $this->app->bind(
+            \App\Repositories\KpiScoringRepository::class, EloquentKpiScoringRepository::class
+        );
+        $this->app->bind(
+            \App\Repositories\KpaRepository::class, EloquentKpaRepository::class
+        );
+        $this->app->bind(
+            \App\Repositories\FeedbackRepository::class, EloquentFeedbackRepository::class
+        );
+        $this->app->bind(
             \App\Repositories\StrategicDomainRepository::class,
             \App\Repositories\EloquentStrategicDomainRepository::class
         );
         $this->app->bind(
             App\Repositories\EloquentFeedbackRepository::class,
             App\Repositories\FeedbackRepository::class
-        );
-        $this->app->bind(
-            App\Repositories\EloquentKpaRepository::class,
-            App\Repositories\KpaRepositoryInterface::class
         );
     }
 

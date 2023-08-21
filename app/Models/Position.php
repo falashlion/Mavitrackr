@@ -12,6 +12,8 @@ class Position extends Model
     protected $hidden =[
         'created_at',
         'updated_at',
+        'uuid',
+        'id'
         ];
 
     protected $table = 'positions';

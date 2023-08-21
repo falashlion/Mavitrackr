@@ -23,9 +23,13 @@ class Department extends Model
         return $this->hasMany(User::class); //one to many relationship with the user model
     }
 
+    // public function manager()
+    // {
+    //     return $this->hasOne(User::class, 'manager_id');
+    // }
     public function manager()
-    {
-        return $this->hasOne(User::class);
-    }
+{
+    return $this->belongsTo(User::class, 'manager_id');
+}
 
 }

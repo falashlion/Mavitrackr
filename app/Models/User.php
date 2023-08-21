@@ -34,6 +34,7 @@ class User extends Authenticatable  implements JWTSubject
 
     protected $hidden =[
         'password',
+        'pivot',
         'departments_id',
         'positions_id',
         'created_at',
@@ -67,7 +68,7 @@ class User extends Authenticatable  implements JWTSubject
      */
     public function roles()
     {
-        return $this->belongsToMany(Role::class, Access::class);
+        return $this->belongsToMany(Role::class, Access::class, 'role_id');
     }
     /**
      * Summary of positions
@@ -77,10 +78,6 @@ class User extends Authenticatable  implements JWTSubject
         return $this->belongsTo(Position::class, 'positions_id');
     }
 
-
-        public function managers(){
-            return $this->hasMany(User::class)->where('is_manager', true);
-        }
  /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
@@ -96,7 +93,9 @@ class User extends Authenticatable  implements JWTSubject
      * @return array
      */
     public function getJWTCustomClaims() {
-        return [];
+        return [
+            'roles' => $this->roles()->without('permit')->get(['title']),
+        ];
     }
 
 }

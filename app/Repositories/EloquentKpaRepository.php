@@ -4,11 +4,11 @@ namespace App\Repositories;
 
 use App\Models\Kpa;
 
-class EloquentKpaRepository implements KpaRepositoryInterface
-{
+class EloquentKpaRepository implements KpaRepository{
+
     public function getAllKpa()
     {
-        return Kpa::paginate(10);
+        return Kpa::all();
     }
 
     public function getKpaById($id)

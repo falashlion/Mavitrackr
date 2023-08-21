@@ -14,8 +14,7 @@ use App\Http\Requests\FeedbackRequest;
 use App\Http\Requests\StrategicDomainsRequest;
 use App\Repositories\StrategicDomainRepository;
 use App\Repositories\FeedbackRepository;
-use App\Repositories\KpaRepositoryInterface;
-use App\Repositories\KpiRepositoryInterface;
+
 
 
 
@@ -25,12 +24,10 @@ class objectivesController extends Controller
     //endpoints for StrategicDomain
     private $strategicDomainRepository;
 
-    public function __construct(StrategicDomainRepository $strategicDomainRepository, FeedbackRepository $feedbackRepository, KpaRepositoryInterface $kpaRepository, KpiRepositoryInterface $kpiRepository)
+    public function __construct(StrategicDomainRepository $strategicDomainRepository, )
     {
         $this->strategicDomainRepository = $strategicDomainRepository;
-        $this->feedbackRepository = $feedbackRepository;
-        $this->KpaRepository = $kpaRepository;
-        $this->kpiRepository = $kpiRepository;
+
     }
     protected $feedbackRepository;
 
@@ -42,10 +39,12 @@ class objectivesController extends Controller
     public function getstrategic_domains()
     {
         $strategicDomains = $this->strategicDomainRepository->getAll();
-
+        $data=[
+            'strategic_domains' =>  $strategicDomains,
+        ];
         return response()->json([
             'status' => 'success',
-            'strategic_domains' => $strategicDomains,
+            'data' => $data,
         ]);
     }
     public function getStrategicDomainById(Request $request, $id)
@@ -172,110 +171,9 @@ class objectivesController extends Controller
     }
 
     //endpoints for kpas
-    public function getKpa()
-    {
-        $kpas = $this->kpaRepository->getAllKpa();
 
-        return response()->json([
-            'status' => 'success',
-            'key performance areas' => $kpas,
-        ]);
-    }
-
-    public function getKpabyid(Request $request, $id)
-    {
-        $kpa = $this->kpaRepository->getKpaById($id);
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $kpa,
-        ]);
-    }
-
-    public function createKpa(KpaRequest $request)
-    {
-        $kpa = $this->kpaRepository->createKpa($request->all());
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $kpa,
-            'message' => 'key performance area created successfully.',
-        ], 200);
-    }
-
-    public function updateKpa(KpaRequest $request, $id)
-    {
-        $kpa = $this->kpaRepository->updateKpa($id, $request->all());
-
-        return response()->json([
-            'status' => 'updated',
-            'message' => 'key performance area updated',
-            'Kpa' => $kpa,
-        ]);
-    }
-
-    public function deleteKpa(Request $request, $id)
-    {
-        $this->kpaRepository->deleteKpa($id);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'key performance area successfully deleted',
-        ]);
-    }
 
     //endpoints for kpis
-    public function getKpi()
-    {
-        $kpis = $this->kpiRepository->getAllKpi();
-
-        return response()->json([
-            'status' => 'success',
-            'key performance indicators' => $kpis,
-        ]);
-    }
-
-    public function getKpibyid(Request $request, $id)
-    {
-        $kpi = $this->kpiRepository->getKpiById($id);
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $kpi,
-        ]);
-    }
-
-    public function createKpi(KpiRequest $request)
-    {
-        $kpi = $this->kpiRepository->createKpi($request->all());
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $kpi,
-            'message' => 'key performance indicator created successfully.',
-        ], 200);
-    }
-
-    public function updateKpi(KpiRequest $request, $id)
-    {
-        $kpi = $this->kpiRepository->updateKpi($id, $request->all());
-
-        return response()->json([
-            'status' => 'updated',
-            'message' => 'key performance indicator updated',
-            'Kpi' => $kpi,
-        ]);
-    }
-
-    public function deleteKpi(Request $request, $id)
-    {
-        $this->kpiRepository->deleteKpi($id);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'key performance indicator successfully deleted',
-        ]);
-    }
 
         // kpi scoring endpoints
 
@@ -286,7 +184,7 @@ public function getKpiscore(){
                  'key performance indicator' => $Kpi,
              ]);
             }
-public function updateKpiscore(Request $request, $id)
+public function updateKpiscore(KpiRequest $request, $id)
 {
     $Kpi = Kpi::find($id);
     if (!$Kpi) {
@@ -296,14 +194,9 @@ public function updateKpiscore(Request $request, $id)
         ], 404);
     }
 
-    $validatedData = $request->validate([
-        'weight' => 'required|numeric',
-        'score' => 'required|numeric',
-    ]);
-
     // Perform the calculations to update the weighted average score
-    $weights = Kpi::get($validatedData['weight']);
-    $scores = Kpi::get($validatedData['score']);
+    $weights = Kpi::get($request['weight']);
+    $scores = Kpi::get($request['score']);
 
     $total_weight = $weights->sum('percentage');
     $weighted_sum = $weights->zip($scores)->sum(function ($pair) {
