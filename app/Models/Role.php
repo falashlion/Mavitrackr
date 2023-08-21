@@ -24,10 +24,10 @@ class Role extends Model
     protected $table = 'roles';
     public function permission()
     {
-        return $this->belongsToMany(Permission::class, 'permissions');
+        return $this->belongsToMany(Permission::class);
     }
     public function users()
     {
-        return $this->belongsToMany(User::class, 'accesses', Access::class);
+        return $this->belongsToMany(User::class, Access::class);
     }
 }

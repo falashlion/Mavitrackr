@@ -21,7 +21,6 @@ use Illuminate\Support\Facades\Schema;
             $table->string('last_name');
             $table->string('phone')->unique();
             $table->string('address')->nullable();
-            $table->boolean('is_manager')->default(false);
             $table->enum('gender', ['Male','Female'])->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Schema;
     {
         Schema::create('strategic_domains', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->nullable();
             $table->enum('title', ['Financial', 'Customer', 'Process', 'People']);
             $table->timestamps();
         });

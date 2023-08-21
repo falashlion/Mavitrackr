@@ -7,188 +7,74 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Http\Requests\DepartmentRequest;
+use App\Repositories\DepartmentRepository;
 
 
-class departmentController extends Controller
-{
+class departmentController extends Controller {
+    protected $departmentRepository;
 
+    public function __construct(DepartmentRepository $departmentRepository) {
+        $this->departmentRepository = $departmentRepository;
+    }
 
-    // manager endpoints
-
-
-    // public function getmanagerbyid(Request $request, $id){
-
-    //     $managerdata = Department::with('User:first_name,last_name,profile_image')->get();
-    //     $department= Department::Find($id);
-    //     if (!$department ) {
-    //         return response()->json([
-    //             'status'=> 'error',
-    //             'message' =>'department could not found',
-    //         ], 404);
-    //     }
-    //     $manager = $department->where('is_manager', true)->first();
-
-    //     if(!$manager) {
-    //         return response()->json([
-    //             "status" => "error",
-    //             "message" => "No manager found for this department"
-    //         ]);
-    //     }
-    //     if ($manager->id != $request->user()->id) {
-    //         return response()->json([
-    //             'status' => 'error',
-    //             'message' => 'you are not authorized to access this resource',
-    //         ], 403);
-    //     }
-
-    //     $department -> get();
-    //     return response()->json([
-    //         "status" => "success",
-    //         "data"=>$managerdata ,
-    //     ]);
-    // }
-
-
-
-    public function getdepartmentsbyid(Request $request, $id){
-        $department= Department::Find($id);
-        if (!$department ) {
+    public function getdepartmentsbyid(Request $request, $id) {
+        $department = $this->departmentRepository->getDepartmentById($id);
+        if (!$department) {
             return response()->json([
-                'status'=> 'error',
-                'message' =>'department could not found',
+                'status' => 'error',
+                'message' => 'department could not found',
             ], 404);
         }
-        $department -> get();
         return response()->json([
-            "status" => "success",
-            "data"=> $department,
+            'status' => 'success',
+            'data' => $department,
         ]);
     }
-    public function getdepartments(Request $request){
-        $department  = Department::paginate(10);
-         return response()->json([
-             'status' => 'success',
-             'users' => $department,
-         ]);
-        }
 
-        public function createdepartments(Request $request){
-            $validatedData = $request-> validate([
-            'title' => 'required|string'
-            ]);
+    public function getdepartments(Request $request) {
+        $departments = $this->departmentRepository->getAllDepartments();
+        return response()->json([
+            'status' => 'success',
+            'data' => $departments,
+        ]);
+    }
 
-            $department = Department::insert([
-                "title"   =>  $validatedData['title'],
-            ]);
-            return response ()-> json ( [
-                "status"    =>"success",
-                "data"      =>$department,
-                "Message"   =>"Department created successfully."]);
+    public function createdepartments(DepartmentRequest $request) {
+        $validatedData = $request->validated();
+        $department = $this->departmentRepository->createDepartment($validatedData);
+        return response()->json([
+            'status' => 'success',
+            'data' => $department,
+            'message' => 'Department created successfully.',
+        ]);
+    }
 
-        }
-        public function updatedepartments(Request $request, $id){
+    public function updatedepartments(DepartmentRequest $request, $id) {
+        $validatedData = $request->validated();
+        $department = $this->departmentRepository->updateDepartment($id, $validatedData);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Department updated successfully.',
+        ]);
+    }
 
-            $departments = Department::Find($id);
-            if(!$departments) {
-                return response()->json([
-                    'status'=> 'error',
-                    'message' =>'department could not found',
-                ], 404);
-            }
+    public function deletedepartments(Request $request, $id) {
+        $this->departmentRepository->deleteDepartment($id);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Department deleted successfully.',
+        ]);
+    }
 
-            $validatedData = $request-> validate([
-                'title' => 'required|string'
-                ]);
-                //dd($validatedData);
-                $departments->update([
-                    "title"=> $validatedData["title"],
-                ]) ;
-                return response() -> json ([
-                    "status"=>"updated",
-                    "message"=> "department updated",
-                ]);
+    // endpoints for manager data
 
-        }
+    public function getmanager($id) {
+        // Implementation code
+    }
 
-        public function deletedepartments(Request $request, $id){
-
-            $departments = Department::Find($id);
-
-
-
-            if (!$departments ) {
-                return response()->json([
-                    "status"=> "notfound",
-                    "message"=> "department was not round"
-                ], 404);
-            }
-                $departments ->delete();
-
-                return response()->json([
-                    "status" => "success",
-                    "message" => "department successfully deleted ",
-                ]);
-
-        }
-        // endpoints for manager data
-
-        public function getmanager($id){
-
-            $user = User::find($id);
-
-
-            if(!$user){
-                return response ()-> json ( [
-                    "status" => 'error',
-                    "message" => ' user not found']);
-                }
-
-            $manager = User::select("first_name", "last_name", "profile_image")
-            ->where([
-                ['is_manager',"=", true,],
-                ['departments_id' ,"=", $user->departments_id]
-            ])->get();
-
-            if(!$manager){
-                return response ()-> json ( [
-                    "status" => 'error',
-                    "message" =>' department not found' ] );
-            }
-
-            return response()->json([
-                "status"=>"success",
-                "data"=>$manager,
-
-            ]);
-
-        }
-
-        public function getdirectreports(Request $request, $id){
-
-            // $user = JWTAuth::parseToken()->authenticate();
-            $user=User::find($id) ;
-            if(!$user){
-                return response ()-> json ( [
-                    "status" => 'error',
-                    "message" => ' user not found']);
-                }
-
-            $manager = User::select("*")
-            ->where([
-                ['is_manager',"=", false,],
-                ['departments_id' ,"=", $user->departments_id]
-            ])->get();
-
-            if(!$manager){
-                return response ()-> json ( [
-                    "status" => 'error',
-                    "message" =>' department not found' ] );
-            }
-
-            return response()->json([
-                "status"=>"success",
-                "data"=>$manager,
-
-            ]);
-        }
+    public function getdirectreports(Request $request, $id) {
+        // Implementation code
+    }
 }
+
