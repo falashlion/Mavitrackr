@@ -43,7 +43,7 @@ class AuthController extends Controller
 
     public function register(Request $request) {
         $user = $this->userRepository->createUser($request->all());
-        return response()->json(['user' => $user]);
+        return response()->json(['user' => $user],JsonResponse::HTTP_OK);
     }
 
     public function getUserById($id) {
@@ -62,7 +62,7 @@ class AuthController extends Controller
         'manager'=> $managerData,
 
     ];
-        return response()->json(['data' => $data]);
+        return response()->json(['data' => $data],JsonResponse::HTTP_OK);
     }
 
     public function updateUser($id, Request $request) {

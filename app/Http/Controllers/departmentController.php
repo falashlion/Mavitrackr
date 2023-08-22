@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Department;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -24,12 +25,12 @@ class departmentController extends Controller {
             return response()->json([
                 'status' => 'error',
                 'message' => 'department could not found',
-            ], 404);
+            ],JsonResponse::HTTP_NOT_FOUND);
         }
         return response()->json([
             'status' => 'success',
             'data' => $department,
-        ]);
+        ], JsonResponse::HTTP_OK);
     }
 
     public function getdepartments(Request $request) {
@@ -38,7 +39,7 @@ class departmentController extends Controller {
         return response()->json([
             'status' => 'success',
             'data' => $departments,
-        ]);
+        ],JsonResponse::HTTP_OK);
     }
 
     public function createdepartments(DepartmentRequest $request) {
@@ -48,7 +49,7 @@ class departmentController extends Controller {
             'status' => 'success',
             'data' => $department,
             'message' => 'Department created successfully.',
-        ]);
+        ], JsonResponse::HTTP_CREATED);
     }
 
     public function updatedepartments(DepartmentRequest $request, $id) {
@@ -57,7 +58,7 @@ class departmentController extends Controller {
         return response()->json([
             'status' => 'success',
             'message' => 'Department updated successfully.',
-        ]);
+        ], JsonResponse::HTTP_OK);
     }
 
     public function deletedepartments(Request $request, $id) {
@@ -65,17 +66,11 @@ class departmentController extends Controller {
         return response()->json([
             'status' => 'success',
             'message' => 'Department deleted successfully.',
-        ]);
+        ],JsonResponse::HTTP_OK);
     }
 
     // endpoints for manager data
 
-    public function getmanager($id) {
-        // Implementation code
-    }
 
-    public function getdirectreports(Request $request, $id) {
-        // Implementation code
-    }
 }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Feedback;
 use App\Models\Kpa;
@@ -27,7 +28,7 @@ public function getfeedback(Request $request)
     return response()->json([
         'status' => 'success',
         'users' => $feedback,
-    ]);
+    ], JsonResponse::HTTP_OK);
 }
 public function getfeedbackbyKpiid(FeedbackRequest $request, $id)
 {
@@ -36,13 +37,13 @@ public function getfeedbackbyKpiid(FeedbackRequest $request, $id)
         return response()->json([
             'status'=> 'error',
             'message' =>'feedback for this key performance indicator could not be found',
-        ], 404);
+        ], JsonResponse::HTTP_NOT_FOUND);
     }
 
     return response()->json([
         "status" => "success",
         "data"=> $feedback,
-    ]);
+    ], JsonResponse::HTTP_OK);
 }
 public function createfeedback(FeedbackRequest $request, $id)
 {
@@ -55,7 +56,7 @@ public function createfeedback(FeedbackRequest $request, $id)
         "status"    =>"success",
         "data"      => $feedback,
         "Message"   =>"feedback created successfully."
-    ]);
+    ], JsonResponse::HTTP_CREATED);
 }
 public function updatefeedback(FeedbackRequest $request, $id)
 {
@@ -66,13 +67,13 @@ public function updatefeedback(FeedbackRequest $request, $id)
         return response()->json([
             'status'=> 'error',
             'message' =>'feedback could not found',
-        ], 404);
+        ], JsonResponse::HTTP_NOT_FOUND);
     }
 
     return response() -> json ([
         "status"=>"updated",
         "message"=> "feedback updated",
-    ]);
+    ], JsonResponse::HTTP_OK);
 }
 public function deletefeedback(Request $request, $id)
 {
@@ -81,13 +82,13 @@ public function deletefeedback(Request $request, $id)
         return response()->json([
             "status"=> "not found",
             "message"=> "feedback was not round"
-        ], 404);
+        ], JsonResponse::HTTP_NOT_FOUND);
     }
 
     return response()->json([
         "status" => "success",
         "message" => "feedback successfully deleted ",
-    ]);
+    ], JsonResponse::HTTP_OK);
 }
 
 }
