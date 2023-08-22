@@ -16,13 +16,11 @@ use Illuminate\Support\Facades\Schema;
             $table->uuid('uuid')->nullable();
             $table->string('title');
             $table->unsignedBigInteger('kpas_id');
-            $table->unsignedBigInteger('users_id');
             $table->json('indicators')->nullable();
             $table->decimal('weight', 5, 2)->nullable();
             $table->integer('weighted_average_score')->nullable();
             $table->integer('score')->nullable();
-            $table->foreign('kpas_id')->references('id')->on('kpas')->onDelete('cascade');
-            $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('kpas_id')->references('id')->on('kpas');
             $table->timestamps();
     });
     }

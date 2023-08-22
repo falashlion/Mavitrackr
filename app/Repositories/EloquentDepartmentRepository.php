@@ -10,8 +10,14 @@ class EloquentDepartmentRepository implements DepartmentRepository {
         return $department;
     }
 
-    public function getAllDepartments() {
-        $departments = Department::all();
+    public function getAllDepartments($paginate) {
+        if($paginate == 'all'){
+            $departments = Department::all();
+        }
+        else{
+
+            $departments = Department::paginate($paginate);
+        }
         return $departments;
     }
 

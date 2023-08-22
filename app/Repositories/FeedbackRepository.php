@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 interface FeedbackRepository
 {
-    public function all();
+    public function all($paginate);
 
     public function getByKpiId($id);
 

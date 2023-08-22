@@ -42,6 +42,7 @@ class User extends Authenticatable  implements JWTSubject
         'remember_token',
         'email_verified_at',
         'is_manager',
+        'uuid',
     ];
 
 

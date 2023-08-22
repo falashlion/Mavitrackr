@@ -33,7 +33,8 @@ class departmentController extends Controller {
     }
 
     public function getdepartments(Request $request) {
-        $departments = $this->departmentRepository->getAllDepartments();
+        $departments = $this->departmentRepository->getAllDepartments($request->paginate ? $request->paginate : 'all');
+        // dd($request->paginate);
         return response()->json([
             'status' => 'success',
             'data' => $departments,

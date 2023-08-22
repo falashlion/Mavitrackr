@@ -5,9 +5,15 @@ namespace App\Repositories;
 use App\Models\Kpi;
 
 class EloquentKpiRepository implements KpiRepository{
-    public function getAllKpi()
+    public function getAllKpi($paginate)
     {
-        return Kpi::paginate(10);
+        if($paginate == 'all'){
+        $kpi = Kpi::all();
+        }
+        else{
+            $kpi = Kpi::orderBy('created_at', 'desc')->paginate($paginate);
+        }
+        return $kpi;
     }
 
     public function getKpiById($id)

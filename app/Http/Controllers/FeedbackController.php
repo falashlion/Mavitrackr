@@ -20,9 +20,9 @@ public function __construct(FeedbackRepository $feedbackRepository)
 {
     $this->feedbackRepository = $feedbackRepository;
 }
-public function getfeedback()
+public function getfeedback(Request $request)
 {
-    $feedback = $this->feedbackRepository->all();
+    $feedback = $this->feedbackRepository->all($request -> paginate ? $request -> paginate : 'all');
 
     return response()->json([
         'status' => 'success',

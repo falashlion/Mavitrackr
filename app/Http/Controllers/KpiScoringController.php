@@ -14,9 +14,10 @@ class KpiScoringController extends Controller
     {
         $this->KpiScoringRepository = $KpiScoringRepository;
     }
-    public function getKpiScoring()
+    public function getKpiScoring(Request $request)
     {
-        $kpis = $this->KpiScoringRepository->getAllKpi();
+        $user= auth()->user();
+        $kpis = $this->KpiScoringRepository->getAllKpi($request -> paginate ? $request -> paginate : 'all');
         $data = [
             'key_performance_indicator_score' => $kpis,
         ];

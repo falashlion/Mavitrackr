@@ -12,6 +12,8 @@ class Department extends Model
     protected $hidden =[
         'created_at',
         'updated_at',
+        'manager_id',
+        'uuid',
         ];
     protected $table = 'departments';
     protected $fillable =[

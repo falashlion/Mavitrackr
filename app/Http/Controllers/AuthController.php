@@ -48,49 +48,41 @@ class AuthController extends Controller
 
     public function getUserById($id) {
         $user = $this->userRepository->getUserById($id);
-        $roles = $this->roles()->only('title');
-        $position = $user->position()->only('title');
-        $department = $user->department()->only('title');
-        $managerData = $user->department->manager->only('first_name', 'id', 'last_name', 'profile_image');
+        $roles = $user->roles->pluck('title');
+        $position = $user->position->title;
+        $departmentManagerID = $user->department->title;
+        $managerData = $user->department->manager->only('first_name', 'last_name', 'profile_image');
 
-        $data = [
-            'user' => $user,
-            'role'=> $roles,
-            'position' => $position,
-            'department' => $department,
-            'manager'=> $managerData,
 
-        ];
+    $data = [
+        'user' => $user,
+        'role'=> $roles,
+        'position' => $position,
+        'department'=> $departmentManagerID,
+        'manager'=> $managerData,
+
+    ];
         return response()->json(['data' => $data]);
     }
 
     public function updateUser($id, Request $request) {
         $user = $this->userRepository->updateUser($id, $request->all());
-        return response()->json(['user' => $user]);
+        return response()->json(['user' => $user],JsonResponse::HTTP_OK);
     }
 
     public function deleteUser($id) {
         $this->userRepository->deleteUser($id);
-        return response()->json(['message' => 'User deleted successfully']);
+        return response()->json(['message' => 'User deleted successfully'],JsonResponse::HTTP_OK);
     }
 
-    public function getUsers() {
-        $users = $this->userRepository->getAllUsers();
+    public function getUsers(Request $request) {
+        $users = $this->userRepository->getAllUsers($request -> paginate ? $request -> paginate : 'all');
         $user = Auth::user();
-        // $roles = $user->roles->pluck('title');
-        // $position = $user->position->title;
-        // $departmentManagerID = $user->department->title;
-        // $managerData = $user->department->manager->id;
-        // $departmentManager=[$departmentManagerID];
 
     $data = [
         'user' => $user,
-        // 'role'=> $roles,
-        // 'position' => $position,
-        // 'department'=> $departmentManager,
-
     ];
-        return response()->json(['users' => $users]);
+        return response()->json(['users' => $user],JsonResponse::HTTP_OK);
     }
 
 
@@ -112,17 +104,18 @@ class AuthController extends Controller
         }
 
         $user = Auth::user();
-        // $roles = $user->roles->pluck('title');
+        $roles = $user->roles->pluck('title');
         $position = $user->position->title;
         $departmentManagerID = $user->department->title;
-        $managerData = $user->department->manager->id;
-        $departmentManager=[$departmentManagerID];
+        $managerData = $user->department->manager->only('first_name', 'last_name', 'profile_image');
+
 
     $data = [
         'user' => $user,
-        'roles'=> $user->roles->pluck('title'),
-        // 'position' => $position,
-        'department'=> $departmentManager,
+        'role'=> $roles,
+        'position' => $position,
+        'department'=> $departmentManagerID,
+        'manager'=> $managerData,
 
     ];
 
@@ -138,7 +131,7 @@ class AuthController extends Controller
             'message' => 'login successful',
             'token' => $token,
             'data' => $data,
-         ]);
+         ], JsonResponse::HTTP_OK);
         }
 
 
@@ -153,7 +146,7 @@ class AuthController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'User successfully signed out']);
+            'message' => 'User successfully signed out'],JsonResponse::HTTP_OK);
     }
 
 

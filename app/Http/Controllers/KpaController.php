@@ -14,9 +14,9 @@ class KpaController extends Controller
     {
         $this->KpaRepository = $KpaRepository;
     }
-    public function getKpa()
+    public function getKpa(Request $request)
     {
-        $kpas = $this->KpaRepository->getAllKpa();
+        $kpas = $this->KpaRepository->getAllKpa($request-> paginate ? $request -> paginate : 'all');
         $data=[
             'key_performance_areas'=>$kpas
         ];

@@ -26,8 +26,13 @@ class EloquentUserRepository implements UserRepository {
         $user->delete();
     }
 
-    public function getAllUsers() {
+    public function getAllUsers($paginate) {
+        if($paginate == 'all'){
         $users = User::all();
+        }
+        else{
+            $users=  User::orderBy('created_at', 'desc')->paginate($paginate);
+        }
         return $users;
     }
 }

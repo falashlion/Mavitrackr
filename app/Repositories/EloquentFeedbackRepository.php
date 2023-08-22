@@ -13,11 +13,20 @@ class EloquentFeedbackRepository implements FeedbackRepository
         $this->model = $feedback;
     }
 
-    public function all()
+    // public function all($paginate)
+    // {
+    //     return $this->model->paginate(10);
+    // }
+    public function all($paginate)
     {
-        return $this->model->paginate(10);
+        if($paginate == 'all'){
+        $Feedback = $this->model->all();
+        }
+        else{
+            $Feedback = $this->model->orderBy('created_at', 'desc')->paginate($paginate);
+        }
+        return $Feedback;
     }
-
     public function getByKpiId($id)
     {
         $feedback = $this->model->where('kpis_id', $id)->get();

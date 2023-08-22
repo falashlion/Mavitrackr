@@ -13,6 +13,7 @@ class Kpi extends Model
         'created_at',
         'updated_at',
         'kpas_id',
+        'indicators',
         ];
 
         protected $fillable =[
@@ -22,14 +23,13 @@ class Kpi extends Model
             'weighted_average_score',
             'score',
             'weight',
-            'indicators',
             'status',
         ];
 
     protected $table = 'kpis';
     public function kpa()
     {
-        return $this->belongsTo(Kpa::class);
+        return $this->belongsTo(Kpa::class, 'kpas_id');
     }
 
     public function user(){

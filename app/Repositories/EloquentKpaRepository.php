@@ -5,11 +5,21 @@ namespace App\Repositories;
 use App\Models\Kpa;
 
 class EloquentKpaRepository implements KpaRepository{
-
-    public function getAllKpa()
+    public function getAllKpa($paginate)
     {
-        return Kpa::all();
+        if($paginate == 'all'){
+        $kpa = Kpa::all();
+        }
+        else{
+            $kpa = Kpa::paginate($paginate);
+        }
+        return $kpa;
     }
+
+    // public function getAllKpa()
+    // {
+    //     return Kpa::all();
+    // }
 
     public function getKpaById($id)
     {
