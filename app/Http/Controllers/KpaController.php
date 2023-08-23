@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Repositories\KpaRepository;
 use App\Http\Requests\KpaRequest;
@@ -24,7 +25,7 @@ class KpaController extends Controller
         return response()->json([
             'status' => 'success',
             'data' => $data,
-        ]);
+        ], JsonResponse::HTTP_OK);
     }
 
     public function getKpabyid(Request $request, $id)
@@ -36,7 +37,7 @@ class KpaController extends Controller
         return response()->json([
             'status' => 'success',
             'data' => $data,
-        ]);
+        ], JsonResponse::HTTP_OK);
     }
 
     public function createKpa(KpaRequest $request)
@@ -47,7 +48,7 @@ class KpaController extends Controller
             'status' => 'success',
             'data' => $kpa,
             'message' => 'key performance area created successfully.',
-        ], 200);
+        ], JsonResponse::HTTP_OK);
     }
 
     public function updateKpa(KpaRequest $request, $id)
@@ -58,7 +59,7 @@ class KpaController extends Controller
             'status' => 'updated',
             'message' => 'key performance area updated',
             'Kpa' => $kpa,
-        ]);
+        ], JsonResponse::HTTP_OK);
     }
 
     public function deleteKpa(Request $request, $id)
@@ -68,6 +69,6 @@ class KpaController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'key performance area successfully deleted',
-        ]);
+        ], JsonResponse::HTTP_OK);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\StrategicDomain;
@@ -191,7 +192,7 @@ public function updateKpiscore(KpiRequest $request, $id)
         return response()->json([
             'status' => 'error',
             'message' => 'Key performance indicator score could not be found',
-        ], 404);
+        ], JsonResponse::HTTP_NOT_FOUND);
     }
 
     // Perform the calculations to update the weighted average score
@@ -216,7 +217,7 @@ public function updateKpiscore(KpiRequest $request, $id)
         'status' => 'updated',
         'message' => 'Key performance indicator scores are updated',
         'Kpiscore' => $Kpi,
-    ]);
+    ], JsonResponse::HTTP_OK);
 }
 
         public function deleteKpiscore(Request $request, $id){
@@ -234,7 +235,7 @@ public function updateKpiscore(KpiRequest $request, $id)
                 return response()->json([
                     "status" => "success",
                     "message" => "key performance indicator's score was successfully deleted ",
-                ]);
+                ], JsonResponse::HTTP_OK);
         }
 
 

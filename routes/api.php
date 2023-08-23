@@ -43,7 +43,7 @@ Route::group([
 ],
 function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/user/{paginate?}', [AuthController::class, 'getUsers']);
+    Route::get('/users/{paginate?}', [AuthController::class, 'getUsers']);
     Route::get('/user/{id}', [AuthController::class, 'getUserById']);
     Route::put('/user/{id}', [AuthController::class, 'UpdateUser']);
     Route::delete('/user/{id}', [AuthController::class, 'deleteUser']);

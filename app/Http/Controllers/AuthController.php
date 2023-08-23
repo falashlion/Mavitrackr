@@ -82,7 +82,7 @@ class AuthController extends Controller
     $data = [
         'user' => $user,
     ];
-        return response()->json(['users' => $user],JsonResponse::HTTP_OK);
+        return response()->json(['users' => $users],JsonResponse::HTTP_OK);
     }
 
 

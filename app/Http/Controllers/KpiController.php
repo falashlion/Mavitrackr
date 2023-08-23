@@ -80,6 +80,6 @@ class KpiController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'key performance indicator successfully deleted',
-        ]);
+        ], JsonResponse::HTTP_OK);
     }
 }

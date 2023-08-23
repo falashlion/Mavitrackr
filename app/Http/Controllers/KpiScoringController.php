@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Repositories\KpiScoringRepository;
 use App\Http\Requests\KpiScoringRequest;
@@ -25,7 +26,7 @@ class KpiScoringController extends Controller
         return response()->json([
             'status' => 'success',
             'data' => $data,
-        ]);
+        ], JsonResponse::HTTP_OK);
     }
 
     public function getKpiScoringbyid(Request $request, $id)
@@ -35,7 +36,7 @@ class KpiScoringController extends Controller
         return response()->json([
             'status' => 'success',
             'data' => $kpi,
-        ]);
+        ], JsonResponse::HTTP_OK);
     }
 
     public function createKpiScoring(KpiScoringRequest $request)
@@ -46,7 +47,7 @@ class KpiScoringController extends Controller
             'status' => 'success',
             'data' => $kpi,
             'message' => 'key performance indicator score created successfully.',
-        ], 200);
+        ], JsonResponse::HTTP_CREATED);
     }
 
     public function updateKpiScoring(KpiScoringRequest $request, $id)
@@ -57,7 +58,7 @@ class KpiScoringController extends Controller
             'status' => 'updated',
             'message' => 'key performance indicator score updated',
             'Kpi' => $kpi,
-        ]);
+        ], JsonResponse::HTTP_OK);
     }
 
     public function deleteKpiScoring(Request $request, $id)
@@ -67,6 +68,6 @@ class KpiScoringController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'key performance indicator score successfully deleted',
-        ]);
+        ], JsonResponse::HTTP_OK);
     }
 }

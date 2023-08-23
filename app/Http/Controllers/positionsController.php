@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Position;
 use App\Http\Controllers\Controller;
@@ -32,7 +33,7 @@ class positionsController extends Controller
             return response ()-> json ( [
                 "status"    =>"success",
                 "data"      => $position,
-                "Message"   =>"job title  created successfully."]);
+                "Message"   =>"job title  created successfully."], JsonResponse::HTTP_OK);
         }
         public function updatepositions(Request $request, $id){
 
@@ -54,7 +55,7 @@ class positionsController extends Controller
                 return response() -> json ([
                     "status"=>"updated",
                     "message"=> "position updated",
-                ]);
+                ], JsonResponse::HTTP_OK);
 
         }
 
@@ -75,7 +76,7 @@ class positionsController extends Controller
                 return response()->json([
                     "status" => "sucess",
                     "message" => "position successfully deleted ",
-                ]);
+                ], JsonResponse::HTTP_OK);
 
         }
         public function getpositionsbyid(Request $request, $id){
@@ -85,13 +86,13 @@ class positionsController extends Controller
             return response()->json([
                 'status'=> 'error',
                 'message' =>'job title id could not found',
-            ], 404);
+            ], JsonResponse::HTTP_NOT_FOUND);
         }
         $position -> get();
         return response()->json([
             "status" => "success",
             "data"=> $position,
-        ]);
+        ], JsonResponse::HTTP_OK);
 
         }
 }
