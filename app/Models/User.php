@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable  implements JWTSubject
 {
@@ -98,5 +99,13 @@ class User extends Authenticatable  implements JWTSubject
             'roles' => $this->roles()->without('permit')->get(['title']),
         ];
     }
+    protected  static  function  boot()
+{
+    parent::boot();
+
+    static::creating(function  ($model)  {
+        $model->uuid = (string) Str::uuid();
+    });
+}
 
 }

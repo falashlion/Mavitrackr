@@ -3,16 +3,26 @@
 namespace App\Repositories;
 
 use App\Models\Kpi;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class EloquentKpiRepository implements KpiRepository{
+    // public function getAllKpi($paginate)
+    // {
+    //     if($paginate == 'all'){
+    //     $kpi = Kpi::all();
+    //     }
+    //     else{
+    //         $kpi = Kpi::orderBy('created_at', 'desc')->paginate($paginate);
+    //     }
+    //     return $kpi;
+    // }
     public function getAllKpi($paginate)
     {
-        if($paginate == 'all'){
+        $user_id = auth()->user();
+
         $kpi = Kpi::all();
-        }
-        else{
-            $kpi = Kpi::orderBy('created_at', 'desc')->paginate($paginate);
-        }
         return $kpi;
     }
 

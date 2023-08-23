@@ -5,8 +5,8 @@ namespace App\Repositories;
 use App\Models\Department;
 
 class EloquentDepartmentRepository implements DepartmentRepository {
-    public function getDepartmentById($id) {
-        $department = Department::find($id);
+    public function getDepartmentById($uuid) {
+        $department = Department::find($uuid);
         return $department;
     }
 

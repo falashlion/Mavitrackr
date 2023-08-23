@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Feedback extends Model
 {
@@ -22,5 +23,14 @@ class Feedback extends Model
     ];
     public function kpi(){
         return $this->hasMany(Kpi::class);
+    }
+
+    protected  static  function  boot()
+    {
+        parent::boot();
+
+        static::creating(function  ($model)  {
+            $model->uuid = (string) Str::uuid();
+        });
     }
 }

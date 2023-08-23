@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Department extends Model
 {
@@ -32,6 +33,15 @@ class Department extends Model
     public function manager()
 {
     return $this->belongsTo(User::class, 'manager_id');
+}
+
+protected  static  function  boot()
+{
+    parent::boot();
+
+    static::creating(function  ($model)  {
+        $model->uuid = (string) Str::uuid();
+    });
 }
 
 }

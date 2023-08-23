@@ -54,7 +54,8 @@ class AuthController extends Controller
         $managerData = $user->department->manager->only('first_name', 'last_name', 'profile_image');
 
 
-    $data = [
+    $data =
+    [
         'user' => $user,
         'role'=> $roles,
         'position' => $position,
@@ -65,9 +66,13 @@ class AuthController extends Controller
         return response()->json(['data' => $data],JsonResponse::HTTP_OK);
     }
 
-    public function updateUser($id, Request $request) {
+    public function updateUser($id, Request $request)
+    {
         $user = $this->userRepository->updateUser($id, $request->all());
-        return response()->json(['user' => $user],JsonResponse::HTTP_OK);
+        return response()->json(
+        [
+            'user' => $user
+        ],JsonResponse::HTTP_OK);
     }
 
     public function deleteUser($id) {
@@ -104,35 +109,23 @@ class AuthController extends Controller
         }
 
         $user = Auth::user();
-        $roles = $user->roles->pluck('title');
-        $position = $user->position->title;
-        $departmentManagerID = $user->department->title;
-        $managerData = $user->department->manager->only('first_name', 'last_name', 'profile_image');
 
+        $data = [
+            'user' => $user,
+            'role'=> $user->roles->pluck('title'),
+            'position' => $user->position->title,
+            'department'=> $user->department->title,
+            'manager'=> $user->department->manager->only('first_name', 'last_name', 'profile_image'),
 
-    $data = [
-        'user' => $user,
-        'role'=> $roles,
-        'position' => $position,
-        'department'=> $departmentManagerID,
-        'manager'=> $managerData,
+        ];
 
-    ];
-
-
-    $customClaims= [
-        // 'role' => $roles,
-    ];
-
-    $token = JWTAuth::claims($customClaims)->attempt($credentials);
-
-         return response()->json([
-            'status' => 'success',
-            'message' => 'login successful',
-            'token' => $token,
-            'data' => $data,
-         ], JsonResponse::HTTP_OK);
-        }
+        return response()->json([
+        'status' => 'success',
+        'message' => 'login successful',
+        'token' => $token,
+        'data' => $data,
+        ], JsonResponse::HTTP_OK);
+    }
 
 
 

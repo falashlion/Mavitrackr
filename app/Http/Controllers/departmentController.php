@@ -19,8 +19,8 @@ class departmentController extends Controller {
         $this->departmentRepository = $departmentRepository;
     }
 
-    public function getdepartmentsbyid(Request $request, $id) {
-        $department = $this->departmentRepository->getDepartmentById($id);
+    public function getdepartmentsbyid(Request $request, $uuid) {
+        $department = $this->departmentRepository->getDepartmentById($uuid);
         if (!$department) {
             return response()->json([
                 'status' => 'error',

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Kpi extends Model
 {
@@ -33,9 +34,17 @@ class Kpi extends Model
     }
 
     public function user(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'users_id');
     }
     public function feedback(){
         return $this->belongsTo(Feedback::class);
+    }
+    protected  static  function  boot()
+    {
+        parent::boot();
+
+        static::creating(function  ($model)  {
+            $model->uuid = (string) Str::uuid();
+        });
     }
 }

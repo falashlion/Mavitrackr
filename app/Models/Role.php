@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Str;
 
 class Role extends Model
 {
@@ -34,5 +35,14 @@ class Role extends Model
     public function users()
     {
         return $this->belongsToMany(User::class, Access::class);
+    }
+
+    protected  static  function  boot()
+    {
+        parent::boot();
+
+        static::creating(function  ($model)  {
+            $model->uuid = (string) Str::uuid();
+        });
     }
 }
