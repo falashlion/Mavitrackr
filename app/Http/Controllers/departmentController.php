@@ -34,6 +34,8 @@ class departmentController extends Controller {
     }
 
     public function getdepartments(Request $request) {
+        $user = auth()->user();
+       dd($user);
         $departments = $this->departmentRepository->getAllDepartments($request->paginate ? $request->paginate : 'all');
         // dd($request->paginate);
         return response()->json([
@@ -61,7 +63,8 @@ class departmentController extends Controller {
         ], JsonResponse::HTTP_OK);
     }
 
-    public function deletedepartments(Request $request, $id) {
+    public function deletedepartments(Request $request, $id)
+    {
         $this->departmentRepository->deleteDepartment($id);
         return response()->json([
             'status' => 'success',
@@ -69,7 +72,7 @@ class departmentController extends Controller {
         ],JsonResponse::HTTP_OK);
     }
 
-    // endpoints for manager data
+
 
 
 }

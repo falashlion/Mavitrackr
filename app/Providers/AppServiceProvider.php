@@ -5,11 +5,12 @@ namespace App\Providers;
 use App\Repositories\EloquentFeedbackRepository;
 use App\Repositories\EloquentKpiRepository;
 use App\Repositories\EloquentKpiScoringRepository;
+use App\Repositories\RoleRepository;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\UserRepository;
 use App\Repositories\EloquentUserRepository;
 use App\Repositories\EloquentKpaRepository;
-
+use App\Repositories\EloquentRoleRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -42,6 +43,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             App\Repositories\EloquentFeedbackRepository::class,
             App\Repositories\FeedbackRepository::class
+        );
+        $this->app->bind(
+            \App\Repositories\RoleRepository::class, EloquentRoleRepository::class
         );
     }
 

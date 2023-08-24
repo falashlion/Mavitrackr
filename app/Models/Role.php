@@ -16,7 +16,7 @@ class Role extends Model
         'created_at',
         'updated_at',
         'pivot',
-        'id',
+        // 'id',
         'uuid',
         'description',
 

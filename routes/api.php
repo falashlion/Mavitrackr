@@ -9,6 +9,7 @@ use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\KpaController;
 use App\Http\Controllers\KpiController;
 use App\Http\Controllers\KpiScoringController;
+use App\Http\Controllers\RoleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -39,7 +40,8 @@ function () {
 
 Route::group
 ([
-
+    'middleware' => 'api',
+    // 'prefix' => 'auth'
 
 ],
 function ()
@@ -51,13 +53,16 @@ function ()
         Route::delete('/user/{id}', [AuthController::class, 'deleteUser']);
     }
 );
-//departments endpoints
+
 
 Route::group([
+
 
 ],
 function()
     {
+        //departments endpoints
+        Route::get('/department/users/{id}', [AuthController::class, 'getDepartmentMembers']);
         Route::get('/departments/{paginate?}', [departmentController::class, 'getdepartments']);
         Route::post('/departments', [departmentController::class, 'createdepartments']);
         Route::put('/departments/{id}', [departmentController::class, 'updatedepartments']);
@@ -107,7 +112,12 @@ function()
         // manager endpoints
         Route::get('/user/{id}/manager', [departmentController::class, 'getmanager'])->name('manager');
         Route::get('/user/manager/{id}', [departmentController::class, 'getdirectreports'])->name('managerReport');
-
+        // Roles endpoint
+        Route::get('/Roles/{paginate?}', [RoleController::class, 'getRoles']);
+        Route::post('/Role', [RoleController::class, 'createRole']);
+        Route::put('/Role/{id}', [RoleController::class,'updateRole']);
+        Route::delete('/Role/{id}',[RoleController::class,'deleteRole']);
+        Route::get('/Role/{id}',[RoleController::class,'getRolebyid']);
     }
 );
 

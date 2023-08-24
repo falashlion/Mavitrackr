@@ -8,11 +8,6 @@ use App\Models\Role;
 use App\Models\Position;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use Illuminate\Support\Facades\Cookie;
-use App\Http\Requests\ImageStoreRequest;
-use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\LoginRequest;
 use App\Repositories\UserRepository;
@@ -35,10 +30,15 @@ class AuthController extends Controller
      */
     public $token = true;
     protected $userRepository;
+    protected $user;
 
     public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
+        $this->middleware('api', ['except' => ['login']]);
+
+
+
     }
 
     public function register(Request $request) {
@@ -47,6 +47,8 @@ class AuthController extends Controller
     }
 
     public function getUserById($id) {
+        $auth=Auth::guard('api')->user();
+        dd($auth);
         $user = $this->userRepository->getUserById($id);
         $roles = $user->roles->pluck('title');
         $position = $user->position->title;
@@ -66,7 +68,7 @@ class AuthController extends Controller
         return response()->json(['data' => $data],JsonResponse::HTTP_OK);
     }
 
-    public function updateUser($id, Request $request)
+    public function updateUser( $id, Request $request)
     {
         $user = $this->userRepository->updateUser($id, $request->all());
         return response()->json(
@@ -81,13 +83,12 @@ class AuthController extends Controller
     }
 
     public function getUsers(Request $request) {
-        $users = $this->userRepository->getAllUsers($request -> paginate ? $request -> paginate : 'all');
-        $user = Auth::user();
+        $users = $this->userRepository->getAllUsers();
 
     $data = [
-        'user' => $user,
+        'users' => $users,
     ];
-        return response()->json(['users' => $users],JsonResponse::HTTP_OK);
+        return response()->json(['data' => $data],JsonResponse::HTTP_OK);
     }
 
 
@@ -96,11 +97,13 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
+
+
     public function login(LoginRequest $request, departmentController $id)
     {
         $credentials = $request->validated();
 
-        if(!$token = Auth::attempt($credentials) ){
+        if(!$token = auth('api')->attempt($credentials) ){
 
             return response()->json([
                 'status'=>'error',
@@ -124,6 +127,18 @@ class AuthController extends Controller
         'message' => 'login successful',
         'token' => $token,
         'data' => $data,
+        //
+
+
+
+
+
+
+
+
+
+
+        'expires_in' => auth()->factory()->getTTL() * 60
         ], JsonResponse::HTTP_OK);
     }
 
@@ -141,6 +156,18 @@ class AuthController extends Controller
             'status' => 'success',
             'message' => 'User successfully signed out'],JsonResponse::HTTP_OK);
     }
+
+     // function for all the members in a department
+
+     public function getDepartmentMembers($id)
+     {
+        $users = $this->userRepository->getDepartmentMembers($id);
+        $data = [
+            'users' => $users,
+        ];
+            return response()->json(['data' => $data],JsonResponse::HTTP_OK);
+
+     }
 
 
   }

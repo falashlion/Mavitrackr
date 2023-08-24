@@ -32,7 +32,8 @@ class UserStoreRequest extends FormRequest
             'address' =>'string',
             'gender'=> 'string',
             'departments_id'=> 'exists:departments,id',
-            'positions_id'=> 'exists:positions,id',
+            'positions_id'=> 'string',
+            'role_id'=> 'exists:roles,id'
         ];
     }
 

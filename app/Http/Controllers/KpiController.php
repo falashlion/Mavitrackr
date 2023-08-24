@@ -9,8 +9,7 @@ use App\Http\Requests\KpiRequest;
 use App\Http\Controllers\Controller;
 use App\Models\Kpi;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
-use Tymon\JWTAuth\Facades\JWTAuth;
+
 
 class KpiController extends Controller
 {
@@ -22,19 +21,16 @@ class KpiController extends Controller
     }
     public function getKpi(Request $request)
     {
-        //  dd($request->query('paginate'));
          $page = $request->query('paginate') ?? '10';
-
-         return Kpi::paginate($page);
-        dd($request->headers->all());
-        $kpis = $this->KpiRepository->getAllKpi($request->paginate ? $request->paginate : 'all');
-        foreach ($kpis as $kpi) {
-           'key_performance_area'== $kpi->kpa->title;
-           $strategicDomans=$kpi->kpa->strategicDomain->title;
-        }
+         $kpis = Kpi::paginate($page);
+        // foreach ($kpis as $kpi) {
+        //    'key_performance_area'== $kpi->kpa->title;
+        //    $strategicDomans=$kpi->kpa->strategicDomain->title;
+        // }
         $data =
          [
             'key_performance_indicators' => $kpis,
+            // 'strategicDomains'=>$strategicDomans
          ];
 
         return response()->json
