@@ -12,9 +12,8 @@ use Illuminate\Support\Facades\Schema;
     public function up(): void
     {
         Schema::create('departments', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('title');
-            $table->uuid('uuid')->nullable();
             $table->timestamps();
 
 

@@ -12,6 +12,9 @@ use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\LoginRequest;
 use App\Repositories\UserRepository;
 use Illuminate\Http\JsonResponse;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+
+
 
 class AuthController extends Controller
 {
@@ -88,7 +91,9 @@ class AuthController extends Controller
     $data = [
         'users' => $users,
     ];
-        return response()->json(['data' => $data],JsonResponse::HTTP_OK);
+        // return response()->json(['data' => $data],JsonResponse::HTTP_OK);
+        return ResponseBuilder::success($data);
+
     }
 
 
@@ -115,31 +120,22 @@ class AuthController extends Controller
 
         $data = [
             'user' => $user,
+            'token' => $token,
             'role'=> $user->roles->pluck('title'),
             'position' => $user->position->title,
             'department'=> $user->department->title,
-            'manager'=> $user->department->manager->only('first_name', 'last_name', 'profile_image'),
+            'manager'=> collect($user->department->manager)->only('first_name', 'last_name', 'profile_image'),
 
         ];
 
-        return response()->json([
-        'status' => 'success',
-        'message' => 'login successful',
-        'token' => $token,
-        'data' => $data,
-        //
-
-
-
-
-
-
-
-
-
-
-        'expires_in' => auth()->factory()->getTTL() * 60
-        ], JsonResponse::HTTP_OK);
+        // return response()->json([
+        // 'status' => 'success',
+        // 'message' => 'login successful',
+        // 'token' => $token,
+        // 'data' => $data,
+        // 'expires_in' => auth()->factory()->getTTL() * 60
+        // ], JsonResponse::HTTP_OK);
+        return ResponseBuilder::success($data);
     }
 
 

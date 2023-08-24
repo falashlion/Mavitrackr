@@ -12,15 +12,14 @@ use Illuminate\Support\Facades\Schema;
     public function up(): void
     {
         Schema::create('kpis', function (Blueprint $table) {
-            $table->id();
-            $table->uuid('uuid')->nullable();
+            $table->uuid('id')->primary();
             $table->string('title');
-            $table->unsignedBigInteger('kpas_id');
+            $table->uuid('kpas_id');
             $table->json('indicators')->nullable();
             $table->decimal('weight', 5, 2)->nullable();
             $table->integer('weighted_average_score')->nullable();
             $table->integer('score')->nullable();
-            $table->foreign('kpas_id')->references('id')->on('kpas');
+            $table->foreignUuid('kpas_id')->references('id')->on('kpas');
             $table->timestamps();
     });
     }

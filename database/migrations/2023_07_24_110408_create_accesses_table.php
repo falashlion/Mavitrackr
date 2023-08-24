@@ -12,12 +12,11 @@ use Illuminate\Support\Facades\Schema;
     public function up(): void
     {
         Schema::create('accesses', function (Blueprint $table) {
-            $table->id();
-            $table->uuid('uuid')->nullable();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('role_id');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('role_id')->references('id')->on('roles');
+            $table->uuid('id')->primary();
+            $table->uuid('user_id');
+            $table->uuid('role_id');
+            $table->foreignUuid('user_id')->references('id')->on('users');
+            $table->foreignUuid('role_id')->references('id')->on('roles');
             $table->timestamps();
         });
     }

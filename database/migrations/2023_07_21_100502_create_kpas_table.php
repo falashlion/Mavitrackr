@@ -12,11 +12,11 @@ use Illuminate\Support\Facades\Schema;
     public function up(): void
     {
         Schema::create('kpas', function (Blueprint $table) {
-                $table->id();
+                $table->uuid('id')->primary();
                 $table->string('title');
-                $table->unsignedBigInteger('strategic_domains_id');
+                $table->uuid('strategic_domains_id');
                 $table->timestamps();
-                $table->foreign('strategic_domains_id')->references('id')->on('strategic_domains')->onDelete('cascade');
+                $table->foreignUuid('strategic_domains_id')->references('id')->on('strategic_domains');
         });
     }
 

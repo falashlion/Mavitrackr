@@ -113,7 +113,7 @@ function()
         Route::get('/user/{id}/manager', [departmentController::class, 'getmanager'])->name('manager');
         Route::get('/user/manager/{id}', [departmentController::class, 'getdirectreports'])->name('managerReport');
         // Roles endpoint
-        Route::get('/Roles/{paginate?}', [RoleController::class, 'getRoles']);
+        Route::get('/Roles/{}', [RoleController::class, 'getRoles']);
         Route::post('/Role', [RoleController::class, 'createRole']);
         Route::put('/Role/{id}', [RoleController::class,'updateRole']);
         Route::delete('/Role/{id}',[RoleController::class,'deleteRole']);

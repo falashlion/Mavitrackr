@@ -12,8 +12,7 @@ use Illuminate\Support\Facades\Schema;
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->uuid('uuid')->nullable();
+            $table->uuid('id')->primary();
             $table->string('user_matricule')->unique();
             $table->string('password');
             $table->string('profile_image')->nullable();
@@ -25,10 +24,10 @@ use Illuminate\Support\Facades\Schema;
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
-            $table->unsignedBigInteger('departments_id')->nullable();
-            $table->unsignedBigInteger('positions_id')->nullable();
-            $table->foreign('departments_id')->references('id')->on('departments')->onDelete('cascade');
-            $table->foreign('positions_id')->references('id')->on('positions')->onDelete('cascade');
+            $table->uuid('departments_id')->nullable();
+            $table->uuid('positions_id')->nullable();
+            $table->foreignUuid('departments_id')->references('id')->on('departments');
+            $table->foreignUuid('positions_id')->references('id')->on('positions');
             $table->timestamps();
         });
         // Schema::create('users', function (Blueprint $table) {

@@ -12,11 +12,10 @@ class CreateFeedbacksTable extends Migration
     public function up(): void
     {
         Schema::create('feedbacks', function (Blueprint $table) {
-            $table->id();
-            $table->uuid('uuid')->nullable();
+            $table->uuid('id')->primary();
             $table->string('comment');
-            $table->unsignedBigInteger('kpis_id')->nullable();
-            $table->foreign('kpis_id')->references('id')->on('kpis')->onDelete('cascade');
+            $table->uuid('kpis_id')->nullable();
+            $table->foreignUuid('kpis_id')->references('id')->on('kpis')->onDelete('cascade');
             $table->timestamps();
         });
     }

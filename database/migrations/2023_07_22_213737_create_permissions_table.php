@@ -12,8 +12,7 @@ use Illuminate\Support\Facades\Schema;
     public function up(): void
     {
         Schema::create('permissions', function (Blueprint $table) {
-            $table->id();
-            $table->uuid('uuid')->nullable();
+            $table->uuid('id')->primary();
             $table->string('title');
             $table->text('description')->nullable();
             $table->timestamps();
