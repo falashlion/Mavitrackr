@@ -3,23 +3,16 @@
 namespace App\Repositories;
 
 use App\Models\Kpa;
+use GuzzleHttp\Psr7\Request;
 
 class EloquentKpaRepository implements KpaRepository{
-    public function getAllKpa($paginate)
-    {
-        if($paginate == 'all'){
-        $kpa = Kpa::all();
-        }
-        else{
-            $kpa = Kpa::paginate($paginate);
-        }
-        return $kpa;
-    }
 
-    // public function getAllKpa()
-    // {
-    //     return Kpa::all();
-    // }
+    public function getAllKpa($data)
+    {
+        $page = $data->query('paginate') ?? '10';
+         $kpas = Kpa::paginate($page);
+        return $kpas;
+    }
 
     public function getKpaById($id)
     {

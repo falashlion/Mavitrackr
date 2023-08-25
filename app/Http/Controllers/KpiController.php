@@ -9,6 +9,7 @@ use App\Http\Requests\KpiRequest;
 use App\Http\Controllers\Controller;
 use App\Models\Kpi;
 use Illuminate\Http\Resources\Json\JsonResource;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 
 class KpiController extends Controller
@@ -21,23 +22,8 @@ class KpiController extends Controller
     }
     public function getKpi(Request $request)
     {
-         $page = $request->query('paginate') ?? '10';
-         $kpis = Kpi::paginate($page);
-        // foreach ($kpis as $kpi) {
-        //    'key_performance_area'== $kpi->kpa->title;
-        //    $strategicDomans=$kpi->kpa->strategicDomain->title;
-        // }
-        $data =
-         [
-            'key_performance_indicators' => $kpis,
-            // 'strategicDomains'=>$strategicDomans
-         ];
-
-        return response()->json
-        ([
-            'status' => 'success',
-            'data' => $data,
-        ],JsonResponse::HTTP_OK);
+        $kpis = $this->KpiRepository->getAllKpi($request);
+         return ResponseBuilder::success($kpis);
     }
 
     public function getKpibyid(Request $request, $id)
@@ -48,47 +34,30 @@ class KpiController extends Controller
         $data =
         [
             'key_performance_indicators' => $kpi,
+            'key_performance_area' => $kpa,
+            'strategicDomains'=>  $strategicDomans
         ];
 
-        return response()->json(
-        [
-            'status' => 'success',
-            'data' => $data,
-        ],JsonResponse::HTTP_OK);
+        return ResponseBuilder::success($data);
     }
 
     public function createKpi(KpiRequest $request)
     {
         $kpi = $this->KpiRepository->createKpi($request->all());
 
-        return response()->json(
-        [
-            'status' => 'success',
-            'data' => $kpi,
-            'message' => 'key performance indicator created successfully.',
-        ],JsonResponse::HTTP_CREATED );
+        return ResponseBuilder::success($kpi);
     }
 
     public function updateKpi(KpiRequest $request, $id)
     {
         $kpi = $this->KpiRepository->updateKpi($id, $request->all());
 
-        return response()->json
-        ([
-            'status' => 'updated',
-            'message' => 'key performance indicator updated',
-            'Kpi' => $kpi,
-        ]);
+        return ResponseBuilder::success($kpi);
     }
 
     public function deleteKpi(Request $request, $id)
     {
-        $this->KpiRepository->deleteKpi($id);
-
-        return response()->json(
-        [
-            'status' => 'success',
-            'message' => 'key performance indicator successfully deleted',
-        ], JsonResponse::HTTP_OK);
+        $kpi = $this->KpiRepository->deleteKpi($id);
+        return ResponseBuilder::success($kpi);
     }
 }

@@ -18,12 +18,19 @@ class EloquentKpiRepository implements KpiRepository{
     //     }
     //     return $kpi;
     // }
-    public function getAllKpi($paginate)
-    {
-        $user_id = auth()->user();
 
-        $kpi = Kpi::all();
-        return $kpi;
+    public function getAllKpi($data)
+    {
+        $page = $data->query('paginate') ?? '10';
+         $kpis = Kpi::paginate($page);
+
+        foreach ($kpis as $kpi)
+        {
+            $user = $kpi->user;
+            $key_performance_area = $kpi->kpa->title;
+           $strategic_domains = $kpi->kpa->strategicDomain->title;
+        }
+        return $kpis;
     }
 
     public function getKpiById($id)

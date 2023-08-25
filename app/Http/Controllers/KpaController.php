@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kpa;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Repositories\KpaRepository;
 use App\Http\Requests\KpaRequest;
 use App\Http\Controllers\Controller;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 class KpaController extends Controller
 {
@@ -17,58 +19,36 @@ class KpaController extends Controller
     }
     public function getKpa(Request $request)
     {
-        $kpas = $this->KpaRepository->getAllKpa($request-> paginate ? $request -> paginate : 'all');
-        $data=[
-            'key_performance_areas'=>$kpas
-        ];
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $data,
-        ], JsonResponse::HTTP_OK);
+        $page = $request->query('paginate') ?? '10';
+         $kpas = Kpa::paginate($page);
+        // $kpas = $this->KpaRepository->getAllKpa($request);
+        return ResponseBuilder::success($kpas);
     }
 
     public function getKpabyid(Request $request, $id)
     {
         $kpa = $this->KpaRepository->getKpaById($id);
-        $data=[
-            'key_performance_areas'=>$kpa
-        ];
-        return response()->json([
-            'status' => 'success',
-            'data' => $data,
-        ], JsonResponse::HTTP_OK);
+        return ResponseBuilder::success($kpa);
     }
 
     public function createKpa(KpaRequest $request)
     {
         $kpa = $this->KpaRepository->createKpa($request->all());
 
-        return response()->json([
-            'status' => 'success',
-            'data' => $kpa,
-            'message' => 'key performance area created successfully.',
-        ], JsonResponse::HTTP_OK);
+        return ResponseBuilder::success($kpa);
     }
 
     public function updateKpa(KpaRequest $request, $id)
     {
         $kpa = $this->KpaRepository->updateKpa($id, $request->all());
 
-        return response()->json([
-            'status' => 'updated',
-            'message' => 'key performance area updated',
-            'Kpa' => $kpa,
-        ], JsonResponse::HTTP_OK);
+        return ResponseBuilder::success($kpa);
     }
 
     public function deleteKpa(Request $request, $id)
     {
-        $this->KpaRepository->deleteKpa($id);
+       $kpa = $this->KpaRepository->deleteKpa($id);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'key performance area successfully deleted',
-        ], JsonResponse::HTTP_OK);
+       return ResponseBuilder::success($kpa);
     }
 }

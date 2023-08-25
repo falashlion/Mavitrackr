@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 interface KpaRepository
 {
-    public function getAllKpa($paginate);
+    public function getAllKpa($data);
 
     public function getKpaById($id);
 

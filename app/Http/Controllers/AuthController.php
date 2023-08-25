@@ -46,12 +46,11 @@ class AuthController extends Controller
 
     public function register(Request $request) {
         $user = $this->userRepository->createUser($request->all());
-        return response()->json(['user' => $user],JsonResponse::HTTP_OK);
+        return ResponseBuilder::success($user);
     }
 
     public function getUserById($id) {
         $auth=Auth::guard('api')->user();
-        dd($auth);
         $user = $this->userRepository->getUserById($id);
         $roles = $user->roles->pluck('title');
         $position = $user->position->title;
@@ -68,16 +67,14 @@ class AuthController extends Controller
         'manager'=> $managerData,
 
     ];
-        return response()->json(['data' => $data],JsonResponse::HTTP_OK);
+    return ResponseBuilder::success($data);
     }
 
     public function updateUser( $id, Request $request)
     {
         $user = $this->userRepository->updateUser($id, $request->all());
-        return response()->json(
-        [
-            'user' => $user
-        ],JsonResponse::HTTP_OK);
+
+        return ResponseBuilder::success($user);
     }
 
     public function deleteUser($id) {
@@ -110,17 +107,15 @@ class AuthController extends Controller
 
         if(!$token = auth('api')->attempt($credentials) ){
 
-            return response()->json([
-                'status'=>'error',
-                'message'=>'invalid user_matricule and password',
-            ], JsonResponse::HTTP_UNAUTHORIZED);
+            return ResponseBuilder::error(400);
         }
 
         $user = Auth::user();
+        // dd($user);
 
         $data = [
             'user' => $user,
-            'token' => $token,
+            // 'token' => $token,
             'role'=> $user->roles->pluck('title'),
             'position' => $user->position->title,
             'department'=> $user->department->title,

@@ -12,6 +12,7 @@ class EloquentUserRepository implements UserRepository {
 
     public function getUserById($id) {
         $user = User::find($id);
+        // APP_URL
         return $user;
     }
 

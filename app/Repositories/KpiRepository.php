@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 interface KpiRepository
 {
-    public function getAllKpi($paginate);
+    public function getAllKpi($data);
 
     public function getKpiById($id);
 

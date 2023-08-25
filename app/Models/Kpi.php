@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 
 class Kpi extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory;// HasUuids;
 
     protected $hidden =[
         'created_at',

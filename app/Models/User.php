@@ -102,13 +102,13 @@ class User extends Authenticatable  implements JWTSubject
             'roles' => $this->roles()->without('permit')->get(['title']),
         ];
     }
-    protected  static  function  boot()
-{
-    parent::boot();
+//     protected  static  function  boot()
+// {
+//     parent::boot();
 
-    static::creating(function  ($model)  {
-        $model->uuid = (string) Str::uuid();
-    });
-}
+//     static::creating(function  ($model)  {
+//         $model->uuid = (string) Str::uuid();
+//     });
+// }
 
 }

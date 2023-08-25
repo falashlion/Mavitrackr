@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 
 class Role extends Model
 {
-    use HasFactory, HasRoles, HasUuids ;
+    use HasFactory, HasRoles;// HasUuids ;
 
     use HasFactory;
     protected $hidden =[
@@ -38,12 +38,12 @@ class Role extends Model
         return $this->belongsToMany(User::class, Access::class);
     }
 
-    protected  static  function  boot()
-    {
-        parent::boot();
+    // protected  static  function  boot()
+    // {
+    //     parent::boot();
 
-        static::creating(function  ($model)  {
-            $model->uuid = (string) Str::uuid();
-        });
-    }
+    //     static::creating(function  ($model)  {
+    //         $model->uuid = (string) Str::uuid();
+    //     });
+    // }
 }
