@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use App\Models\User;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 class Kpi extends Model
 {
@@ -35,7 +37,7 @@ class Kpi extends Model
     }
 
     public function user(){
-        return $this->belongsTo(User::class, 'users_id');
+        return $this->belongsTo(User::class);//, 'users_id'
     }
     public function feedback(){
         return $this->belongsTo(Feedback::class);

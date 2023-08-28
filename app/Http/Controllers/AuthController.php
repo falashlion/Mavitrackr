@@ -107,7 +107,8 @@ class AuthController extends Controller
 
         if(!$token = auth('api')->attempt($credentials) ){
 
-            return ResponseBuilder::error(400);
+            // return ResponseBuilder::error(404::Invalid);
+            // return RB::error(404);
         }
 
         $user = Auth::user();
@@ -115,21 +116,13 @@ class AuthController extends Controller
 
         $data = [
             'user' => $user,
-            // 'token' => $token,
+            'token' => $token,
             'role'=> $user->roles->pluck('title'),
             'position' => $user->position->title,
             'department'=> $user->department->title,
             'manager'=> collect($user->department->manager)->only('first_name', 'last_name', 'profile_image'),
 
         ];
-
-        // return response()->json([
-        // 'status' => 'success',
-        // 'message' => 'login successful',
-        // 'token' => $token,
-        // 'data' => $data,
-        // 'expires_in' => auth()->factory()->getTTL() * 60
-        // ], JsonResponse::HTTP_OK);
         return ResponseBuilder::success($data);
     }
 

@@ -8,6 +8,8 @@ use App\Repositories\KpiRepository;
 use App\Http\Requests\KpiRequest;
 use App\Http\Controllers\Controller;
 use App\Models\Kpi;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
@@ -18,12 +20,15 @@ class KpiController extends Controller
     public function __construct(KpiRepository $KpiRepository)
     {
         $this->KpiRepository = $KpiRepository;
-        // $this->middleware('auth:api');
+        $this->middleware('auth:api');
     }
     public function getKpi(Request $request)
     {
+        $user = Auth::user();
+         dd($user);
         $kpis = $this->KpiRepository->getAllKpi($request);
          return ResponseBuilder::success($kpis);
+
     }
 
     public function getKpibyid(Request $request, $id)
