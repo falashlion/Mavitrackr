@@ -17,7 +17,7 @@ class Role extends Model
         'created_at',
         'updated_at',
         'pivot',
-        // 'id',
+        'id',
         'uuid',
         'description',
 
@@ -35,7 +35,7 @@ class Role extends Model
     }
     public function users()
     {
-        return $this->belongsToMany(User::class, Access::class);
+        return $this->belongsToMany( User::class, Access::class, 'users_id');
     }
 
     // protected  static  function  boot()

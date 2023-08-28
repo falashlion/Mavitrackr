@@ -47,7 +47,7 @@ Route::group
 function ()
     {
         Route::post('/logout', [AuthController::class, 'logout']);
-        Route::get('/users/{paginate?}', [AuthController::class, 'getUsers']);
+        Route::get('/users', [AuthController::class, 'getUsers']);
         Route::get('/user/{id}', [AuthController::class, 'getUserById']);
         Route::put('/user/{id}', [AuthController::class, 'UpdateUser']);
         Route::delete('/user/{id}', [AuthController::class, 'deleteUser']);
@@ -73,7 +73,7 @@ function()
         Route::post('/job_titles', [positionsController::class, 'createpositions']);
         Route::put('/job_titles/{id}', [positionsController::class, 'updatepositions']);
         Route::delete('/job_titles/{id}',[positionsController::class,'deletepositions'] );
-        Route::get('/job_titles/{id}',[positionsController::class,'getpositionsbyid'] );
+        Route::get('/job_title/{id}',[positionsController::class,'getpositionsbyid'] );
         // stratergic domains endpoints
         Route::get('/strategic_domains', [objectivesController::class, 'getstrategic_domains']);
         Route::post('/strategic_domains', [objectivesController::class, 'createstrategic_domains']);
@@ -113,7 +113,7 @@ function()
         Route::get('/user/{id}/manager', [departmentController::class, 'getmanager'])->name('manager');
         Route::get('/user/manager/{id}', [departmentController::class, 'getdirectreports'])->name('managerReport');
         // Roles endpoint
-        Route::get('/Roles/{}', [RoleController::class, 'getRoles']);
+        Route::get('/Roles', [RoleController::class, 'getRoles']);
         Route::post('/Role', [RoleController::class, 'createRole']);
         Route::put('/Role/{id}', [RoleController::class,'updateRole']);
         Route::delete('/Role/{id}',[RoleController::class,'deleteRole']);

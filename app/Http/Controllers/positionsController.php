@@ -6,6 +6,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Position;
 use App\Http\Controllers\Controller;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 class positionsController extends Controller
 {
 
@@ -15,47 +16,32 @@ class positionsController extends Controller
     // }
       public function getpositions(){
         $position  = Position::all();
-         return response()->json([
-             'status' => 'success',
-             'users' => $position,
-         ]);
+        return ResponseBuilder::success($position, 200 );
         }
 
         public function createpositions(Request $request){
             $validatedData = $request-> validate([
             'title' => 'required|string'
             ]);
-
-            //dd($validatedData);
             $position = Position::insert([
                 "title"   =>  $validatedData['title'],
             ]);
-            return response ()-> json ( [
-                "status"    =>"success",
-                "data"      => $position,
-                "Message"   =>"job title  created successfully."], JsonResponse::HTTP_OK);
+            return ResponseBuilder::success($position, 200 );
         }
         public function updatepositions(Request $request, $id){
 
             $positions = Position::Find($id);
             if(!$positions) {
-                return response()->json([
-                    'status'=> 'error',
-                    'message' =>'positions could not found',
-                ], 404);
+                return ResponseBuilder::success(400);
             }
 
             $validatedData = $request-> validate([
                 'title' => 'required|string'
                 ]);
-               // dd($validatedData);
                 $positions->update([
                     "title"=> $validatedData["title"],
                 ]) ;
-                return response() -> json ([
-                    "status"=>"updated",
-                    "message"=> "position updated",
-                ], JsonResponse::HTTP_OK);
+                return ResponseBuilder::success($positions, 200 );
 
         }
 
@@ -66,33 +52,21 @@ class positionsController extends Controller
 
 
             if (!$position ) {
-                return response()->json([
-                    "status"=> "Not found",
-                    "message"=> "position was not round"
-                ], 404);
+                return ResponseBuilder::success(400);
             }
                 $position ->delete();
 
-                return response()->json([
-                    "status" => "sucess",
-                    "message" => "position successfully deleted ",
-                ], JsonResponse::HTTP_OK);
+                return ResponseBuilder::success($position, 200 );
 
         }
         public function getpositionsbyid(Request $request, $id){
 
             $position= Position::Find($id);
         if (!$position ) {
-            return response()->json([
-                'status'=> 'error',
-                'message' =>'job title id could not found',
-            ], JsonResponse::HTTP_NOT_FOUND);
+            return ResponseBuilder::success(400);
         }
         $position -> get();
-        return response()->json([
-            "status" => "success",
-            "data"=> $position,
-        ], JsonResponse::HTTP_OK);
+        return ResponseBuilder::success($position, 200 );
 
         }
 }

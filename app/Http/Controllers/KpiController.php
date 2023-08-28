@@ -8,6 +8,7 @@ use App\Repositories\KpiRepository;
 use App\Http\Requests\KpiRequest;
 use App\Http\Controllers\Controller;
 use App\Models\Kpi;
+use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
@@ -22,8 +23,9 @@ class KpiController extends Controller
     }
     public function getKpi(Request $request)
     {
+
         $kpis = $this->KpiRepository->getAllKpi($request);
-         return ResponseBuilder::success($kpis);
+         return ResponseBuilder::success($kpis,200);
     }
 
     public function getKpibyid(Request $request, $id)
@@ -38,26 +40,26 @@ class KpiController extends Controller
             'strategicDomains'=>  $strategicDomans
         ];
 
-        return ResponseBuilder::success($data);
+        return ResponseBuilder::success($data,200);
     }
 
     public function createKpi(KpiRequest $request)
     {
         $kpi = $this->KpiRepository->createKpi($request->all());
 
-        return ResponseBuilder::success($kpi);
+        return ResponseBuilder::success($kpi,200);
     }
 
     public function updateKpi(KpiRequest $request, $id)
     {
         $kpi = $this->KpiRepository->updateKpi($id, $request->all());
 
-        return ResponseBuilder::success($kpi);
+        return ResponseBuilder::success($kpi,200);
     }
 
     public function deleteKpi(Request $request, $id)
     {
         $kpi = $this->KpiRepository->deleteKpi($id);
-        return ResponseBuilder::success($kpi);
+        return ResponseBuilder::success($kpi,200);
     }
 }

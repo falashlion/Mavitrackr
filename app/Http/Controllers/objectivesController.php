@@ -15,6 +15,7 @@ use App\Http\Requests\FeedbackRequest;
 use App\Http\Requests\StrategicDomainsRequest;
 use App\Repositories\StrategicDomainRepository;
 use App\Repositories\FeedbackRepository;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 
 
@@ -40,29 +41,21 @@ class objectivesController extends Controller
     public function getstrategic_domains()
     {
         $strategicDomains = $this->strategicDomainRepository->getAll();
-        $data=[
+        $data=
+        [
             'strategic_domains' =>  $strategicDomains,
         ];
-        return response()->json([
-            'status' => 'success',
-            'data' => $data,
-        ]);
+        return ResponseBuilder::success($data, 200 );
     }
     public function getStrategicDomainById(Request $request, $id)
     {
         $strategicDomain = $this->strategicDomainRepository->getById($id);
 
         if (!$strategicDomain) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Strategic domain not found',
-            ], 404);
+            return ResponseBuilder::success(400);
         }
 
-        return response()->json([
-            'status' => 'success',
-            'strategic_domain' => $strategicDomain,
-        ]);
+        return ResponseBuilder::success($strategicDomain, 200 );
     }
 
     public function createStrategicDomain(StrategicDomainsRequest $request)

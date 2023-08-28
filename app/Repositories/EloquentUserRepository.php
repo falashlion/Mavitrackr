@@ -2,17 +2,21 @@
 
 namespace App\Repositories;
 
+use App\Http\Requests\UserStoreRequest;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class EloquentUserRepository implements UserRepository {
-    public function createUser(array $data) {
-        $user = User::create($data);
+
+    public function createUser()
+    {
+        $user = User::create();
         return $user;
     }
 
     public function getUserById($id) {
         $user = User::find($id);
-        // APP_URL
         return $user;
     }
 
@@ -27,9 +31,15 @@ class EloquentUserRepository implements UserRepository {
         $user->delete();
     }
 
-    public function getAllUsers() {
-
-        $users = User::all();
+    public function getAllUsers($data) {
+        $page = $data->query('paginate') ?? '10';
+         $users = User::paginate($page);
+        foreach ($users as $user){
+        $role = $user->roles;
+        $position = $user->position->title;
+        $departmentManagerID = $user->department->title;
+        // $managerData = $user->department->manager->only('first_name', 'last_name', 'profile_image');
+        }
         return $users;
     }
 

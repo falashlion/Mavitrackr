@@ -24,34 +24,34 @@ class KpiScoringController extends Controller
             'key_performance_indicator_score' => $kpis,
         ];
 
-        return ResponseBuilder::success($data);
+        return ResponseBuilder::success($data,200);
     }
 
     public function getKpiScoringbyid(Request $request, $id)
     {
         $kpi = $this->KpiScoringRepository->getKpiById($id);
 
-        return ResponseBuilder::success($kpi);
+        return ResponseBuilder::success($kpi,200);
     }
 
     public function createKpiScoring(KpiScoringRequest $request)
     {
         $kpi = $this->KpiScoringRepository->createKpi($request->all());
 
-        return ResponseBuilder::success($kpi);
+        return ResponseBuilder::success($kpi,200);
     }
 
     public function updateKpiScoring(KpiScoringRequest $request, $id)
     {
         $kpi = $this->KpiScoringRepository->updateKpi($id, $request->all());
 
-        return ResponseBuilder::success($kpi);
+        return ResponseBuilder::success($kpi,200);
     }
 
     public function deleteKpiScoring(Request $request, $id)
     {
        $kpi = $this->KpiScoringRepository->deleteKpi($id);
 
-        return ResponseBuilder::success($kpi);
+        return ResponseBuilder::success($kpi,200);
     }
 }

@@ -22,33 +22,33 @@ class KpaController extends Controller
         $page = $request->query('paginate') ?? '10';
          $kpas = Kpa::paginate($page);
         // $kpas = $this->KpaRepository->getAllKpa($request);
-        return ResponseBuilder::success($kpas);
+        return ResponseBuilder::success($kpas,200);
     }
 
     public function getKpabyid(Request $request, $id)
     {
         $kpa = $this->KpaRepository->getKpaById($id);
-        return ResponseBuilder::success($kpa);
+        return ResponseBuilder::success($kpa,200);
     }
 
     public function createKpa(KpaRequest $request)
     {
         $kpa = $this->KpaRepository->createKpa($request->all());
 
-        return ResponseBuilder::success($kpa);
+        return ResponseBuilder::success($kpa,200);
     }
 
     public function updateKpa(KpaRequest $request, $id)
     {
         $kpa = $this->KpaRepository->updateKpa($id, $request->all());
 
-        return ResponseBuilder::success($kpa);
+        return ResponseBuilder::success($kpa,200);
     }
 
     public function deleteKpa(Request $request, $id)
     {
        $kpa = $this->KpaRepository->deleteKpa($id);
 
-       return ResponseBuilder::success($kpa);
+       return ResponseBuilder::success($kpa,200);
     }
 }

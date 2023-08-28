@@ -23,57 +23,36 @@ class departmentController extends Controller {
     public function getdepartmentsbyid(Request $request, $uuid) {
         $department = $this->departmentRepository->getDepartmentById($uuid);
         if (!$department) {
-            // return response()->json([
-            //     'status' => 'error',
-            //     'message' => 'department could not found',
-            // ],JsonResponse::HTTP_NOT_FOUND);
             return ResponseBuilder::error(404);
         }
-        // return response()->json([
-        //     'status' => 'success',
-        //     'data' => $department,
-        // ], JsonResponse::HTTP_OK);
-        return ResponseBuilder::success($department);
+        return ResponseBuilder::success($department,200);
     }
 
     public function getdepartments(Request $request) {
 
         $departments = $this->departmentRepository->getAllDepartments($request->paginate ? $request->paginate : 'all');
-        return ResponseBuilder::success($departments);
+        return ResponseBuilder::success($departments,200);
 
     }
 
     public function createdepartments(DepartmentRequest $request) {
         $validatedData = $request->validated();
         $department = $this->departmentRepository->createDepartment($validatedData);
-        // return response()->json([
-        //     'status' => 'success',
-        //     'data' => $department,
-        //     'message' => 'Department created successfully.',
-        // ], JsonResponse::HTTP_CREATED);
-        return ResponseBuilder::success($department);
+        return ResponseBuilder::success($department,200);
 
     }
 
     public function updatedepartments(DepartmentRequest $request, $id) {
         $validatedData = $request->validated();
         $department = $this->departmentRepository->updateDepartment($id, $validatedData);
-        // return response()->json([
-        //     'status' => 'success',
-        //     'message' => 'Department updated successfully.',
-        // ], JsonResponse::HTTP_OK);
-        return ResponseBuilder::success($department);
+        return ResponseBuilder::success($department,200);
 
     }
 
     public function deletedepartments(Request $request, $id)
     {
        $department = $this->departmentRepository->deleteDepartment($id);
-        // return response()->json([
-        //     'status' => 'success',
-        //     'message' => 'Department deleted successfully.',
-        // ],JsonResponse::HTTP_OK);
-        return ResponseBuilder::success($department);
+        return ResponseBuilder::success($department,200);
 
     }
 

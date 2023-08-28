@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Repositories\RoleRepository;
 use App\Http\Requests\RoleRequest;
 use App\Http\Controllers\Controller;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 class RoleController extends Controller
 {
@@ -19,54 +20,30 @@ class RoleController extends Controller
     public function getRoles(Request $request)
     {
         $roles = $this->RoleRepository->getAllRoles();
-        $data=[
-            'roles'=>$roles
-        ];
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $data,
-        ], JsonResponse::HTTP_OK);
+        return ResponseBuilder::success($roles, 200 );
     }
 
     public function getRolebyid(Request $request, $id)
     {
         $role = $this->RoleRepository->getRoleById($id);
-        $data=[
-            'role'=>$role
-        ];
-        return response()->json([
-            'status' => 'success',
-            'data' => $data,
-        ], JsonResponse::HTTP_OK);
+        return ResponseBuilder::success($role, 200 );
     }
 
     public function createRole(RoleRequest $request)
     {
         $role = $this->RoleRepository->createRole($request->all());
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $role,
-        ], JsonResponse::HTTP_CREATED);
+        return ResponseBuilder::success($role,201);
     }
 
     public function updateRole(RoleRequest $request, $id)
     {
         $role= $this->RoleRepository->updateRole($id, $request->all());
-
-        return response()->json([
-            'status' => 'updated',
-            'Kpa' => $role,
-        ], JsonResponse::HTTP_OK);
+        return ResponseBuilder::success($role, 200 );
     }
 
     public function deleteRole(Request $request, $id)
     {
-        $this->RoleRepository->deleteRole($id);
-
-        return response()->json([
-            'status' => 'success',
-        ], JsonResponse::HTTP_OK);
+       $role = $this->RoleRepository->deleteRole($id);
+        return ResponseBuilder::success($role, 200 );
     }
 }

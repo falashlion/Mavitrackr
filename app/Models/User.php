@@ -11,12 +11,13 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+// use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Support\Str;
 
 
 class User extends Authenticatable  implements JWTSubject
 {
-    use HasFactory, Notifiable, HasApiTokens, HasRoles , HasUuids ;
+    use HasFactory, Notifiable, HasApiTokens, HasRoles ;
 
     // private string $user_matricule;
 
@@ -73,7 +74,7 @@ class User extends Authenticatable  implements JWTSubject
      */
     public function roles()
     {
-        return $this->belongsToMany(Role::class, Access::class, 'role_id');
+        return $this->belongsToMany(Role::class, Access::class, 'roles_id');
     }
     /**
      * Summary of positions
@@ -99,7 +100,7 @@ class User extends Authenticatable  implements JWTSubject
      */
     public function getJWTCustomClaims() {
         return [
-            'roles' => $this->roles()->without('permit')->get(['title']),
+            'roles' => $this->roles()->get(['title']),
         ];
     }
 //     protected  static  function  boot()
