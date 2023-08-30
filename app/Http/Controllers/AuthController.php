@@ -106,6 +106,11 @@ class AuthController extends Controller
         if(!$token = auth::attempt($credentials) )
         {
             return ResponseBuilder::error(404);
+
+        if(!$token = auth('api')->attempt($credentials) ){
+
+            // return ResponseBuilder::error(404::Invalid);
+            // return RB::error(404);
         }
         $user = Auth::user();
         $managerData = collect($user->linemanager)->only('first_name', 'last_name', 'profile_image');
@@ -121,6 +126,7 @@ class AuthController extends Controller
         $managerData['profile_image']= config('app.url') . "/storage/" . $user->profile_image;
         $user->profile_image = config('app.url') . '/storage/' . $user->profile_image;
         return ResponseBuilder::success($data, 200 );
+        return ResponseBuilder::success($data);
     }
     public function logout()
     {
