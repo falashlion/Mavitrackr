@@ -31,6 +31,10 @@ class KpiController extends Controller
     public function getKpibyid(Request $request, $id)
     {
         $kpi = $this->KpiRepository->getKpiById($id);
+        if ($kpi->user_id !== auth()->user()->id)
+        {
+            return ResponseBuilder::error(400);
+        }
         $kpa= $kpi->kpa->title;
         $strategicDomans=$kpi->kpa->strategicDomain->title;
         $data =
@@ -45,14 +49,20 @@ class KpiController extends Controller
 
     public function createKpi(KpiRequest $request)
     {
-        $kpi = $this->KpiRepository->createKpi($request->all());
+        $data = $request->validated();
+        $data['user_id'] = auth()->user()->id;
+        $kpi = $this->KpiRepository->create($data);
 
         return ResponseBuilder::success($kpi,200);
     }
 
-    public function updateKpi(KpiRequest $request, $id)
+    public function updateKpiDetails(KpiRequest $request, $id)
     {
         $kpi = $this->KpiRepository->updateKpi($id, $request->all());
+        if ($kpi->user_id !== auth()->user()->id)
+        {
+            return ResponseBuilder::error(400);
+        }
 
         return ResponseBuilder::success($kpi,200);
     }

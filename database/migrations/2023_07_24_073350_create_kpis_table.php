@@ -15,11 +15,13 @@ use Illuminate\Support\Facades\Schema;
             $table->uuid('id')->primary();
             $table->string('title');
             $table->uuid('kpas_id');
+            $table->uuid('user_id');
             $table->json('indicators')->nullable();
             $table->decimal('weight', 5, 2)->nullable();
             $table->integer('weighted_average_score')->nullable();
             $table->integer('score')->nullable();
             $table->foreignUuid('kpas_id')->references('id')->on('kpas');
+            $table->foreignUuid('user_id')->references('id')->on('users');
             $table->timestamps();
     });
     }

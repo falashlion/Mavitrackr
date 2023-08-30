@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Schema;
         Schema::create('accesses', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id');
-            $table->uuid('role_id');
+            $table->uuid('role_id')->default(3);
             $table->foreignUuid('user_id')->references('id')->on('users');
             $table->foreignUuid('role_id')->references('id')->on('roles');
             $table->timestamps();

@@ -33,17 +33,9 @@ class Role extends Model
     {
         return $this->belongsToMany(Permission::class);
     }
-    public function users()
+    public function user()
     {
-        return $this->belongsToMany( User::class, Access::class, 'users_id');
+        return $this->belongsToMany( User::class, 'accesses');
     }
 
-    // protected  static  function  boot()
-    // {
-    //     parent::boot();
-
-    //     static::creating(function  ($model)  {
-    //         $model->uuid = (string) Str::uuid();
-    //     });
-    // }
 }

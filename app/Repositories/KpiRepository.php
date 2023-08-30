@@ -8,7 +8,7 @@ interface KpiRepository
 
     public function getKpiById($id);
 
-    public function createKpi($data);
+    public function create($data);
 
     public function updateKpi($id, $data);
 

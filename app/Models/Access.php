@@ -10,12 +10,18 @@ use Illuminate\Support\Str;
 class Access extends Model
 {
     use HasFactory, HasUuids;
-    protected $hidden =[
+    protected $hidden =
+    [
         'created_at',
         'updated_at',
 
 
-        ];
+    ];
+    protected $fillable =
+    [
+        'user_id',
+        'role_id'
+    ];
     protected $table = 'accesses';
 
     protected  static  function  boot()

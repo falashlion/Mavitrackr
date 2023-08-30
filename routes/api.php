@@ -49,16 +49,15 @@ function ()
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/users', [AuthController::class, 'getUsers']);
         Route::get('/user/{id}', [AuthController::class, 'getUserById']);
-        Route::put('/user/{id}', [AuthController::class, 'UpdateUser']);
+        Route::post('/user/{id}', [AuthController::class, 'UpdateUserDetails']);
         Route::delete('/user/{id}', [AuthController::class, 'deleteUser']);
     }
 );
 
 
-Route::group([
-
-
-],
+Route::
+// middleware('jwt.auth')->
+group([],
 function()
     {
         //departments endpoints
@@ -88,9 +87,9 @@ function()
         Route::get('/Kpas/{id}',[KpaController::class,'getKpabyid']);
         // key performance indicators endpoints
         Route::get('/Kpis', [KpiController::class, 'getKpi']);
-        Route::post('/Kpis', [KpiController::class, 'createKpi']);
-        Route::put('/Kpis/{id}', [KpiController::class,'updateKpi']);
-        Route::delete('/Kpis/{id}',[KpiController::class,'deleteKpi']);
+        Route::post('/Kpi', [KpiController::class, 'createKpi']);
+        Route::put('/Kpi/{id}', [KpiController::class,'updateKpiDetails']);
+        Route::delete('/Kpi/{id}',[KpiController::class,'deleteKpi']);
         Route::get('/Kpi/{id}',[KpiController::class,'getKpibyid']);
         // key performance indicatoras scoring
         Route::get('/Kpis/scoring/{paginate?}', [KpiScoringController::class, 'getKpiScoring']);

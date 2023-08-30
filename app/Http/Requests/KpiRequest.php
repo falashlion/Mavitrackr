@@ -24,7 +24,7 @@ class KpiRequest extends FormRequest
         return [
             'title' => 'required|string',
             'kpas_id' => 'exists:kpas,id',
-            'users_id' => 'exists:users,id',
+            // 'users_id' => 'exists:users,id',
         ];
     }
 }

@@ -7,18 +7,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class EloquentKpiRepository implements KpiRepository{
-    // public function getAllKpi($paginate)
-    // {
-    //     if($paginate == 'all'){
-    //     $kpi = Kpi::all();
-    //     }
-    //     else{
-    //         $kpi = Kpi::orderBy('created_at', 'desc')->paginate($paginate);
-    //     }
-    //     return $kpi;
-    // }
-
+class EloquentKpiRepository implements KpiRepository
+{
     public function getAllKpi($data)
     {
         $page = $data->query('paginate') ?? '10';
@@ -27,8 +17,9 @@ class EloquentKpiRepository implements KpiRepository{
         foreach ($kpis as $kpi)
         {
             $user = $kpi->user;
-            $key_performance_area = $kpi->kpa->title;
-           $strategic_domains = $kpi->kpa->strategicDomain->title;
+            $user->profile_image = config('app.url') . "/storage/" . $user->profile_image;
+            $kpi->kpa->title;
+            $kpi->kpa->strategicDomain->title;
         }
         return $kpis;
     }
@@ -38,7 +29,7 @@ class EloquentKpiRepository implements KpiRepository{
         return Kpi::findOrFail($id);
     }
 
-    public function createKpi($data)
+    public function create($data)
     {
         return Kpi::create($data);
     }

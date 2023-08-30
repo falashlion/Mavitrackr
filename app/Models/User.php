@@ -30,7 +30,7 @@ class User extends Authenticatable  implements JWTSubject
         'last_name',
         'phone',
         'address',
-        'is_manager',
+        'line_manager',
         'gender',
         'email',
         'departments_id',
@@ -60,7 +60,7 @@ class User extends Authenticatable  implements JWTSubject
         'is_manager' => 'boolean',
     ];
 
-    public function kpi(){
+    public function kpis(){
         return $this->hasMany(Kpi::class, 'kpis_id');
     }
 
@@ -68,13 +68,9 @@ class User extends Authenticatable  implements JWTSubject
         return $this->belongsTo(Department::class, 'departments_id');
     }
 
-    /**
-     * Summary of roles
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function roles()
+    public function role()
     {
-        return $this->belongsToMany(Role::class, Access::class, 'roles_id');
+        return $this->belongsToMany( Role::class, 'accesses');
     }
     /**
      * Summary of positions
@@ -83,24 +79,28 @@ class User extends Authenticatable  implements JWTSubject
     {
         return $this->belongsTo(Position::class, 'positions_id');
     }
+    public function employees()
+    {
+        return $this->hasMany(User::class, 'line_manager');
+    }
+
+    public function lineManager()
+    {
+        return $this->belongsTo(User::class, 'line_manager');
+    }
 
  /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed
      */
-    public function getJWTIdentifier() {
+    public function getJWTIdentifier()
+    {
         return $this->user_matricule;
-
     }
-    /**
-     * Return a key value array, containing any custdatabase/migrations/2023_07_25_104727_users.phpom claims to be added to the JWT.
-     *
-     * @return array
-     */
     public function getJWTCustomClaims() {
         return [
-            'roles' => $this->roles()->get(['title']),
+            'roles' => $this->role()->get(['title']),
         ];
     }
 //     protected  static  function  boot()

@@ -32,11 +32,6 @@ use Illuminate\Support\Facades\Schema;
             $table->foreignUuid('positions_id')->references('id')->on('positions');
             $table->timestamps();
         });
-        // Schema::create('users', function (Blueprint $table) {
-
-        //     $table->string('role');
-
-        // });
     }
 
     /**
