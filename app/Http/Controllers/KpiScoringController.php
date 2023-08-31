@@ -19,7 +19,7 @@ class KpiScoringController extends Controller
     public function getKpiScoring(Request $request)
     {
         $user= auth()->user();
-        $kpis = $this->KpiScoringRepository->getAllKpi($request -> paginate ? $request -> paginate : 'all');
+        $kpis = $this->KpiScoringRepository->getAllKpi($request->all());
         $data = [
             'key_performance_indicator_score' => $kpis,
         ];
@@ -37,14 +37,20 @@ class KpiScoringController extends Controller
     public function createKpiScoring(KpiScoringRequest $request)
     {
         $kpi = $this->KpiScoringRepository->createKpi($request->all());
-
+        if ($kpi->users_id->lineManager!== auth()->user()->id)
+        {
+            return ResponseBuilder::error(400);
+        }
         return ResponseBuilder::success($kpi,200);
     }
 
     public function updateKpiScoring(KpiScoringRequest $request, $id)
     {
         $kpi = $this->KpiScoringRepository->updateKpi($id, $request->all());
-
+        if ($kpi->users_id->lineManager!== auth()->user()->id)
+        {
+            return ResponseBuilder::error(400);
+        }
         return ResponseBuilder::success($kpi,200);
     }
 

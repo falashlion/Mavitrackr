@@ -28,12 +28,12 @@ class UserUpdateRequest extends FormRequest
                 'first_name' => 'string',
                 'last_name' => 'string',
                 'email' => 'email|unique:users',
-                'profile_image' => 'image|mimes:jpg,png,jpeg,gif,svg|max:8048',
+                'profile_image' => 'image|mimes:jpg,png,jpeg,gif,svg,bmp,tiff|max:8048',
                 'phone' =>'numeric',
                 'address' =>'string',
                 'gender'=> 'string',
                 'departments_id'=> 'exists:departments,id',
-                'positions_id'=> 'string',
+                'positions_id'=> 'exists:positions,id',
                 'role_id'=> 'exists:roles,id',
                 'line_manager'=> 'exists:users,id'
             ];

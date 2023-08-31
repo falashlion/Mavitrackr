@@ -8,19 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
-// use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Support\Str;
 
 
 class User extends Authenticatable  implements JWTSubject
 {
-    use HasFactory, Notifiable, HasApiTokens, HasRoles ;
-
-    // private string $user_matricule;
-
+    use HasFactory, Notifiable, HasRoles;
     protected $table = 'users';
     protected $fillable =[
         'password',
@@ -55,22 +50,17 @@ class User extends Authenticatable  implements JWTSubject
     {
         $this->attributes['password'] = Hash::make($value);
     }
-
-    protected $casts = [
-        'is_manager' => 'boolean',
-    ];
-
     public function kpis(){
-        return $this->hasMany(Kpi::class, 'kpis_id');
+        return $this->hasMany(Kpi::class, 'users_id');
     }
 
     public function department(){
         return $this->belongsTo(Department::class, 'departments_id');
     }
 
-    public function role()
+    public function roles()
     {
-        return $this->belongsToMany( Role::class, 'accesses');
+        return $this->belongsToMany( Role::class, 'accesses', 'role_id','user_id');
     }
     /**
      * Summary of positions
@@ -83,7 +73,6 @@ class User extends Authenticatable  implements JWTSubject
     {
         return $this->hasMany(User::class, 'line_manager');
     }
-
     public function lineManager()
     {
         return $this->belongsTo(User::class, 'line_manager');
@@ -96,20 +85,11 @@ class User extends Authenticatable  implements JWTSubject
      */
     public function getJWTIdentifier()
     {
-        return $this->user_matricule;
+        return $this->getKey();
     }
     public function getJWTCustomClaims() {
         return [
-            'roles' => $this->role()->get(['title']),
+            'roles' => $this->roles->title,
         ];
     }
-//     protected  static  function  boot()
-// {
-//     parent::boot();
-
-//     static::creating(function  ($model)  {
-//         $model->uuid = (string) Str::uuid();
-//     });
-// }
-
 }

@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Kpi;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class EloquentKpiRepository implements KpiRepository
@@ -16,8 +17,7 @@ class EloquentKpiRepository implements KpiRepository
 
         foreach ($kpis as $kpi)
         {
-            $user = $kpi->user;
-            $user->profile_image = config('app.url') . "/storage/" . $user->profile_image;
+            $kpi->user;
             $kpi->kpa->title;
             $kpi->kpa->strategicDomain->title;
         }
@@ -43,7 +43,11 @@ class EloquentKpiRepository implements KpiRepository
 
     public function deleteKpi($id)
     {
-        $kpi = Kpi::findOrFail($id);
+        $kpi = Kpi::findOrFail($id)->first();
+        if ($kpi->users_id !== auth()->user()->id)
+        {
+            return ResponseBuilder::error(400);
+        }
         $kpi->delete();
         return true;
     }

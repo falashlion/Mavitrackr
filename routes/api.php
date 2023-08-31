@@ -86,12 +86,12 @@ function()
         Route::delete('/Kpas/{id}',[KpaController::class,'deleteKpa']);
         Route::get('/Kpas/{id}',[KpaController::class,'getKpabyid']);
         // key performance indicators endpoints
-        Route::get('/Kpis', [KpiController::class, 'getKpi']);
+        Route::get('/Kpis', [KpiController::class, 'getKpisOfUser']);
         Route::post('/Kpi', [KpiController::class, 'createKpi']);
         Route::put('/Kpi/{id}', [KpiController::class,'updateKpiDetails']);
-        Route::delete('/Kpi/{id}',[KpiController::class,'deleteKpi']);
+        Route::delete('/Kpi/{id}',[KpiController::class,'deleteKpiDetails']);
         Route::get('/Kpi/{id}',[KpiController::class,'getKpibyid']);
-        // key performance indicatoras scoring
+        // key performance indicators scoring
         Route::get('/Kpis/scoring/{paginate?}', [KpiScoringController::class, 'getKpiScoring']);
         Route::post('/Kpis/{id}/scoring', [KpiScoringController::class, 'updateKpiScoring']);
         Route::put('/Kpis/{id}/scoring', [KpiScoringController::class,'updateKpisScoring']);

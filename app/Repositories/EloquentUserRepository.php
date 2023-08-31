@@ -44,9 +44,9 @@ class EloquentUserRepository implements UserRepository
         $page = $data->query('paginate') ?? '10';
          $users = User::paginate($page);
         foreach ($users as $user){
-        $role = $user->role;
-        $position = $user->positions_id;
-        $departmentManagerID = $user->department->title;
+         $user->role;
+         $user->positions_id;
+         $user->department->title;
         // $managerData = $user->department->manager->only('first_name', 'last_name', 'profile_image');
         $user->profile_image = config('app.url') . "/storage/" . $user->profile_image;
         }

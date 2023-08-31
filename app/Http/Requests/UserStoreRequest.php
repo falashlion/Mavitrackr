@@ -28,7 +28,7 @@ class UserStoreRequest extends FormRequest
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'email' => 'required|email|unique:users',
-            'profile_image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:5048',
+            'profile_image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg,bmp,tiff|max:5048',
             'phone' =>'numeric',
             'address' =>'string',
             'gender'=> 'string',

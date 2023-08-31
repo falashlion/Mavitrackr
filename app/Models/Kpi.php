@@ -37,7 +37,7 @@ class Kpi extends Model
     }
 
     public function user(){
-        return $this->belongsTo(User::class);//, 'users_id'
+        return $this->belongsTo(User::class, 'users_id');
     }
     public function feedback(){
         return $this->belongsTo(Feedback::class);
