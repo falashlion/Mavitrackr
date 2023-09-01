@@ -10,6 +10,6 @@ interface UserRepository {
     public function deleteUser($id);
     public function getAllUsers($request);
 
-    public function getDepartmentMembers($id);
+    public function getDepartmentMembers();
 }
 

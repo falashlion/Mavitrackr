@@ -17,7 +17,7 @@ class KpiController extends Controller
     public function __construct(KpiRepository $KpiRepository)
     {
         $this->KpiRepository = $KpiRepository;
-        // $this->middleware('auth:api');
+        $this->middleware('auth:api');
     }
 
     public function getKpisOfUser(Request $request)

@@ -23,7 +23,7 @@ class UserStoreRequest extends FormRequest
     {
         return
         [
-            'user_matricule' => 'required|string|max:255',
+            'user_matricule' => 'required|unique:users|string|max:255',
             'password'=>'required|string|min:8|',
             'first_name' => 'required|string',
             'last_name' => 'required|string',

@@ -49,7 +49,7 @@ function ()
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/users', [AuthController::class, 'getUsers']);
         Route::get('/user/{id}', [AuthController::class, 'getUserById']);
-        Route::post('/user/{id}', [AuthController::class, 'UpdateUserDetails']);
+        Route::post('/user/{id}', [AuthController::class, 'updateUserDetails']);
         Route::delete('/user/{id}', [AuthController::class, 'deleteUser']);
     }
 );
@@ -61,7 +61,7 @@ group([],
 function()
     {
         //departments endpoints
-        Route::get('/department/users/{id}', [AuthController::class, 'getDepartmentMembers']);
+        Route::get('/department/users', [AuthController::class, 'getDepartmentMembers']);
         Route::get('/departments/{paginate?}', [departmentController::class, 'getdepartments']);
         Route::post('/departments', [departmentController::class, 'createdepartments']);
         Route::put('/departments/{id}', [departmentController::class, 'updatedepartments']);

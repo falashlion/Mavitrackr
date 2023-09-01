@@ -5,13 +5,12 @@ namespace App\Repositories;
 use App\Http\Requests\UserStoreRequest;
 use App\Models\Role;
 use App\Models\User;
-use App\Repositories\UserRepository;
+use App\Repositories\UserRepository as UserRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class EloquentUserRepository implements UserRepository
+class EloquentUserRepository implements UserRepositoryInterface
 {
-
     public function createUser(array $data)
     {
 
@@ -42,21 +41,24 @@ class EloquentUserRepository implements UserRepository
     public function getAllUsers($data)
     {
         $page = $data->query('paginate') ?? '10';
-         $users = User::paginate($page);
+        $users = User::paginate($page);
         foreach ($users as $user){
-         $user->role;
-         $user->positions_id;
-         $user->department->title;
-        // $managerData = $user->department->manager->only('first_name', 'last_name', 'profile_image');
-        $user->profile_image = config('app.url') . "/storage/" . $user->profile_image;
+        $user->role;
+        $user->positions_id;
+        $user->department->title;
+        $user->lineManager;
+        $user->kpis;
         }
         return $users;
     }
 
-    public function getDepartmentMembers($id)
+    public function getDepartmentMembers()
      {
-        $users = User::all()->where('departments_id', $id);
+        if ('departments_id' === auth()->user()->departments_id){
+        $users = User::all();
         return $users;
+        }
+
      }
 
 }
