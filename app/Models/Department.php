@@ -17,6 +17,7 @@ class Department extends Model
         'manager_id',
         'uuid',
         ];
+    protected $primaryKey = 'uuid';
     protected $table = 'departments';
     protected $fillable =[
         'title',
@@ -36,13 +37,13 @@ class Department extends Model
     return $this->belongsTo(User::class, 'manager_id');
 }
 
-protected  static  function  boot()
-{
-    parent::boot();
+// protected  static  function  boot()
+// {
+//     parent::boot();
 
-    static::creating(function  ($model)  {
-        $model->uuid = (string) Str::uuid();
-    });
-}
+//     static::creating(function  ($model)  {
+//         $model->uuid = (string) Str::uuid();
+//     });
+// }
 
 }

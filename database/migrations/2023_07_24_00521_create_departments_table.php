@@ -20,14 +20,6 @@ use Illuminate\Support\Facades\Schema;
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    // public function down(): void
-    // {
-    //     Schema::dropIfExists('departments');
-    // }
-
     public function down()
 {
     Schema::dropIfExists('departments');

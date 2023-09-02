@@ -15,7 +15,7 @@ class CreateFeedbacksTable extends Migration
             $table->uuid('id')->primary();
             $table->string('comment');
             $table->uuid('kpis_id')->nullable();
-            $table->foreignUuid('kpis_id')->references('id')->on('kpis')->onDelete('cascade');
+            $table->foreign('kpis_id')->references('id')->on('kpis')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -14,13 +14,13 @@ use Illuminate\Support\Facades\Schema;
         Schema::create('kpas', function (Blueprint $table) {
                 $table->uuid('id')->primary();
                 $table->string('title');
-                $table->uuid('strategic_domains_id');
+                $table->uuid('strategic_domain_id');
                 $table->timestamps();
-                $table->foreignUuid('strategic_domains_id')->references('id')->on('strategic_domains');
+                $table->foreign('strategic_domain_id')->references('id')->on('strategic_domains');
         });
     }
 
-    /**
+    /**git
      * Reverse the migrations.
      */
     public function down(): void

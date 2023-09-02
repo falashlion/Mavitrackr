@@ -20,8 +20,8 @@ use Illuminate\Support\Facades\Schema;
             $table->decimal('weight', 5, 2)->nullable();
             $table->integer('weighted_average_score')->nullable();
             $table->integer('score')->nullable();
-            $table->foreignUuid('kpas_id')->references('id')->on('kpas');
-            $table->foreignUuid('user_id')->references('id')->on('users');
+            $table->foreign('kpas_id')->references('id')->on('kpas');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
     });
     }

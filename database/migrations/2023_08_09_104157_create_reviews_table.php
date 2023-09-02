@@ -19,7 +19,7 @@ return new class extends Migration
             $table->dateTime('duedate_author');
             $table->dateTime('duedate_manager');
             $table->timestamps();
-            $table->foreignUuid('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

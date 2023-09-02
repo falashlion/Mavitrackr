@@ -25,11 +25,9 @@ use Illuminate\Support\Facades\Schema;
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->uuid('departments_id')->nullable();
-            $table->uuid('line_manager')->nullable();
             $table->uuid('positions_id')->nullable();
-            $table->foreignUuid('line_manager')->references('id')->on('users');
-            $table->foreignUuid('departments_id')->references('id')->on('departments');
-            $table->foreignUuid('positions_id')->references('id')->on('positions');
+            $table->foreign('departments_id')->references('id')->on('departments');
+            $table->foreign('positions_id')->references('id')->on('positions');
             $table->timestamps();
         });
     }
