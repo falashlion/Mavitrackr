@@ -7,11 +7,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use App\Models\User;
-use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 class Kpi extends Model
 {
-    use HasFactory;// HasUuids;
+    use HasFactory, HasUuids;
 
     protected $hidden =[
         'created_at',
@@ -22,7 +21,7 @@ class Kpi extends Model
 
         protected $fillable =[
             'kpas_id',
-            'users_id',
+            'user_id',
             'title',
             'weighted_average_score',
             'score',
@@ -31,23 +30,16 @@ class Kpi extends Model
         ];
 
     protected $table = 'kpis';
+    protected $primaryKey = 'id';
     public function kpa()
     {
         return $this->belongsTo(Kpa::class, 'kpas_id');
     }
 
     public function user(){
-        return $this->belongsTo(User::class, 'users_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
     public function feedback(){
         return $this->belongsTo(Feedback::class);
-    }
-    protected  static  function  boot()
-    {
-        parent::boot();
-
-        static::creating(function  ($model)  {
-            $model->uuid = (string) Str::uuid();
-        });
     }
 }

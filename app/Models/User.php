@@ -13,8 +13,9 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable  implements JWTSubject
 {
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable, HasRoles, HasUuids;
     protected $table = 'users';
+    protected $primaryKey = 'id';
     protected $fillable =[
         'password',
         'user_matricule',
@@ -28,19 +29,17 @@ class User extends Authenticatable  implements JWTSubject
         'email',
         'departments_id',
         'positions_id',
+        'id'
     ];
 
     protected $hidden =[
         'password',
-        'pivot',
         'departments_id',
         'positions_id',
         'created_at',
         'updated_at',
         'remember_token',
         'email_verified_at',
-        'is_manager',
-        'uuid',
     ];
 
 
@@ -49,17 +48,17 @@ class User extends Authenticatable  implements JWTSubject
         $this->attributes['password'] = Hash::make($value);
     }
     public function kpis(){
-        return $this->hasMany(Kpi::class, 'users_id');
+        return $this->hasMany(Kpi::class, 'user_id');
     }
 
     public function department(){
         return $this->belongsTo(Department::class, 'departments_id');
     }
 
-    public function roles()
-    {
-        return $this->belongsToMany( Role::class, 'accesses', 'role_id','user_id');
-    }
+    // public function roles()
+    // {
+    //     return $this->belongsToMany( Role::class, 'accesses', 'role_id','user_id');
+    // }
     /**
      * Summary of positions
      */
@@ -87,7 +86,7 @@ class User extends Authenticatable  implements JWTSubject
     }
     public function getJWTCustomClaims() {
         return [
-            'roles' => $this->roles,
+            // 'roles' => $this->roles,
         ];
     }
 }

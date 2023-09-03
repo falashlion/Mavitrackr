@@ -7,31 +7,30 @@ use GuzzleHttp\Psr7\Request;
 
 class EloquentKpaRepository implements KpaRepository{
 
-    public function getAllKpa($data)
+    public function getAll($data)
     {
         $page = $data->query('paginate') ?? '10';
          $kpas = Kpa::paginate($page);
         return $kpas;
     }
 
-    public function getKpaById($id)
+    public function getById($id)
     {
         return Kpa::findOrFail($id);
     }
 
-    public function createKpa($data)
+    public function create($data)
     {
         return Kpa::create($data);
     }
-
-    public function updateKpa($id, $data)
+    public function update($id, $data)
     {
         $kpa = Kpa::findOrFail($id);
         $kpa->update($data);
         return $kpa;
     }
 
-    public function deleteKpa($id)
+    public function delete($id)
     {
         $kpa = Kpa::findOrFail($id);
         $kpa->delete();

@@ -31,20 +31,20 @@ class AuthController extends Controller
         [
             'user' => $user,
             'token' => $token,
-            'role'=> $user->roles,
+            // 'role'=> $user->roles,
             'position' => $user->position->title,
             'department'=> $user->department->title,
             'manager'=> collect($user->lineManager)->only('first_name', 'last_name', 'profile_image'),
         ];
         $user->profile_image = config('app.url') . '/storage/' . $user->profile_image;
-        $user->lineManager->profile_image = config('app.url') . '/storage/' . $user->lineManager->profile_image ;
+        // $user->lineManager->profile_image = config('app.url') . '/storage/' . $user->lineManager->profile_image ;
         return ResponseBuilder::success($data, 200 );
     }
     public function register(UserStoreRequest $request) {
         $userData = $request->validated();
         $user = $this->userRepository->createUser($userData);
         $this->storeProfileImage($user, $request);
-        $user->role()->attach($userData['role_id']);
+        // $user->role()->attach($userData['role_id']);
         $user->profile_image = config('app.url') . "/storage/" . $user->profile_image;
         return ResponseBuilder::success($user, 201);
     }

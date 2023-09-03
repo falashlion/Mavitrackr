@@ -10,18 +10,18 @@ use App\Models\User;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Requests\DepartmentRequest;
-use App\Repositories\DepartmentRepository;
+use App\Repositories\DepartmentRepository as DepartmentRepositoryInterface;
 
 
 class departmentController extends Controller {
     protected $departmentRepository;
 
-    public function __construct(DepartmentRepository $departmentRepository) {
+    public function __construct(DepartmentRepositoryInterface $departmentRepository) {
         $this->departmentRepository = $departmentRepository;
     }
 
-    public function getdepartmentsbyid(Request $request, $uuid) {
-        $department = $this->departmentRepository->getDepartmentById($uuid);
+    public function getdepartmentsbyid(Request $request, $id) {
+        $department = $this->departmentRepository->getDepartmentById($id);
         if (!$department) {
             return ResponseBuilder::error(404);
         }

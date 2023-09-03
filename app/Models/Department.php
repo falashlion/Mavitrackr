@@ -15,35 +15,24 @@ class Department extends Model
         'created_at',
         'updated_at',
         'manager_id',
-        'uuid',
+        // 'uuid',
         ];
-    protected $primaryKey = 'uuid';
+    protected $primaryKey = 'id';
     protected $table = 'departments';
     protected $fillable =[
         'title',
         'manager_id',
+        'id'
     ];
 
     public function users(){
-        return $this->hasMany(User::class); //one to many relationship with the user model
+        return $this->hasMany(User::class, 'manager_id'); //one to many relationship with the user model
     }
 
-    // public function manager()
-    // {
-    //     return $this->hasOne(User::class, 'manager_id');
-    // }
+
     public function manager()
 {
     return $this->belongsTo(User::class, 'manager_id');
 }
-
-// protected  static  function  boot()
-// {
-//     parent::boot();
-
-//     static::creating(function  ($model)  {
-//         $model->uuid = (string) Str::uuid();
-//     });
-// }
 
 }

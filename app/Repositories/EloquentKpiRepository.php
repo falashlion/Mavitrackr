@@ -10,7 +10,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class EloquentKpiRepository implements KpiRepository
 {
-    public function getAllKpi($data)
+    public function getAll($data)
     {
         $page = $data->query('paginate') ?? '10';
          $kpis = Kpi::paginate($page);
@@ -19,12 +19,12 @@ class EloquentKpiRepository implements KpiRepository
         {
             $kpi->user;
             $kpi->kpa->title;
-            $kpi->kpa->strategicDomain->title;
+            // $kpi->kpa->strategicDomain->title;
         }
         return $kpis;
     }
 
-    public function getKpiById($id)
+    public function getById($id)
     {
         return Kpi::findOrFail($id);
     }
@@ -34,14 +34,14 @@ class EloquentKpiRepository implements KpiRepository
         return Kpi::create($data);
     }
 
-    public function updateKpi($id, $data)
+    public function update($id, $data)
     {
         $kpi = Kpi::findOrFail($id);
         $kpi->update($data);
         return $kpi;
     }
 
-    public function deleteKpi($id)
+    public function delete($id)
     {
         $kpi = Kpi::findOrFail($id)->first();
         if ($kpi->users_id !== auth()->user()->id)

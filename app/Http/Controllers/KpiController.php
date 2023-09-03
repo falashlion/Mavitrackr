@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Repositories\KpiRepository;
 use App\Http\Requests\KpiRequest;
@@ -17,27 +16,27 @@ class KpiController extends Controller
     public function __construct(KpiRepository $KpiRepository)
     {
         $this->KpiRepository = $KpiRepository;
-        $this->middleware('auth:api');
+        // $this->middleware('auth:api');
     }
 
-    public function getKpisOfUser(Request $request)
+    public function getAllKpis(Request $request)
     {
     $user = Auth::user();
-    $kpis = $this->KpiRepository->getAllKpi($request);
+    $kpis = $this->KpiRepository->getAll($request);
     $filtered_kpis = [];
     foreach ($kpis as $kpi){
-        if ($kpi->users_id === Auth::id() || $kpi->user->lineManager->id === Auth::id()) {
-            $user->profile_image = config('app.url') . "/storage/" . $user->profile_image;
+        if ($kpi->users_id === Auth::id()) {
+            // $user->profile_image = config('app.url') . "/storage/" . $user->profile_image;
             $filtered_kpis[] = $kpi;
         }
     }
     return ResponseBuilder::success($filtered_kpis, 200);
     }
 
-    public function getKpibyid(Request $request, $id)
+    public function getKpiById(Request $request, $id)
     {
-        $kpi = $this->KpiRepository->getKpiById($id);
-        if ($kpi->users_id !== auth()->user()->id)
+        $kpi = $this->KpiRepository->getById($id);
+        if (!$id)
         {
             return ResponseBuilder::error(400);
         }
@@ -55,24 +54,23 @@ class KpiController extends Controller
     public function createKpi(KpiRequest $request)
     {
         $data = $request->validated();
-        $data['users_id'] = auth()->user()->id;
+        $data['user_id'] = auth()->user()->id;
         $kpi = $this->KpiRepository->create($data);
         return ResponseBuilder::success($kpi,200);
     }
-
-    public function updateKpiDetails(KpiRequest $request, $id)
+    public function updateKpi(KpiRequest $request, $id)
     {
-        $kpi = $this->KpiRepository->updateKpi($id, $request->all());
-        if ($kpi->users_id !== auth()->user()->id)
+        $kpi = $this->KpiRepository->update($id, $request->all());
+        if (!$id)
         {
-            return ResponseBuilder::error(400);
+            return ResponseBuilder::error(404);
         }
         return ResponseBuilder::success($kpi,200);
     }
 
     public function deleteKpiDetails(Request $request, $id)
     {
-        $kpi = $this->KpiRepository->deleteKpi($id);
+        $kpi = $this->KpiRepository->delete($id);
         return ResponseBuilder::success(200);
     }
 }

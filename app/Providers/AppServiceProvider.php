@@ -47,6 +47,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             \App\Repositories\RoleRepository::class, EloquentRoleRepository::class
         );
+        $this->app->bind(
+            App\Repositories\PositionRepository::class,
+        );
     }
 
     /**

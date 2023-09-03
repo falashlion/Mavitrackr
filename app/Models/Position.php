@@ -14,25 +14,16 @@ class Position extends Model
     protected $hidden =[
         'created_at',
         'updated_at',
-        'uuid',
-        'id'
         ];
 
     protected $table = 'positions';
+    protected $primaryKey = 'id';
 
     protected $fillable =[
         'title',
+        'id'
     ];
     public function users(){
         return $this->hasMany(User::class, 'positions_id');
-    }
-
-    protected  static  function  boot()
-    {
-        parent::boot();
-
-        static::creating(function  ($model)  {
-            $model->uuid = (string) Str::uuid();
-        });
     }
 }

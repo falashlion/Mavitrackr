@@ -17,38 +17,33 @@ class KpaController extends Controller
     {
         $this->KpaRepository = $KpaRepository;
     }
-    public function getKpa(Request $request)
+    public function getAllKpa(Request $request)
     {
-        $page = $request->query('paginate') ?? '10';
-         $kpas = Kpa::paginate($page);
-        // $kpas = $this->KpaRepository->getAllKpa($request);
+        $kpas = $this->KpaRepository->getAll($request);
         return ResponseBuilder::success($kpas,200);
     }
 
-    public function getKpabyid(Request $request, $id)
+    public function getKpaById(Request $request, $id)
     {
-        $kpa = $this->KpaRepository->getKpaById($id);
+        $kpa = $this->KpaRepository->getById($id);
         return ResponseBuilder::success($kpa,200);
     }
 
     public function createKpa(KpaRequest $request)
     {
-        $kpa = $this->KpaRepository->createKpa($request->all());
-
+        $kpa = $this->KpaRepository->create($request->all());
         return ResponseBuilder::success($kpa,200);
     }
 
     public function updateKpa(KpaRequest $request, $id)
     {
-        $kpa = $this->KpaRepository->updateKpa($id, $request->all());
-
+        $kpa = $this->KpaRepository->update($id, $request->all());
         return ResponseBuilder::success($kpa,200);
     }
 
     public function deleteKpa(Request $request, $id)
     {
-       $kpa = $this->KpaRepository->deleteKpa($id);
-
+       $kpa = $this->KpaRepository->delete($id);
        return ResponseBuilder::success($kpa,200);
     }
 }

@@ -4,13 +4,13 @@ namespace App\Repositories;
 
 interface KpaRepository
 {
-    public function getAllKpa($data);
+    public function getAll($data);
 
-    public function getKpaById($id);
+    public function getById($id);
 
-    public function createKpa($data);
+    public function create($data);
 
-    public function updateKpa($id, $data);
+    public function update($id, $data);
 
-    public function deleteKpa($id);
+    public function delete($id);
 }

@@ -11,17 +11,16 @@ class Kpa extends Model
 {
     use HasFactory, HasUuids;
     protected $table = 'kpas';
-
+    protected $primaryKey = 'id';
     protected $hidden =[
         'created_at',
         'updated_at',
-        'strategic_domains_id',
+        'strategic_domain_id',
         ];
 
     protected $fillable =[
-
         'title',
-        'strategic_domains_id'
+        'strategic_domain_id'
     ];
 
     public function strategicDomain(){
@@ -29,14 +28,5 @@ class Kpa extends Model
     }
     public function kpi(){
         return $this->hasMany(Kpi::class, 'kpas_id');
-    }
-
-    protected  static  function  boot()
-    {
-        parent::boot();
-
-        static::creating(function  ($model)  {
-            $model->uuid = (string) Str::uuid();
-        });
     }
 }

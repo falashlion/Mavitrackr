@@ -15,8 +15,6 @@ use Illuminate\Support\Facades\Schema;
             $table->uuid('id')->primary();
             $table->string('title');
             $table->timestamps();
-
-
         });
     }
 

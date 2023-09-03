@@ -15,11 +15,11 @@ class StrategicDomain extends Model
     'created_at',
     'updated_at',
     ];
-
-    use HasFactory;
+    protected $primaryKey = 'id';
     protected $table = 'strategic_domains';
     protected $fillable =[
         'title',
+        'id'
     ];
     public function kpa()
     {
