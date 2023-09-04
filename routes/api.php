@@ -61,9 +61,8 @@ group([],
 function()
     {
         //departments endpoints
-        Route::get('/department/users', [AuthController::class, 'getDepartmentMembers']);
         Route::get('/departments', [departmentController::class, 'getdepartments']);
-        Route::post('/departments', [departmentController::class, 'createdepartments']);
+        Route::post('/department', [departmentController::class, 'createdepartments']);
         Route::put('/department/{id}', [departmentController::class, 'updatedepartments']);
         Route::delete('/department/{id}',[departmentController::class,'deletedepartments'] );
         Route::get('/department/{id}',[departmentController::class,'getdepartmentsbyid'] );
@@ -91,8 +90,10 @@ function()
         Route::put('/Kpi/{id}', [KpiController::class,'updateKpi']);
         Route::delete('/Kpi/{id}',[KpiController::class,'deleteKpi']);
         Route::get('/Kpi/{id}',[KpiController::class,'getKpiById']);
+        Route::get('/Kpis/reports',[KpiController::class,'getKpisForAllDirectReports']);
+        Route::get('Kpi/weight',[KpiController::class,'createKpiWeight']);
         // key performance indicators scoring
-        Route::get('/Kpis/scoring/{paginate?}', [KpiScoringController::class, 'getKpiScoring']);
+        Route::get('/Kpis/scoring/', [KpiScoringController::class, 'getKpiScoring']);
         Route::post('/Kpis/{id}/scoring', [KpiScoringController::class, 'updateKpiScoring']);
         Route::put('/Kpis/{id}/scoring', [KpiScoringController::class,'updateKpisScoring']);
         Route::delete('/Kpis/{id}/scoring',[KpiScoringController::class,'deleteKpiScoring']);

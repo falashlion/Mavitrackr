@@ -21,6 +21,11 @@ class EloquentUserRepository implements UserRepositoryInterface
     public function getUserById($id)
     {
         $user = User::find($id);
+        $user->roles;
+        $user->position->title;
+        $user->department->title;
+        collect($user->lineManager)->only('first_name', 'last_name', 'profile_image');
+        $user->kpis;
         return $user;
     }
 
@@ -44,7 +49,7 @@ class EloquentUserRepository implements UserRepositoryInterface
         $users = User::paginate($page);
         foreach ($users as $user){
         $user->role;
-        $user->positions_id;
+        $user->position;
         $user->department->title;
         $user->lineManager;
         $user->kpis;

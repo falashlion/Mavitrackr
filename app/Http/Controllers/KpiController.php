@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Repositories\KpiRepository;
 use App\Http\Requests\KpiRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\kpiStoreRequest;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
@@ -16,23 +18,18 @@ class KpiController extends Controller
     public function __construct(KpiRepository $KpiRepository)
     {
         $this->KpiRepository = $KpiRepository;
-        // $this->middleware('auth:api');
     }
 
     public function getAllKpis(Request $request)
     {
-    $user = Auth::user();
+    Auth::user();
     $kpis = $this->KpiRepository->getAll($request);
-    $filtered_kpis = [];
     foreach ($kpis as $kpi){
-        if ($kpi->users_id === Auth::id()) {
-            // $user->profile_image = config('app.url') . "/storage/" . $user->profile_image;
-            $filtered_kpis[] = $kpi;
+        if ($kpi->user_id === Auth::id()) {
         }
     }
-    return ResponseBuilder::success($filtered_kpis, 200);
+    return ResponseBuilder::success($kpi, 200);
     }
-
     public function getKpiById(Request $request, $id)
     {
         $kpi = $this->KpiRepository->getById($id);
@@ -40,15 +37,7 @@ class KpiController extends Controller
         {
             return ResponseBuilder::error(400);
         }
-        $kpa= $kpi->kpa->title;
-        $strategicDomans=$kpi->kpa->strategicDomain->title;
-        $data =
-        [
-            'key_performance_indicators' => $kpi,
-            'key_performance_area' => $kpa,
-            'strategicDomains'=>  $strategicDomans
-        ];
-        return ResponseBuilder::success($data,200);
+        return ResponseBuilder::success($kpi,200);
     }
 
     public function createKpi(KpiRequest $request)
@@ -70,7 +59,22 @@ class KpiController extends Controller
 
     public function deleteKpiDetails(Request $request, $id)
     {
-        $kpi = $this->KpiRepository->delete($id);
+        $this->KpiRepository->delete($id);
         return ResponseBuilder::success(200);
+    }
+    public function getKpisForAllDirectReports(Request $request)
+    {
+    $user = Auth::user()->id;
+    $userDirectReports = User::select('line_manager')->get('line_manager' == $user);
+    $kpis = $this->KpiRepository->getAllDirectReportsKpis($request);
+    foreach ($kpis as $kpi){
+        if ($kpi->user_id === $userDirectReports) {
+        }
+    }
+    return ResponseBuilder::success($kpi, 200);
+    }
+    public function createKpiWeight(kpiStoreRequest $request){
+        $kpi = $this->KpiRepository->create($request);
+        return ResponseBuilder::success($kpi,200);
     }
 }

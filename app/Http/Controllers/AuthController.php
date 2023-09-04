@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserUpdateRequest;
+use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UserStoreRequest;
@@ -31,39 +32,29 @@ class AuthController extends Controller
         [
             'user' => $user,
             'token' => $token,
-            // 'role'=> $user->roles,
             'position' => $user->position->title,
             'department'=> $user->department->title,
             'manager'=> collect($user->lineManager)->only('first_name', 'last_name', 'profile_image'),
         ];
-        $user->profile_image = config('app.url') . '/storage/' . $user->profile_image;
-        // $user->lineManager->profile_image = config('app.url') . '/storage/' . $user->lineManager->profile_image ;
         return ResponseBuilder::success($data, 200 );
     }
+
     public function register(UserStoreRequest $request) {
         $userData = $request->validated();
         $user = $this->userRepository->createUser($userData);
         $this->storeProfileImage($user, $request);
-        // $user->role()->attach($userData['role_id']);
         $user->profile_image = config('app.url') . "/storage/" . $user->profile_image;
+        if ($user->line_manager === null) {
+            $department = Department::find($user->departments_id);
+            $user->line_manager = $department->manager_id;
+            $user->save();
+        }
         return ResponseBuilder::success($user, 201);
     }
-
-
     public function getUserById($id)
      {
         $userData = $this->userRepository->getUserById($id);
-        $data =
-            [
-                'user' => $userData,
-                'role'=> $userData->roles,
-                'position' => $userData->position->title,
-                'department'=> $userData->department->title,
-                'manager'=> collect($userData->lineManager)->only('first_name', 'last_name', 'profile_image'),
-                'kpis'=> $userData->kpis
-            ];
-        $userData->profile_image = $this-> getImageUrl($userData->profile_image);
-        return ResponseBuilder::success($data,200);
+        return ResponseBuilder::success($userData,200);
     }
     public function getUsers(Request $request)
     {
@@ -80,12 +71,11 @@ class AuthController extends Controller
     {
         $user = $this->userRepository->updateUser($id, $request->all());
         $this->storeProfileImage($user, $request);
-        $userArray = $user->toArray();
-        $user->roles()->attach($user['role_id']);
         $user->profile_image = $this-> getImageUrl($user->profile_image);
+        $userArray = $user->toArray();
+        $user->save();
         return ResponseBuilder::success($userArray,200);
     }
-
     public function deleteUser($id)
     {
         $this->userRepository->deleteUser($id);
@@ -96,25 +86,12 @@ class AuthController extends Controller
         Auth::logout();
         return ResponseBuilder::success(200 );
     }
-
-     // function for all the members in a department
-
-    public function getDepartmentMembers()
-    {
-        $users = $this->userRepository->getDepartmentMembers();
-        $data =
-        [
-            'users' => $users,
-        ];
-        return ResponseBuilder::success($data, 200 );
-    }
-
     public function storeProfileImage($user, $request)
     {
         if ($request->hasFile('profile_image')) {
             $file = $request->file('profile_image');
             $fileName = time(). '_' . $file->getClientOriginalName();
-            $filePath = $file->storeAs('public/images/' . $fileName);
+            $filePath = $file->storeAs('images/' . $fileName);
             $user->profile_image = $filePath;
         }
     }
@@ -122,6 +99,4 @@ class AuthController extends Controller
      {
         return config('app.url') . "/storage/" . $Path;
      }
-
-
   }

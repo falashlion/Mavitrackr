@@ -24,7 +24,7 @@ class Kpa extends Model
     ];
 
     public function strategicDomain(){
-        return $this->belongsTo(StrategicDomain::class, 'strategic_domains_id'); //one to many relationship with strategic_domains model.
+        return $this->belongsTo(StrategicDomain::class, 'strategic_domain_id'); //one to many relationship with strategic_domains model.
     }
     public function kpi(){
         return $this->hasMany(Kpi::class, 'kpas_id');
