@@ -10,8 +10,7 @@ use App\Models\User;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Requests\DepartmentRequest;
-use App\Repositories\DepartmentRepository as DepartmentRepositoryInterface;
-
+use App\Repositories\DepartmentRepository as DepartmentRepositoryInterface;;
 
 class departmentController extends Controller {
     protected $departmentRepository;
@@ -28,35 +27,39 @@ class departmentController extends Controller {
         return ResponseBuilder::success($department,200);
     }
 
-    public function getdepartments(Request $request) {
+    public function getAllDepartments() {
 
-        $departments = $this->departmentRepository->getAllDepartments($request->paginate ? $request->paginate : 'all');
+        $departments = $this->departmentRepository->getDepartments();
         return ResponseBuilder::success($departments,200);
 
     }
 
-    public function createdepartments(DepartmentRequest $request) {
+    public function createNewDepartment(DepartmentRequest $request) {
         $validatedData = $request->validated();
         $department = $this->departmentRepository->createDepartment($validatedData);
         return ResponseBuilder::success($department,200);
 
     }
 
-    public function updatedepartments(DepartmentRequest $request, $id) {
+    public function updateDepartmentDetails(DepartmentRequest $request, $id) {
         $validatedData = $request->validated();
         $department = $this->departmentRepository->updateDepartment($id, $validatedData);
         return ResponseBuilder::success($department,200);
 
     }
 
-    public function deletedepartments(Request $request, $id)
+    public function deleteDepartmentDetails($id)
     {
-       $department = $this->departmentRepository->deleteDepartment($id);
+        $department = $this->departmentRepository->deleteDepartment($id);
         return ResponseBuilder::success($department,200);
 
     }
 
-
+    public function getDepartmentMembers($id)
+    {
+        $department = $this->departmentRepository->getMembers($id);
+        return ResponseBuilder::success($department,200);
+    }
 
 
 }

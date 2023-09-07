@@ -5,19 +5,13 @@ namespace App\Repositories;
 use App\Models\Department;
 
 class EloquentDepartmentRepository implements DepartmentRepository {
-    public function getDepartmentById($uuid) {
-        $department = Department::find($uuid);
+    public function getDepartmentById($id) {
+        $department = Department::find($id);
         return $department;
     }
 
-    public function getAllDepartments($paginate) {
-        if($paginate == 'all'){
-            $departments = Department::all();
-        }
-        else{
-
-            $departments = Department::paginate($paginate);
-        }
+    public function getDepartments() {
+        $departments = Department::all('*');
         return $departments;
     }
 
@@ -35,5 +29,11 @@ class EloquentDepartmentRepository implements DepartmentRepository {
     public function deleteDepartment($id) {
         $department = Department::find($id);
         $department->delete();
+    }
+
+    public function getMembers($id){
+        $department = Department::find($id);
+        $members = $department->users;
+        return $members;
     }
 }

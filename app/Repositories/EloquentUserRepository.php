@@ -21,15 +21,13 @@ class EloquentUserRepository implements UserRepositoryInterface
     public function getUserById($id)
     {
         $user = User::find($id);
-        $user->roles;
+        // $user->roles;
         $user->position->title;
         $user->department->title;
         collect($user->lineManager)->only('first_name', 'last_name', 'profile_image');
         $user->kpis;
         return $user;
     }
-
-
     public function updateUser($id, array $data)
     {
         $user = User::find($id);
@@ -43,12 +41,12 @@ class EloquentUserRepository implements UserRepositoryInterface
         $user->delete();
     }
 
-    public function getAllUsers($data)
+    public function getUsers($data)
     {
         $page = $data->query('paginate') ?? '10';
         $users = User::paginate($page);
         foreach ($users as $user){
-        $user->role;
+        // $user->role;
         $user->position;
         $user->department->title;
         $user->lineManager;
@@ -63,7 +61,12 @@ class EloquentUserRepository implements UserRepositoryInterface
         $users = User::all();
         return $users;
         }
-
      }
+    public function getAllDirectReports()
+    {
+        $userDetails = auth()->user();
+        $userDirectReports = $userDetails->employees;
+        return $userDirectReports;
+    }
 
 }

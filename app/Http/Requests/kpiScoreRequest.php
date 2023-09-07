@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class KpiScoringRequest extends FormRequest
+class kpiScoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,7 @@ class KpiScoringRequest extends FormRequest
     public function rules(): array
     {
         return [
-        // 'weight' => 'required|numeric',
-        'score' => 'required|numeric',
+            'score'=>'required|string'
         ];
     }
 }

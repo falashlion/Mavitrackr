@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\kpiScoreRequest;
 use Illuminate\Http\Request;
 use App\Repositories\KpiRepository;
 use App\Http\Requests\KpiRequest;
@@ -18,17 +19,15 @@ class KpiController extends Controller
     public function __construct(KpiRepository $KpiRepository)
     {
         $this->KpiRepository = $KpiRepository;
+        $this->middleware('jwt.auth');
     }
 
     public function getAllKpis(Request $request)
     {
     Auth::user();
-    $kpis = $this->KpiRepository->getAll($request);
-    foreach ($kpis as $kpi){
-        if ($kpi->user_id === Auth::id()) {
-        }
-    }
-    return ResponseBuilder::success($kpi, 200);
+    $id = auth()->id();
+    $kpis = $this->KpiRepository->getAll($id);
+    return ResponseBuilder::success($kpis, 200);
     }
     public function getKpiById(Request $request, $id)
     {
@@ -62,19 +61,22 @@ class KpiController extends Controller
         $this->KpiRepository->delete($id);
         return ResponseBuilder::success(200);
     }
-    public function getKpisForAllDirectReports(Request $request)
-    {
-    $user = Auth::user()->id;
-    $userDirectReports = User::select('line_manager')->get('line_manager' == $user);
-    $kpis = $this->KpiRepository->getAllDirectReportsKpis($request);
-    foreach ($kpis as $kpi){
-        if ($kpi->user_id === $userDirectReports) {
-        }
-    }
-    return ResponseBuilder::success($kpi, 200);
-    }
-    public function createKpiWeight(kpiStoreRequest $request){
-        $kpi = $this->KpiRepository->create($request);
+    public function createKpiWeight(kpiStoreRequest $request, $id){
+        $kpi = $this->KpiRepository->createWeight($id,$request->all());
         return ResponseBuilder::success($kpi,200);
     }
+    public function createKpiScore(kpiScoreRequest $request, $id){
+        $kpi = $this->KpiRepository->createScore($id,$request->all());
+        return ResponseBuilder::success($kpi,200);
+    }
+    public function getKpiByUserId($id)
+    {
+        $kpi = $this->KpiRepository->getByUserId($id);
+        if (!$id)
+        {
+            return ResponseBuilder::error(400);
+        }
+        return ResponseBuilder::success($kpi,200);
+    }
+
 }

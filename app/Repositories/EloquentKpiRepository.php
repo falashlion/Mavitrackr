@@ -8,15 +8,14 @@ use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 class EloquentKpiRepository implements KpiRepository
 {
-    public function getAll($data)
+    public function getAll($id)
     {
-        $page = $data->query('paginate') ?? '10';
-        $kpis = Kpi::paginate($page);
-        foreach ($kpis as $kpi)
+        $kpis = Kpi::where('user_id', $id)->get();
+        foreach ($kpis as $user)
         {
-            $kpi->user;
-            $kpi->kpa->title;
-            $kpi->kpa->strategicDomain;
+            $user->user;
+            $user->kpa->title;
+            $user->kpa->strategicDomain;
         }
         return $kpis;
     }
@@ -49,16 +48,24 @@ class EloquentKpiRepository implements KpiRepository
         $kpi->delete();
         return true;
     }
-    public function getAllDirectReportsKpis($data)
+
+    public function createWeight($id, $data)
     {
-        $page = $data->query('paginate') ?? '10';
-        $kpis = Kpi::paginate($page);
-        foreach ($kpis as $kpi)
-        {
-            $kpi->user;
-            $kpi->kpa->title;
-            $kpi->kpa->strategicDomain;
-        }
+        $kpi = Kpi::findOrFail($id);
+        $kpi -> update($data);
+        return $kpi;
+    }
+
+    public function createScore($id, $data)
+    {
+        $kpi = Kpi::findOrFail($id);
+        $kpi -> update($data);
+        return $kpi;
+    }
+    public function getByUserId($id)
+    {
+        $user = User::findOrFail($id);
+        $kpis = Kpi::where('user_id',$id)->get();
         return $kpis;
     }
 }

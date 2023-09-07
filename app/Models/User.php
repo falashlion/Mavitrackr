@@ -51,7 +51,8 @@ class User extends Authenticatable  implements JWTSubject
         return $this->hasMany(Kpi::class, 'user_id');
     }
 
-    public function department(){
+    public function department()
+    {
         return $this->belongsTo(Department::class, 'departments_id');
     }
 
@@ -66,6 +67,7 @@ class User extends Authenticatable  implements JWTSubject
     {
         return $this->belongsTo(Position::class, 'positions_id');
     }
+
     public function employees()
     {
         return $this->hasMany(User::class, 'line_manager');

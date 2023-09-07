@@ -14,8 +14,6 @@ class Department extends Model
     protected $hidden =[
         'created_at',
         'updated_at',
-        'manager_id',
-        // 'uuid',
         ];
     protected $primaryKey = 'id';
     protected $table = 'departments';
@@ -26,7 +24,7 @@ class Department extends Model
     ];
 
     public function users(){
-        return $this->hasMany(User::class, 'manager_id'); //one to many relationship with the user model
+        return $this->hasMany(User::class, 'departments_id'); //one to many relationship with the user model
     }
 
 

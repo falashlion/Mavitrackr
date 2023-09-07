@@ -8,8 +8,8 @@ interface UserRepository {
     public function getUserById($id);
     public function updateUser($id, array $data);
     public function deleteUser($id);
-    public function getAllUsers($request);
-
+    public function getUsers($request);
+    public function getAllDirectReports();
     public function getDepartmentMembers();
 }
 
