@@ -25,7 +25,6 @@ class EloquentUserRepository implements UserRepositoryInterface
         $user->position->title;
         $user->department->title;
         collect($user->lineManager)->only('first_name', 'last_name', 'profile_image');
-        $user->kpis;
         return $user;
     }
     public function updateUser($id, array $data)
@@ -50,7 +49,6 @@ class EloquentUserRepository implements UserRepositoryInterface
         $user->position;
         $user->department->title;
         $user->lineManager;
-        $user->kpis;
         }
         return $users;
     }
