@@ -21,7 +21,7 @@ class StrategicDomain extends Model
         'title',
         'id'
     ];
-    public function kpa()
+    public function keyPerformanceArea()
     {
         return $this->hasMany(Kpa::class, 'strategic_domain_id');
     }

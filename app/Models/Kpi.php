@@ -31,15 +31,14 @@ class Kpi extends Model
 
     protected $table = 'kpis';
     protected $primaryKey = 'id';
-    public function kpa()
+    public function keyPerformanceArea()
     {
         return $this->belongsTo(Kpa::class, 'kpas_id');
     }
-
     public function user(){
         return $this->belongsTo(User::class, 'user_id');
     }
     public function feedback(){
-        return $this->belongsTo(Feedback::class);
+        return $this->hasMany(Feedback::class,'kpis_id');
     }
 }

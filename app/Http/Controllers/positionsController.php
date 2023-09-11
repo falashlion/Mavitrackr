@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\interfaces\PositionRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Repositories\PositionRepository;
@@ -12,7 +13,7 @@ class positionsController extends Controller
 {
     private $positionRepository;
 
-    public function __construct(PositionRepository $positionRepository)
+    public function __construct(PositionRepositoryInterface $positionRepository)
     {
         $this->positionRepository = $positionRepository;
     }
@@ -20,12 +21,11 @@ class positionsController extends Controller
     public function getPositions()
     {
         $positions = $this->positionRepository->getAllPositions();
-
         return ResponseBuilder::success($positions, 200);
     }
     public function createPositions(PositionRequest $request)
     {
-        $position = $this->positionRepository->createPosition($request);
+        $position = $this->positionRepository->createPosition($request->all());
         return ResponseBuilder::success($position, 201);
     }
     public function updatePositions(PositionRequest $request, $id)
@@ -42,7 +42,7 @@ class positionsController extends Controller
         if (!$result) {
             return ResponseBuilder::error(404);
         }
-        return ResponseBuilder::success([], 200);
+        return ResponseBuilder::success([], 204);
     }
     public function getPositionsbyid(Request $request, $id)
     {

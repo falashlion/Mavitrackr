@@ -48,14 +48,11 @@ function ()
     {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/users', [AuthController::class, 'getAllUsers']);
-        Route::get('/user/{id}', [AuthController::class, 'getUserById']);
-        Route::post('/user/{id}', [AuthController::class, 'updateUserDetails']);
-        Route::delete('/user/{id}', [AuthController::class, 'deleteUser']);
-
+        Route::get('/users/{id}', [AuthController::class, 'getUserById']);
+        Route::post('/users/{id}', [AuthController::class, 'updateUserDetails']);
+        Route::delete('/users/{id}', [AuthController::class, 'deleteUser']);
     }
 );
-
-
 Route::
 // middleware('jwt.auth')
 group([],
@@ -64,62 +61,60 @@ function()
         Route::get('users/reports',[AuthController::class,'getAllDirectReportsForUser']);
         //departments endpoints
         Route::get('/departments', [departmentController::class, 'getAllDepartments']);
-        Route::post('/department', [departmentController::class, 'createNewDepartment']);
-        Route::put('/department/{id}', [departmentController::class, 'updateDepartmentDetails']);
-        Route::delete('/department/{id}',[departmentController::class,'deleteDepartmentDetails'] );
-        Route::get('/department/{id}',[departmentController::class,'getdepartmentsbyid'] );
-        Route::get('department/members/{id}',[departmentController::class,'getDepartmentMembers']);
+        Route::post('/departments', [departmentController::class, 'createNewDepartment']);
+        Route::put('/departments/{id}', [departmentController::class, 'updateDepartmentDetails']);
+        Route::delete('/departments/{id}',[departmentController::class,'deleteDepartmentDetails'] );
+        Route::get('/departments/{id}',[departmentController::class,'getdepartmentsbyid'] );
+        Route::get('departments/members/{id}',[departmentController::class,'getDepartmentMembers']);
         // jobtitle endpoints
-        Route::get('/job_titles', [positionsController::class, 'getPositions']);
-        Route::post('/job_title', [positionsController::class, 'createPositions']);
-        Route::put('/job_title/{id}', [positionsController::class, 'updatePositions']);
-        Route::delete('/job_title/{id}',[positionsController::class,'deletePositions'] );
-        Route::get('/job_title/{id}',[positionsController::class,'getPositionsbyid'] );
+        Route::get('/job-titles', [positionsController::class, 'getPositions']);
+        Route::post('/job-titles', [positionsController::class, 'createPositions']);
+        Route::put('/job-titles/{id}', [positionsController::class, 'updatePositions']);
+        Route::delete('/job-titles/{id}',[positionsController::class,'deletePositions'] );
+        Route::get('/job-titles/{id}',[positionsController::class,'getPositionsbyid'] );
         // stratergic domains endpoints
-        Route::get('/strategic_domains', [objectivesController::class, 'getStrategicDomains']);
-        Route::post('/strategic_domain', [objectivesController::class, 'createStrategicDomain']);
-        Route::put('/strategic_domain/{id}', [objectivesController::class,'updateStrategicDomain']);
-        Route::delete('/strategic_domain/{id}',[objectivesController::class,'deleteStrategicDomain']);
-        Route::get('/strategic_domain/{id}',[objectivesController::class,'getStrategicDomainById']);
+        Route::get('/strategic-domains', [objectivesController::class, 'getStrategicDomains']);
+        Route::post('/strategic-domains', [objectivesController::class, 'createStrategicDomain']);
+        Route::put('/strategic-domains/{id}', [objectivesController::class,'updateStrategicDomain']);
+        Route::delete('/strategic-domains/{id}',[objectivesController::class,'deleteStrategicDomain']);
+        Route::get('/strategic-domains/{id}',[objectivesController::class,'getStrategicDomainById']);
         // key performance areas endpoints
-        Route::get('/Kpas', [KpaController::class, 'getAllKpa']);
-        Route::post('/Kpa', [KpaController::class, 'createKpa']);
-        Route::put('/Kpa/{id}', [KpaController::class,'updateKpa']);
-        Route::delete('/Kpa/{id}',[KpaController::class,'deleteKpa']);
-        Route::get('/Kpa/{id}',[KpaController::class,'getKpaById']);
+        Route::get('/kpas', [KpaController::class, 'getAllKpa']);
+        Route::post('/kpas', [KpaController::class, 'createKpa']);
+        Route::put('/kpas/{id}', [KpaController::class,'updateKpa']);
+        Route::delete('/kpas/{id}',[KpaController::class,'deleteKpa']);
+        Route::get('/kpas/{id}',[KpaController::class,'getKpaById']);
         // key performance indicators endpoints
-        Route::get('/Kpis', [KpiController::class, 'getAllKpis']);
-        Route::post('/Kpi', [KpiController::class, 'createKpi']);
-        Route::put('/Kpi/{id}', [KpiController::class,'updateKpi']);
-        Route::delete('/Kpi/{id}',[KpiController::class,'deleteKpi']);
-        Route::get('/Kpi/{id}',[KpiController::class,'getKpiById']);
-        Route::get('/Kpis/reports',[KpiController::class,'getKpisForAllDirectReports']);
-        Route::get('Kpi/weight/{id}',[KpiController::class,'createKpiWeight']);
-        Route::get('Kpi/score/{id}',[KpiController::class,'createKpiScore']);
-        Route::get('/Kpis/user/{id}',[KpiController::class,'getKpiByUserId']);
+        Route::get('/kpis', [KpiController::class, 'getAllKpis']);
+        Route::post('/kpis', [KpiController::class, 'createKpi']);
+        Route::put('/kpis/{id}', [KpiController::class,'updateKpi']);
+        Route::delete('/kpis/{id}',[KpiController::class,'deleteKpi']);
+        Route::get('/kpis/{id}',[KpiController::class,'getKpiById']);
+        Route::get('/kpis/reports',[KpiController::class,'getKpisForAllDirectReports']);
+        Route::get('kpis/weights/{id}',[KpiController::class,'createKpiWeight']);
+        Route::get('kpis/scores/{id}',[KpiController::class,'createKpiScore']);
+        Route::get('/users/Kpis/{id}',[KpiController::class,'getKpiByUserId']);
         // key performance indicators scoring
-        Route::get('/Kpis/scoring/', [KpiScoringController::class, 'getKpiScoring']);
-        Route::post('/Kpis/{id}/scoring', [KpiScoringController::class, 'updateKpiScoring']);
-        Route::put('/Kpis/{id}/scoring', [KpiScoringController::class,'updateKpisScoring']);
-        Route::delete('/Kpis/{id}/scoring',[KpiScoringController::class,'deleteKpiScoring']);
-        Route::get('/Kpis/{id}/scoring',[KpiScoringController::class, 'getKpiScoringbyid']);
-
+        Route::get('/kpis/scorings', [KpiScoringController::class,'getKpiScoring']);
+        Route::post('/kpis/{id}/scorings', [KpiScoringController::class,'updateKpiScoring']);
+        Route::put('/kpis/{id}/scorings', [KpiScoringController::class,'updateKpisScoring']);
+        Route::delete('/kpis/{id}/scorings',[KpiScoringController::class,'deleteKpiScoring']);
+        Route::get('/kpis/{id}/scorings',[KpiScoringController::class,'getKpiScoringbyid']);
         // feedbacks endpoints
-        Route::get('/Kpis/feedback/{paginate?} ', [FeedbackController::class, 'getfeedback']);
-        Route::post('/Kpis/{id}/feedback ', [FeedbackController::class, 'createfeedback']);
-        Route::put('/Kpis/{id}/feedback ', [FeedbackController::class,'updatefeedback']);
-        Route::delete('/Kpis/{id}/feedback ',[FeedbackController::class,'deletefeedback']);
-        Route::get('/Kpis/{id}/feedback', [FeedbackController::class, 'getfeedbackbyKpiid']);
+        Route::get('/feedbacks/kpis', [FeedbackController::class, 'getAllFeedbacks']);
+        Route::post('/feedbacks/kpis', [FeedbackController::class, 'createFeedback']);
+        Route::put('/feedbacks/{id} ', [FeedbackController::class,'updateFeedback']);
+        Route::delete('/feedbacks/kpis/{id}',[FeedbackController::class,'deleteFeedback']);
+        Route::get('/feedbacks/kpis/{id}', [FeedbackController::class, 'getFeedbackByKpiId']);
         //password reset endpoints
-
         Route::post('/forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
         Route::post('/reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
         // Roles endpoint
-        Route::get('/Roles', [RoleController::class, 'getRoles']);
-        Route::post('/Role', [RoleController::class, 'createRole']);
-        Route::put('/Role/{id}', [RoleController::class,'updateRole']);
-        Route::delete('/Role/{id}',[RoleController::class,'deleteRole']);
-        Route::get('/Role/{id}',[RoleController::class,'getRolebyid']);
+        Route::get('/roles', [RoleController::class, 'getRoles']);
+        Route::post('/roles', [RoleController::class, 'createRole']);
+        Route::put('/roles/{id}', [RoleController::class,'updateRole']);
+        Route::delete('/roles/{id}',[RoleController::class,'deleteRole']);
+        Route::get('/roles/{id}',[RoleController::class,'getRolebyid']);
     }
 );
 

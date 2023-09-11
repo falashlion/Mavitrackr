@@ -2,17 +2,35 @@
 
 namespace App\Repositories;
 
-interface FeedbackRepository
+use App\Models\Feedback;
+use App\Interfaces\FeedbackRepositoryInterface;
+
+class FeedbackRepository implements FeedbackRepositoryInterface
 {
-    public function all($paginate);
+    public function allFeedbacks()
+    {
+        return Feedback::all();
+    }
+    public function getByKpiId($id)
+    {
+        return Feedback::find($id);
+    }
+    public function create($data)
+    {
+        return Feedback::create($data) ;
+    }
+    public function update($data, $id)
+    {
+        $feedback = Feedback::find($id);
+        $feedback->update($data);
+        return $feedback;
+    }
+    public function delete($id)
+    {
+        return true;
+    }
+    public function find($id)
+    {
 
-    public function getByKpiId($id);
-
-    public function create(array $data);
-
-    public function update(array $data, $id);
-
-    public function delete($id);
-
-    public function find($id);
+    }
 }

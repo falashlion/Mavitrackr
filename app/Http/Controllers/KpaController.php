@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\interfaces\KpaRepositoryInterface;
 use App\Models\Kpa;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,13 +14,13 @@ use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 class KpaController extends Controller
 {
     protected $KpaRepository;
-    public function __construct(KpaRepository $KpaRepository)
+    public function __construct(KpaRepositoryInterface $KpaRepository)
     {
         $this->KpaRepository = $KpaRepository;
     }
-    public function getAllKpa(Request $request)
+    public function getAllKpa()
     {
-        $kpas = $this->KpaRepository->getAll($request);
+        $kpas = $this->KpaRepository->getAll();
         return ResponseBuilder::success($kpas,200);
     }
 
@@ -44,6 +45,6 @@ class KpaController extends Controller
     public function deleteKpa(Request $request, $id)
     {
        $kpa = $this->KpaRepository->delete($id);
-       return ResponseBuilder::success($kpa,200);
+       return ResponseBuilder::success($kpa,204);
     }
 }

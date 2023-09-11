@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\kpiScoreRequest;
 use Illuminate\Http\Request;
-use App\Repositories\KpiRepository;
+use App\interfaces\KpiRepositoryInterface;
 use App\Http\Requests\KpiRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\kpiStoreRequest;
@@ -15,8 +15,8 @@ use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 class KpiController extends Controller
 {
-    protected $KpiRepository;
-    public function __construct(KpiRepository $KpiRepository)
+    private $KpiRepository;
+    public function __construct(KpiRepositoryInterface $KpiRepository)
     {
         $this->KpiRepository = $KpiRepository;
         $this->middleware('jwt.auth');
@@ -34,7 +34,7 @@ class KpiController extends Controller
         $kpi = $this->KpiRepository->getById($id);
         if (!$id)
         {
-            return ResponseBuilder::error(400);
+            return ResponseBuilder::error(404);
         }
         return ResponseBuilder::success($kpi,200);
     }
@@ -59,7 +59,7 @@ class KpiController extends Controller
     public function deleteKpiDetails(Request $request, $id)
     {
         $this->KpiRepository->delete($id);
-        return ResponseBuilder::success(200);
+        return ResponseBuilder::success(204);
     }
     public function createKpiWeight(kpiStoreRequest $request, $id){
         $kpi = $this->KpiRepository->createWeight($id,$request->all());
@@ -74,7 +74,7 @@ class KpiController extends Controller
         $kpi = $this->KpiRepository->getByUserId($id);
         if (!$id)
         {
-            return ResponseBuilder::error(400);
+            return ResponseBuilder::error(404);
         }
         return ResponseBuilder::success($kpi,200);
     }

@@ -2,15 +2,24 @@
 
 namespace App\Providers;
 
-use App\Repositories\EloquentFeedbackRepository;
-use App\Repositories\EloquentKpiRepository;
-use App\Repositories\EloquentKpiScoringRepository;
-use App\Repositories\RoleRepository;
 use Illuminate\Support\ServiceProvider;
+use App\interfaces\DepartmentRepositoryInterface;
+use App\interfaces\StrategicDomainRepositoryInterface;
+use App\interfaces\FeedbackRepositoryInterface;
+use App\interfaces\PositionRepositoryInterface;
+use App\interfaces\KpaRepositoryInterface;
+use App\interfaces\KpiRepositoryInterface;
+use App\interfaces\UserRepositoryInterface;
+use App\Repositories\FeedbackRepository;
+use App\Repositories\KpiRepository;
+use App\Repositories\KpiScoringRepository;
+use App\Repositories\RoleRepository;
 use App\Repositories\UserRepository;
-use App\Repositories\EloquentUserRepository;
-use App\Repositories\EloquentKpaRepository;
-use App\Repositories\EloquentRoleRepository;
+use App\Repositories\KpaRepository;
+use App\Repositories\PositionRepository;
+use App\Repositories\StrategicDomainRepository;
+use App\Repositories\DepartmentRepository;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,37 +28,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(UserRepository::class, EloquentUserRepository::class);
-        $this->app->bind(
-            \App\Repositories\DepartmentRepository::class,
-            \App\Repositories\EloquentDepartmentRepository::class
-        );
-        $this->app->bind(
-            \App\Repositories\KpiRepository::class, EloquentKpiRepository::class
-        );
-        $this->app->bind(
-            \App\Repositories\KpiScoringRepository::class, EloquentKpiScoringRepository::class
-        );
-        $this->app->bind(
-            \App\Repositories\KpaRepository::class, EloquentKpaRepository::class
-        );
-        $this->app->bind(
-            \App\Repositories\FeedbackRepository::class, EloquentFeedbackRepository::class
-        );
-        $this->app->bind(
-            \App\Repositories\StrategicDomainRepository::class,
-            \App\Repositories\EloquentStrategicDomainRepository::class
-        );
-        $this->app->bind(
-            App\Repositories\EloquentFeedbackRepository::class,
-            App\Repositories\FeedbackRepository::class
-        );
-        $this->app->bind(
-            \App\Repositories\RoleRepository::class, EloquentRoleRepository::class
-        );
-        $this->app->bind(
-            App\Repositories\PositionRepository::class,
-        );
+        $this->app->bind(UserRepositoryInterface::class,UserRepository::class);
+        $this->app->bind(DepartmentRepositoryInterface::class,DepartmentRepository::class);
+        $this->app->bind(KpiRepositoryInterface::class,KpiRepository::class);
+        $this->app->bind(KpiScoringRepositoryInterface::class,KpiScoringRepository::class);
+        $this->app->bind(KpaRepositoryInterface::class,KpaRepository::class);
+        $this->app->bind(FeedbackRepositoryInterface::class,FeedbackRepository::class);
+        $this->app->bind(StrategicDomainRepositoryInterface::class,StrategicDomainRepository::class);
+        $this->app->bind(FeedbackRepositoryInterface::class,FeedbackRepository::class);
+        $this->app->bind(RoleRepositoryInterfaces::class,RoleRepository::class);
+        $this->app->bind(PositionRepositoryInterface::class,PositionRepository::class);
     }
 
     /**

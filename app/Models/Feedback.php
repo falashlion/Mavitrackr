@@ -14,7 +14,7 @@ class Feedback extends Model
     protected $hidden =[
         'created_at',
         'updated_at',
-        'kpis_id',
+        // 'kpis_id',
         ];
     protected $table = 'feedbacks';
 
@@ -22,16 +22,7 @@ class Feedback extends Model
         'comment',
         'kpis_id'
     ];
-    public function kpi(){
-        return $this->hasMany(Kpi::class);
-    }
-
-    protected  static  function  boot()
-    {
-        parent::boot();
-
-        static::creating(function  ($model)  {
-            $model->uuid = (string) Str::uuid();
-        });
+    public function keyPerformanceIndicator(){
+        return $this->belongsTo(Kpi::class,'kpis_id');
     }
 }

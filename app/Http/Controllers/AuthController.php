@@ -2,19 +2,18 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserUpdateRequest;
+use App\interfaces\UserRepositoryInterface;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\LoginRequest;
-use App\Repositories\UserRepository as UserRepositoryInterface;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
-use PHPOpenSourceSaver\JWTAuth\JWTAuth as JWTAuthJWTAuth;
 
 class AuthController extends Controller
 {
-    protected $userRepository;
+    private $userRepository;
 
     public function __construct(UserRepositoryInterface $userRepository)
     {
@@ -28,30 +27,28 @@ class AuthController extends Controller
         {
             return ResponseBuilder::error(401);
         }
-        $expiration = JWTAuth::factory()->getTTL()*60;
         $user = Auth::user();
+        $expiration = JWTAuth::factory()->getTTL()*60;
+        $user->position;
+        $user->department;
+        $user->lineManager;
         $data =
         [
             'user' => $user,
             'token' => $token,
             'expiration' => $expiration,
-            'position' => $user->position->title,
-            'department'=> $user->department->title,
-            'manager'=> collect($user->lineManager)->only('first_name', 'last_name', 'profile_image'),
         ];
-        return ResponseBuilder::success($data, 200 );
+        return ResponseBuilder::success($data, 200);
     }
 
     public function register(UserStoreRequest $request) {
-        $userData = $request->validated();
-        $user = $this->userRepository->createUser($userData);
+        $user = $this->userRepository->createUser($request->all());
         $this->storeProfileImage($user, $request);
         $user->profile_image = config('app.url') . "/storage/" . $user->profile_image;
         $userArray = $user->toArray();
         if ($user->line_manager === null) {
             $department = Department::find($user->departments_id);
             $user->line_manager = $department->manager_id;
-            // $user->save();
         }
         $user->save();
         return ResponseBuilder::success($userArray, 201);
@@ -80,7 +77,7 @@ class AuthController extends Controller
     public function deleteUser($id)
     {
         $this->userRepository->deleteUser($id);
-        return ResponseBuilder::success(200);
+        return ResponseBuilder::success(204);
     }
     public function logout()
     {

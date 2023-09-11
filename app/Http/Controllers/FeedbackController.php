@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\interfaces\FeedbackRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Feedback;
@@ -11,71 +12,38 @@ use App\Repositories\EloquentFeedbackRepository;
 use App\Repositories\FeedbackRepository;
 use App\Http\Requests\FeedbackRequest;
 use App\Http\Controllers\Controller;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 
 class FeedbackController extends Controller
 {
-    protected $feedbackRepository;
+    private $feedbackRepository;
 
-public function __construct(FeedbackRepository $feedbackRepository)
+public function __construct(FeedbackRepositoryInterface $feedbackRepository)
 {
     $this->feedbackRepository = $feedbackRepository;
 }
-public function getfeedback(Request $request)
+public function getAllFeedbacks()
 {
-    $feedback = $this->feedbackRepository->all($request -> paginate ? $request -> paginate : 'all');
-
-    return response()->json([
-        'status' => 'success',
-        'users' => $feedback,
-    ], JsonResponse::HTTP_OK);
+    $feedback = $this->feedbackRepository->allFeedbacks();
+    return ResponseBuilder::success($feedback,200);
 }
-public function getfeedbackbyKpiid(FeedbackRequest $request, $id)
+public function getFeedbackByKpiId($id)
 {
     $feedback = $this->feedbackRepository->getByKpiId($id);
-    if (!$feedback) {
-        return response()->json([
-            'status'=> 'error',
-            'message' =>'feedback for this key performance indicator could not be found',
-        ], JsonResponse::HTTP_NOT_FOUND);
-    }
-
-    return response()->json([
-        "status" => "success",
-        "data"=> $feedback,
-    ], JsonResponse::HTTP_OK);
+    return ResponseBuilder::success($feedback,200);
 }
-public function createfeedback(FeedbackRequest $request, $id)
+public function createFeedback(FeedbackRequest $request)
 {
-    $Kpi = Kpi::Find($id);
-    $feedback = $this->feedbackRepository->create([
-        "comment"   =>  $request['comment'],
-        "kpis_id" => $id,
-    ]);
-    return response ()-> json ( [
-        "status"    =>"success",
-        "data"      => $feedback,
-        "Message"   =>"feedback created successfully."
-    ], JsonResponse::HTTP_CREATED);
+    $feedback = $this->feedbackRepository->create($request->all());
+    return ResponseBuilder::success($feedback,201);
 }
-public function updatefeedback(FeedbackRequest $request, $id)
+public function updateFeedback(FeedbackRequest $request, $id)
 {
-    $feedback = $this->feedbackRepository->update([
-        'comment'   =>  $request['comment'],
-    ], $id);
-    if (!$feedback) {
-        return response()->json([
-            'status'=> 'error',
-            'message' =>'feedback could not found',
-        ], JsonResponse::HTTP_NOT_FOUND);
-    }
-
-    return response() -> json ([
-        "status"=>"updated",
-        "message"=> "feedback updated",
-    ], JsonResponse::HTTP_OK);
+    $feedback = $this->feedbackRepository->update($id,$request->all());
+    return ResponseBuilder::success($feedback,200);
 }
-public function deletefeedback(Request $request, $id)
+public function deleteFeedback(Request $request, $id)
 {
     $result = $this->feedbackRepository->delete($id);
     if (!$result) {

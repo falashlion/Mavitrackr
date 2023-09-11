@@ -47,7 +47,7 @@ class User extends Authenticatable  implements JWTSubject
     {
         $this->attributes['password'] = Hash::make($value);
     }
-    public function kpis(){
+    public function keyPerformanceIndicators(){
         return $this->hasMany(Kpi::class, 'user_id');
     }
 
@@ -88,7 +88,7 @@ class User extends Authenticatable  implements JWTSubject
     }
     public function getJWTCustomClaims() {
         return [
-            // 'roles' => $this->roles,
+            //
         ];
     }
 }

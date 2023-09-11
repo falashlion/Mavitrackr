@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\interfaces\DepartmentRepositoryInterface;
 use App\Models\Department;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -10,10 +11,10 @@ use App\Models\User;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Requests\DepartmentRequest;
-use App\Repositories\DepartmentRepository as DepartmentRepositoryInterface;;
+
 
 class departmentController extends Controller {
-    protected $departmentRepository;
+    private $departmentRepository;
 
     public function __construct(DepartmentRepositoryInterface $departmentRepository) {
         $this->departmentRepository = $departmentRepository;
@@ -51,7 +52,7 @@ class departmentController extends Controller {
     public function deleteDepartmentDetails($id)
     {
         $department = $this->departmentRepository->deleteDepartment($id);
-        return ResponseBuilder::success($department,200);
+        return ResponseBuilder::success($department,204);
 
     }
 

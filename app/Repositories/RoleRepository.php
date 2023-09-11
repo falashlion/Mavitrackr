@@ -2,15 +2,40 @@
 
 namespace App\Repositories;
 
-interface RoleRepository
-{
-    public function getAllRoles();
+use App\Models\Role;
 
-    public function getRoleById($id);
+class EloquentRoleRepository implements RoleRepository{
+    public function getAllRoles()
+    {
 
-    public function createRole($data);
+        $role = Role::all();
+        return $role;
 
-    public function updateRole($id, $data);
+    }
 
-    public function deleteRole($id);
+
+
+    public function getRoleById($id)
+    {
+        return Role::findOrFail($id);
+    }
+
+    public function createRole($data)
+    {
+        return Role::create($data);
+    }
+
+    public function updateRole($id, $data)
+    {
+        $role = Role::findOrFail($id);
+        $role->update($data);
+        return $role;
+    }
+
+    public function deleteRole($id)
+    {
+        $role = Role::find($id);
+        $role->delete();
+        return true;
+    }
 }

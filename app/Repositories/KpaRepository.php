@@ -2,15 +2,38 @@
 
 namespace App\Repositories;
 
-interface KpaRepository
+use App\Interfaces\KpaRepositoryInterface;
+use App\Models\Kpa;
+
+
+class KpaRepository implements KpaRepositoryInterface
 {
-    public function getAll($data);
+    public function getAll()
+    {
+         $kpas = Kpa::all();
+        return $kpas;
+    }
 
-    public function getById($id);
+    public function getById($id)
+    {
+        return Kpa::findOrFail($id);
+    }
 
-    public function create($data);
+    public function create($data)
+    {
+        return Kpa::create($data);
+    }
+    public function update($id, $data)
+    {
+        $kpa = Kpa::findOrFail($id);
+        $kpa->update($data);
+        return $kpa;
+    }
 
-    public function update($id, $data);
-
-    public function delete($id);
+    public function delete($id)
+    {
+        $kpa = Kpa::findOrFail($id);
+        $kpa->delete();
+        return true;
+    }
 }

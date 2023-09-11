@@ -2,53 +2,31 @@
 
 namespace App\Repositories;
 
+use App\Interfaces\PositionRepositoryInterface;
 use App\Models\Position;
-use App\Http\Requests\PositionRequest;
 
-class PositionRepository
+class PositionRepository implements PositionRepositoryInterface
 {
     public function getAllPositions()
     {
         return Position::all();
     }
-
-    public function createPosition(PositionRequest $request)
+    public function createPosition($data)
     {
-        $validatedData = $request->validated();
-        return Position::create([
-            'title' => $validatedData['title'],
-        ]);
+        return Position::create($data);
     }
-
-    public function updatePosition(PositionRequest $request, $id)
+    public function updatePosition($data, $id)
     {
         $position = Position::find($id);
-
-        if (!$position) {
-            return false;
-        }
-
-        $validatedData = $request->validated();
-
-        $position->title = $validatedData['title'];
-        $position->save();
-
+        $position->update($data);
         return $position;
     }
-
     public function deletePosition($id)
     {
         $position = Position::find($id);
-
-        if (!$position) {
-            return false;
-        }
-
         $position->delete();
-
         return true;
     }
-
     public function getPositionById($id)
     {
         return Position::find($id);

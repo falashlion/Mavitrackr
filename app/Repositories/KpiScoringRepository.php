@@ -2,15 +2,41 @@
 
 namespace App\Repositories;
 
-interface KpiScoringRepository
-{
-    public function getAllKpi($paginate);
+use App\Models\Kpi;
 
-    public function getKpiById($id);
+class EloquentKpiScoringRepository implements KpiScoringRepository{
+    public function getAllKpi($paginate)
+    {
+        if($paginate == 'all'){
+        $kpi = Kpi::all();
+        }
+        else{
+            $kpi = Kpi::orderBy('created_at', 'desc')->paginate($paginate);
+        }
+        return $kpi;
+    }
 
-    public function createKpi($data);
+    public function getKpiById($id)
+    {
+        return Kpi::findOrFail($id);
+    }
 
-    public function updateKpi($id, $data);
+    public function createKpi($data)
+    {
+        return Kpi::create($data);
+    }
 
-    public function deleteKpi($id);
+    public function updateKpi($id, $data)
+    {
+        $kpi = Kpi::findOrFail($id);
+        $kpi->update($data);
+        return $kpi;
+    }
+
+    public function deleteKpi($id)
+    {
+        $kpi = Kpi::findOrFail($id);
+        $kpi->delete();
+        return true;
+    }
 }

@@ -35,7 +35,7 @@ class objectivesController extends Controller
         [
             'strategic_domains' =>  $strategicDomains,
         ];
-        return ResponseBuilder::success($data, 200 );
+        return ResponseBuilder::success($data,200);
     }
     public function getStrategicDomainById(Request $request, $id)
     {
@@ -43,9 +43,8 @@ class objectivesController extends Controller
         if (!$strategicDomain) {
             return ResponseBuilder::error(404);
         }
-        return ResponseBuilder::success($strategicDomain, 200 );
+        return ResponseBuilder::success($strategicDomain,200);
     }
-
     public function createStrategicDomain(StrategicDomainsRequest $request)
     {
         $validatedData = $request->validated();
@@ -63,7 +62,7 @@ class objectivesController extends Controller
     public function deleteStrategicDomain(Request $request, $id)
     {
        $strategicDomain = $this->strategicDomainRepository->delete($id);
-        return ResponseBuilder::success($strategicDomain, 200 );
+        return ResponseBuilder::success($strategicDomain, 204);
     }
     // enpoints for feeedback
     public function getfeedback()

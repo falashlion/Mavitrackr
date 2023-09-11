@@ -44,6 +44,6 @@ class RoleController extends Controller
     public function deleteRole(Request $request, $id)
     {
        $role = $this->RoleRepository->deleteRole($id);
-        return ResponseBuilder::success($role, 200 );
+        return ResponseBuilder::success($role, 204);
     }
 }
