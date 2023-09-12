@@ -22,6 +22,7 @@ class Feedback extends Model
         'comment',
         'kpis_id'
     ];
+    protected $primaryKey = 'id';
     public function keyPerformanceIndicator(){
         return $this->belongsTo(Kpi::class,'kpis_id');
     }

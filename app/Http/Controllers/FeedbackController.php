@@ -3,13 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\interfaces\FeedbackRepositoryInterface;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use App\Models\Feedback;
-use App\Models\Kpa;
-use App\Models\Kpi;
-use App\Repositories\EloquentFeedbackRepository;
-use App\Repositories\FeedbackRepository;
 use App\Http\Requests\FeedbackRequest;
 use App\Http\Controllers\Controller;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
@@ -17,7 +10,7 @@ use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 class FeedbackController extends Controller
 {
-    private $feedbackRepository;
+private $feedbackRepository;
 
 public function __construct(FeedbackRepositoryInterface $feedbackRepository)
 {
@@ -30,6 +23,10 @@ public function getAllFeedbacks()
 }
 public function getFeedbackByKpiId($id)
 {
+    if (!$id)
+    {
+        return ResponseBuilder::error(404);
+    }
     $feedback = $this->feedbackRepository->getByKpiId($id);
     return ResponseBuilder::success($feedback,200);
 }
@@ -38,25 +35,24 @@ public function createFeedback(FeedbackRequest $request)
     $feedback = $this->feedbackRepository->create($request->all());
     return ResponseBuilder::success($feedback,201);
 }
-public function updateFeedback(FeedbackRequest $request, $id)
+public function updateFeedbacks(FeedbackRequest $request, $id)
 {
-    $feedback = $this->feedbackRepository->update($id,$request->all());
+    $feedback = $this->feedbackRepository->updateFeedback($id, $request->all());
+    if (!$id)
+    {
+        return ResponseBuilder::error(404);
+    }
     return ResponseBuilder::success($feedback,200);
 }
-public function deleteFeedback(Request $request, $id)
+public function deleteFeedback($id)
 {
-    $result = $this->feedbackRepository->delete($id);
-    if (!$result) {
-        return response()->json([
-            "status"=> "not found",
-            "message"=> "feedback was not round"
-        ], JsonResponse::HTTP_NOT_FOUND);
+    if (!$id)
+    {
+        return ResponseBuilder::error(404);
     }
+    $feedback = $this->feedbackRepository->delete($id);
 
-    return response()->json([
-        "status" => "success",
-        "message" => "feedback successfully deleted ",
-    ], JsonResponse::HTTP_OK);
+    return ResponseBuilder::success($feedback,204);
 }
 
 }

@@ -22,7 +22,8 @@ class FeedbackRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        return
+        [
             'comment' => 'required|string',
             'kpis_id'=> 'exists:kpis,id'
         ];

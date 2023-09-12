@@ -51,6 +51,7 @@ function ()
         Route::get('/users/{id}', [AuthController::class, 'getUserById']);
         Route::post('/users/{id}', [AuthController::class, 'updateUserDetails']);
         Route::delete('/users/{id}', [AuthController::class, 'deleteUser']);
+        Route::get('/reports/users',[AuthController::class,'getAllDirectReportsForUser']);
     }
 );
 Route::
@@ -58,7 +59,7 @@ Route::
 group([],
 function()
     {
-        Route::get('users/reports',[AuthController::class,'getAllDirectReportsForUser']);
+
         //departments endpoints
         Route::get('/departments', [departmentController::class, 'getAllDepartments']);
         Route::post('/departments', [departmentController::class, 'createNewDepartment']);
@@ -91,9 +92,9 @@ function()
         Route::delete('/kpis/{id}',[KpiController::class,'deleteKpi']);
         Route::get('/kpis/{id}',[KpiController::class,'getKpiById']);
         Route::get('/kpis/reports',[KpiController::class,'getKpisForAllDirectReports']);
-        Route::get('kpis/weights/{id}',[KpiController::class,'createKpiWeight']);
-        Route::get('kpis/scores/{id}',[KpiController::class,'createKpiScore']);
-        Route::get('/users/Kpis/{id}',[KpiController::class,'getKpiByUserId']);
+        Route::post('kpis/weights/{id}',[KpiController::class,'createKpiWeight']);
+        Route::post('kpis/scores/{id}',[KpiController::class,'createKpiScore']);
+        Route::get('/users/kpis/{id}',[KpiController::class,'getKpiByUserId']);
         // key performance indicators scoring
         Route::get('/kpis/scorings', [KpiScoringController::class,'getKpiScoring']);
         Route::post('/kpis/{id}/scorings', [KpiScoringController::class,'updateKpiScoring']);
@@ -103,7 +104,7 @@ function()
         // feedbacks endpoints
         Route::get('/feedbacks/kpis', [FeedbackController::class, 'getAllFeedbacks']);
         Route::post('/feedbacks/kpis', [FeedbackController::class, 'createFeedback']);
-        Route::put('/feedbacks/{id} ', [FeedbackController::class,'updateFeedback']);
+        Route::put('/feedbacks/kpis/{id} ', [FeedbackController::class,'updateFeedbacks']);
         Route::delete('/feedbacks/kpis/{id}',[FeedbackController::class,'deleteFeedback']);
         Route::get('/feedbacks/kpis/{id}', [FeedbackController::class, 'getFeedbackByKpiId']);
         //password reset endpoints

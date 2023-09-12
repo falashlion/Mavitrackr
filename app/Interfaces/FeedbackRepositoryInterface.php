@@ -10,7 +10,7 @@ interface FeedbackRepositoryInterface
 
     public function create($data);
 
-    public function update($data, $id);
+    public function updateFeedback(array $data, $id);
 
     public function delete($id);
 

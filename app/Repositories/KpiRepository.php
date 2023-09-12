@@ -67,6 +67,11 @@ class KpiRepository implements KpiRepositoryInterface
     {
         $user = User::findOrFail($id);
         $kpis = Kpi::where('user_id',$id)->get();
+        foreach($kpis as $kpi){
+        $kpi->keyPerformanceArea;
+        $kpi->keyPerformanceArea->strategicDomain;
+        $kpi->feedback;
+        }
         return $kpis;
     }
 }
