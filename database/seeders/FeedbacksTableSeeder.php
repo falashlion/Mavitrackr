@@ -12,6 +12,6 @@ class FeedbacksTableSeeder extends Seeder
      */
     public function run()
     {
-        Feedback::factory()->count(100)->create();
+       //
     }
 }

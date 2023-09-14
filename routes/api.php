@@ -9,7 +9,7 @@ use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\KpaController;
 use App\Http\Controllers\KpiController;
 use App\Http\Controllers\KpiScoringController;
-use App\Http\Controllers\RoleController;
+use App\Http\Controllers\RolesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -111,11 +111,11 @@ function()
         Route::post('/forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
         Route::post('/reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
         // Roles endpoint
-        Route::get('/roles', [RoleController::class, 'getRoles']);
-        Route::post('/roles', [RoleController::class, 'createRole']);
-        Route::put('/roles/{id}', [RoleController::class,'updateRole']);
-        Route::delete('/roles/{id}',[RoleController::class,'deleteRole']);
-        Route::get('/roles/{id}',[RoleController::class,'getRolebyid']);
+        Route::get('/roles', [RolesController::class, 'index']);
+        Route::post('/roles', [RolesController::class, 'create']);
+        Route::put('/roles/{id}', [RolesController::class,'update']);
+        Route::delete('/roles/{id}',[RolesController::class,'destroy']);
+        Route::get('/roles/{id}',[RolesController::class,'show']);
     }
 );
 

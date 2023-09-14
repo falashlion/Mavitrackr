@@ -17,6 +17,7 @@ class KpaController extends Controller
     public function __construct(KpaRepositoryInterface $KpaRepository)
     {
         $this->KpaRepository = $KpaRepository;
+        $this->middleware('jwt.auth');
     }
     public function getAllKpa()
     {

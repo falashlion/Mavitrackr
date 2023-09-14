@@ -12,6 +12,6 @@ class PositionsTableSeeder extends Seeder
      */
     public function run()
     {
-        Position::factory()->count(10)->create();
+        //
     }
 }

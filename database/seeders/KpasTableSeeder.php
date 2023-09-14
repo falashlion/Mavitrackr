@@ -12,6 +12,6 @@ class KpasTableSeeder extends Seeder
      */
     public function run()
     {
-        Kpa::factory()->count(50)->create();
+        //
     }
 }

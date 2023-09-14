@@ -12,6 +12,6 @@ class StrategicDomainsTableSeeder extends Seeder
      */
     public function run()
     {
-        StrategicDomain::factory()->count(10)->create();
+        //
     }
 }

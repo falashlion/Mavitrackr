@@ -25,7 +25,7 @@ class objectivesController extends Controller
     public function __construct(StrategicDomainRepository $strategicDomainRepository, )
     {
         $this->strategicDomainRepository = $strategicDomainRepository;
-
+        $this->middleware('jwt.auth');
     }
     protected $feedbackRepository;
     public function getStrategicDomains()

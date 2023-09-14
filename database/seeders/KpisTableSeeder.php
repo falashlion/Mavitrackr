@@ -12,6 +12,6 @@ class KpisTableSeeder extends Seeder
      */
     public function run()
     {
-        Kpi::factory()->count(100)->create();
+        //
     }
 }

@@ -16,6 +16,7 @@ class positionsController extends Controller
     public function __construct(PositionRepositoryInterface $positionRepository)
     {
         $this->positionRepository = $positionRepository;
+        $this->middleware('jwt.auth');
     }
 
     public function getPositions()

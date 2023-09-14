@@ -50,12 +50,16 @@ class AuthController extends Controller
             $department = Department::find($user->departments_id);
             $user->line_manager = $department->manager_id;
         }
+        $user->assignRole($request->input('roles'));
         $user->save();
         return ResponseBuilder::success($userArray, 201);
     }
     public function getUserById($id)
      {
         $userData = $this->userRepository->getUserById($id);
+        $userData = [
+            'user'=> $userData
+        ];
         return ResponseBuilder::success($userData,200);
     }
     public function getAllUsers(Request $request)
@@ -71,6 +75,7 @@ class AuthController extends Controller
         $this->storeProfileImage($user, $request);
         $user->profile_image = $this-> getImageUrl($user->profile_image);
         $userArray = $user->toArray();
+        $user->syncRole($request->input('roles'));
         $user->save();
         return ResponseBuilder::success($userArray,200);
     }

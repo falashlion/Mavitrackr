@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Schema;
             $table->integer('weighted_average_score')->nullable();
             $table->integer('score')->nullable();
             $table->foreign('kpas_id')->references('id')->on('kpas');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
     });
     }

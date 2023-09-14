@@ -15,6 +15,7 @@ private $feedbackRepository;
 public function __construct(FeedbackRepositoryInterface $feedbackRepository)
 {
     $this->feedbackRepository = $feedbackRepository;
+    $this->middleware('jwt.auth');
 }
 public function getAllFeedbacks()
 {

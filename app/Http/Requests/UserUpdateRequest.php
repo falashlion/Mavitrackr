@@ -34,7 +34,7 @@ class UserUpdateRequest extends FormRequest
                 'gender'=> 'string',
                 'departments_id'=> 'exists:departments,id',
                 'positions_id'=> 'exists:positions,id',
-                'role_id'=> 'exists:roles,id',
+                'roles'=> 'exists:roles,name',
                 'line_manager'=> 'exists:users,id'
             ];
 
