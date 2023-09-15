@@ -18,8 +18,11 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-        $this->call([
-            usersSeeder::class
-        ]);
+        $this->call([StrategicDomainsTableSeeder::class]);
+        $this->call([DepartmentsTableSeeder::class]);
+        $this->call([KpasTableSeeder::class]);
+        $this->call([PositionsTableSeeder::class]);
+        $this->call([RolesPermissionsSeeder::class]);
+
     }
 }

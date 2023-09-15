@@ -15,7 +15,7 @@ class StrategicDomain extends Model
     'created_at',
     'updated_at',
     ];
-    protected $primaryKey = 'id';
+    // protected $primaryKey = 'id';
     protected $table = 'strategic_domains';
     protected $fillable =[
         'title',

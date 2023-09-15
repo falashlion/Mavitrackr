@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DepartmentUpdateRequest;
 use App\interfaces\DepartmentRepositoryInterface;
 use App\Models\Department;
 use Illuminate\Http\JsonResponse;
@@ -43,7 +44,7 @@ class departmentController extends Controller {
 
     }
 
-    public function updateDepartmentDetails(DepartmentRequest $request, $id) {
+    public function updateDepartmentDetails(DepartmentUpdateRequest $request, $id) {
         $validatedData = $request->validated();
         $department = $this->departmentRepository->updateDepartment($id, $validatedData);
         return ResponseBuilder::success($department,200);

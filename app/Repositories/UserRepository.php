@@ -18,9 +18,10 @@ class UserRepository implements UserRepositoryInterface
     public function getUserById($id)
     {
         $user = User::find($id);
-        $user->position->title;
-        $user->department->title;
-        collect($user->lineManager)->only('first_name', 'last_name', 'profile_image');
+        $user->position;
+        $user->department;
+        $user->lineManager;
+        $user->roles;
         return $user;
     }
     public function updateUser($id, array $data)
@@ -38,16 +39,16 @@ class UserRepository implements UserRepositoryInterface
 
     public function getUsers($data)
     {
-        $page = $data->query('paginate') ?? '8';
-        $users = User::paginate($page);
-        foreach ($users as $user){
-        $user->position;
-        $user->department->title;
-        $user->lineManager;
+            $page = $data->query('paginate') ?? '8';
+            $users = User::paginate($page);
+            foreach ($users as $user){
+            $user->position;
+            $user->department;
+            $user->lineManager;
+            $user->roles;
+            return $users;
         }
-        return $users;
     }
-
     public function getDepartmentMembers()
      {
         if ('departments_id' === auth()->user()->departments_id){
@@ -59,6 +60,12 @@ class UserRepository implements UserRepositoryInterface
     {
         $userDetails = auth()->user();
         $userDirectReports = $userDetails->employees;
+        foreach($userDirectReports as $userDirectReport){
+        $userDirectReport->position;
+        $userDirectReport->department;
+        $userDirectReport->lineManager;
+        $userDirectReport->roles;
+        }
         return $userDirectReports;
     }
 

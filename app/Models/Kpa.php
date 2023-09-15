@@ -11,11 +11,11 @@ class Kpa extends Model
 {
     use HasFactory, HasUuids;
     protected $table = 'kpas';
-    protected $primaryKey = 'id';
+    // protected $primaryKey = 'id';
     protected $hidden =[
         'created_at',
         'updated_at',
-        'strategic_domain_id',
+        // 'strategic_domain_id',
         ];
 
     protected $fillable =[

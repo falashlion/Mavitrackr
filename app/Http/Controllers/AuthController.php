@@ -22,16 +22,17 @@ class AuthController extends Controller
     }
     public function login(LoginRequest $request)
     {
-        $credentials = $request->validated();
+        $credentials = $request->all();
         if(!$token = JWTAuth::attempt($credentials) )
         {
-            return ResponseBuilder::error(401);
+            return ResponseBuilder::error(400);
         }
         $user = Auth::user();
         $expiration = JWTAuth::factory()->getTTL()*60;
         $user->position;
         $user->department;
         $user->lineManager;
+        $user->roles;
         $data =
         [
             'user' => $user,

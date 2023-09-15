@@ -2,8 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
@@ -13,6 +16,7 @@ class RolesPermissionsSeeder extends Seeder
     /**
      * Run the database seeds.
      */
+    use HasUuids;
     public function run(): void
     {
         // To reset cached roles and permissions
@@ -36,11 +40,11 @@ class RolesPermissionsSeeder extends Seeder
             'kpis list',
             'kpis create',
             'kpis edit',
+            'kpis delete',
             'kpas delete',
             'kpas list',
             'kpas create',
             'kpas edit',
-            'kpas delete',
             'feedback list',
             'feedback create',
             'feedback edit',
@@ -101,9 +105,19 @@ class RolesPermissionsSeeder extends Seeder
     $role4->givePermissionTo('kpis delete');
     $role4->givePermissionTo('kpas list');
 
-
-
-
+    // create super admin user
+    $superAdmin = User::create([
+        'user_matricule'=>'Admin123',
+        'password'=>'Admin123',
+        'first_name' => 'Super',
+        'last_name' => 'Admin',
+        'phone' => '1234567890',
+        'email' => 'superadmin@example.com',
+        'email_verified_at' => now(),
+        'departments_id' => null,
+        'positions_id' => null,
+    ]);
+    $superAdmin->assignRole($role1,1);
 
 }
 }

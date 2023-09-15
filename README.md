@@ -55,11 +55,11 @@ Description, sub-modules organization...
 ### Build
 * clone the project repository (https://bitbucket.org/moocafrica/kpi/src/master/)
 * get into root directory of the kpi folder that was just created in your local machine
-* open a terminal in this root directory and run the command ./vendor/bin/sail up.
-* accept all propmts for the installation and wwait for the project to download completely 
-* When its fully installed run the command docker-compose up to start the project containers
-* Run the command php artisan serve  and accept the prompt to create the database.
-* Run php artisan db:seed to seed the database with the required data to start using the application.
+* open a terminal in this root directory and run the command "./vendor/bin/sail up"
+* accept all propmts for the installation and wait for the project to download completely 
+* When its fully installed run the command "docker-compose up" to start the project containers
+* Run the command "php artisan migrate"  and accept the prompt to create the database.
+* Run "php artisan db:seed" to seed the database with the required data to start using the application.
 
 
 
