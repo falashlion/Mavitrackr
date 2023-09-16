@@ -3,7 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-
+use Illuminate\Contracts\Validation\Validator;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as ApiResponseBuilder;
+use Illuminate\Http\Exceptions\HttpResponseException;
 class DepartmentUpdateRequest extends FormRequest
 {
     /**
@@ -25,5 +27,10 @@ class DepartmentUpdateRequest extends FormRequest
             'title' => 'string',
             'manager_id'=> 'exists:users,id',
         ];
+    }
+    protected function failedValidation(Validator $validator)
+    {
+        $response = ApiResponseBuilder::error(400);
+        throw new HttpResponseException($response);
     }
 }

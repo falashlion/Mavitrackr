@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as ApiResponseBuilder;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class RolesRequest extends FormRequest
 {
@@ -34,5 +37,10 @@ class RolesRequest extends FormRequest
             'permissions.required' => 'At least one permission is required.',
             'permissions.array' => 'The permissions must be an array.',
         ];
+    }
+    protected function failedValidation(Validator $validator)
+    {
+        $response = ApiResponseBuilder::error(400);
+        throw new HttpResponseException($response);
     }
 }

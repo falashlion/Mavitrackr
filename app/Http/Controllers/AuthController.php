@@ -43,6 +43,9 @@ class AuthController extends Controller
     }
 
     public function register(UserStoreRequest $request) {
+        if(!$request->validated()){
+            return ResponseBuilder::error(400);
+        }
         $user = $this->userRepository->createUser($request->all());
         $this->storeProfileImage($user, $request);
         $user->profile_image = config('app.url') . "/storage/" . $user->profile_image;

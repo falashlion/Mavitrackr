@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as ApiResponseBuilder;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UserUpdateRequest extends FormRequest
 {
@@ -46,12 +49,10 @@ class UserUpdateRequest extends FormRequest
         ];
     }
 
-    protected function failedValidation($validator)
+    protected function failedValidation(Validator $validator)
     {
-        return response()->json([
-            'message' => $validator->errors()->first(),
-            'status' => 'error',
-        ], 422);
+        $response = ApiResponseBuilder::error(400);
+        throw new HttpResponseException($response);
     }
 }
 
