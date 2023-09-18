@@ -21,6 +21,7 @@ class KpiController extends Controller
     {
         $this->KpiRepository = $KpiRepository;
         $this->middleware('jwt.auth');
+        $this->middleware('role:Manager')->only('updateKpi','createKpiWeight','createKpiScore','getKpiByUserId');
     }
 
     public function getAllKpis(Request $request)

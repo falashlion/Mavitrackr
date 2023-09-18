@@ -21,22 +21,28 @@ class Handler extends ExceptionHandler
         'password',
         'password_confirmation',
     ];
+    protected $dontReport = [
+        //
+    ];
 
     /**
      * Register the exception handling callbacks for the application.
      */
-    public function register(): void
+    public function register()
     {
         $this->reportable(function (Throwable $e) {
             //
+        return false;
         });
     }
     public function render($request, Throwable $exception)
     {
-        if ($exception instanceof UnauthorizedHttpException || $exception instanceof AuthorizationException) {
-            return ResponseBuilder::error(401);
-        } else {
-        return parent::render($request, $exception);
+        if ($request->is('api/*')) {
+            return response()->json([
+                'message' => 'Record not found.'
+            ], 404);
         }
+        return parent::render($request, $exception);
+        // }
     }
 }
