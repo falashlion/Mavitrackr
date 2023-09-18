@@ -26,6 +26,7 @@ class KpiRequest extends FormRequest
         return [
             'title' => 'required|string',
             'kpas_id' => 'exists:kpas,id',
+            'weight'=> 'string',
         ];
     }
     protected function failedValidation(Validator $validator)
@@ -34,3 +35,4 @@ class KpiRequest extends FormRequest
         throw new HttpResponseException($response);
     }
 }
+

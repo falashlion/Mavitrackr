@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\User;
 use App\Interfaces\UserRepositoryInterface;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 
 class UserRepository implements UserRepositoryInterface
@@ -15,26 +16,38 @@ class UserRepository implements UserRepositoryInterface
         return $user;
     }
 
-    public function getUserById($id)
+    public function getUserById($id, $e)
     {
-        $user = User::find($id);
-        $user->position;
-        $user->department;
-        $user->lineManager;
-        $user->roles;
-        return $user;
+        try {
+            $user = User::findorFail($id);
+            $user->position;
+            $user->department;
+            $user->lineManager;
+            $user->roles;
+            return $user;
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
     }
-    public function updateUser($id, array $data)
+    public function updateUser($id, array $data, $e)
     {
+        try{
         $user = User::find($id);
         $user->update($data);
         return $user;
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
     }
 
-    public function deleteUser($id)
+    public function deleteUser($id ,$e)
     {
+        try{
         $user = User::find($id);
         $user->delete();
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
     }
 
     public function getUsers($data)
@@ -60,6 +73,19 @@ class UserRepository implements UserRepositoryInterface
     {
         $userDetails = auth()->user();
         $userDirectReports = $userDetails->employees;
+        foreach($userDirectReports as $userDirectReport){
+        $userDirectReport->position;
+        $userDirectReport->department;
+        $userDirectReport->lineManager;
+        $userDirectReport->roles;
+        }
+        return $userDirectReports;
+    }
+
+    public function getAllDirectReportsById($id, $e)
+    {
+        $user = User::findOrfail($id);
+        $userDirectReports = $user->employees;
         foreach($userDirectReports as $userDirectReport){
         $userDirectReport->position;
         $userDirectReport->department;

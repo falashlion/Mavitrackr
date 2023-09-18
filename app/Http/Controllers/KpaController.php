@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Repositories\KpaRepository;
 use App\Http\Requests\KpaRequest;
 use App\Http\Controllers\Controller;
+use Exception;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 class KpaController extends Controller
@@ -25,10 +26,14 @@ class KpaController extends Controller
         return ResponseBuilder::success($kpas,200);
     }
 
-    public function getKpaById(Request $request, $id)
+    public function getKpaById(Request $request, $id, Exception $e)
     {
-        $kpa = $this->KpaRepository->getById($id);
-        return ResponseBuilder::success($kpa,200);
+        try {
+            $kpa = $this->KpaRepository->getById($id, $e);
+            return ResponseBuilder::success($kpa,200);
+        } catch (\Throwable $th) {
+            return ResponseBuilder::error(400);
+        }
     }
 
     public function createKpa(KpaRequest $request)
@@ -37,15 +42,24 @@ class KpaController extends Controller
         return ResponseBuilder::success($kpa,200);
     }
 
-    public function updateKpa(KpaRequest $request, $id)
+    public function updateKpa(KpaRequest $request, $id, Exception $e)
     {
-        $kpa = $this->KpaRepository->update($id, $request->all());
-        return ResponseBuilder::success($kpa,200);
+        try {
+            $kpa = $this->KpaRepository->update($id, $request->all(), $e);
+            return ResponseBuilder::success($kpa,200);
+        } catch (\Throwable $th) {
+            return ResponseBuilder::error(400);
+        }
     }
 
-    public function deleteKpa(Request $request, $id)
+    public function deleteKpa(Request $request, $id, Exception $e)
     {
-       $kpa = $this->KpaRepository->delete($id);
-       return ResponseBuilder::success($kpa,204);
+        try {
+            $kpa = $this->KpaRepository->delete($id, $e);
+            return ResponseBuilder::success($kpa,204);
+        } catch (\Throwable $th) {
+            return ResponseBuilder::error(400);
+        }
+
     }
 }
