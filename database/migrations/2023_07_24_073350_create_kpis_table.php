@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Schema;
             $table->uuid('kpas_id');
             $table->uuid('user_id');
             $table->json('indicators')->nullable();
-            $table->integer('weight', 5, 2)->nullable();
+            $table->integer('weight')->nullable();
             $table->integer('weighted_average_score')->nullable();
             $table->integer('score')->nullable();
             $table->foreign('kpas_id')->references('id')->on('kpas');
