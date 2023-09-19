@@ -33,12 +33,12 @@ class KpiController extends Controller
     }
     public function getKpiById($id , Exception $e)
     {
-        try {
+        // try {
             $kpi = $this->KpiRepository->getById($id, $e);
             return ResponseBuilder::success($kpi, 200);
-        } catch (\Throwable $th) {
-            return ResponseBuilder::error(404);
-        }
+        // } catch (\Throwable $th) {
+        //     return ResponseBuilder::error(404);
+        // }
     }
     public function createKpi(KpiRequest $request)
     {

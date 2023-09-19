@@ -60,13 +60,13 @@ class AuthController extends Controller
     }
     public function getUserById($id, Exception $e)
      {
-        try {
+        // try {
         $userData = $this->userRepository->getUserById($id, $e);
         $userData =[ 'user'=> $userData];
         return ResponseBuilder::success($userData,200);
-        } catch (\Throwable $th) {
-            return ResponseBuilder::error(400);
-        }
+        // } catch (\Throwable $th) {
+        //     return ResponseBuilder::error(400);
+        // }
     }
     public function getAllUsers(Request $request)
     {
@@ -76,26 +76,19 @@ class AuthController extends Controller
     }
 
     public function updateUserDetails( $id, UserUpdateRequest $request, Exception $e)
-    { try {
+    {
         $user = $this->userRepository->updateUser($id,$request->all(), $e);
         $this->storeProfileImage($user, $request);
         $user->profile_image = $this-> getImageUrl($user->profile_image);
         $userArray = $user->toArray();
-        $user->syncRole($request->input('roles'));
+        $user->assignRole($request->input('roles'));
         $user->save();
         return ResponseBuilder::success($userArray,200);
-        } catch (\Throwable $th) {
-            return ResponseBuilder::error(400);
-        }
     }
     public function deleteUser($id ,Exception $e)
     {
-        try {
-            $this->userRepository->deleteUser($id, $e);
+        $this->userRepository->deleteUser($id, $e);
         return ResponseBuilder::success(204);
-        } catch (\Throwable $th) {
-            return ResponseBuilder::error(400);
-        }
     }
     public function logout()
     {
@@ -104,19 +97,14 @@ class AuthController extends Controller
     }
     public function getAllDirectReportsForUser()
     {
-    $kpis = $this->userRepository->getAllDirectReports();
-    return ResponseBuilder::success($kpis, 200);
+        $kpis = $this->userRepository->getAllDirectReports();
+        return ResponseBuilder::success($kpis, 200);
     }
 
     public function getAllDirectReportsByUserId($id, Exception $e)
     {
-        try {
-            $kpis = $this->userRepository->getAllDirectReportsById($id, $e);
-            return ResponseBuilder::success($kpis, 200);
-        } catch (\Throwable $th) {
-            return ResponseBuilder::error(400);
-        }
-
+        $kpis = $this->userRepository->getAllDirectReportsById($id, $e);
+        return ResponseBuilder::success($kpis, 200);
     }
     public function storeProfileImage($user, $request)
     {

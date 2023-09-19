@@ -11,43 +11,28 @@ class UserRepository implements UserRepositoryInterface
 {
     public function createUser(array $data)
     {
-
         $user = User::create($data);
         return $user;
     }
-
     public function getUserById($id, $e)
     {
-        try {
             $user = User::findorFail($id);
             $user->position;
             $user->department;
             $user->lineManager;
             $user->roles;
             return $user;
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => 'Record not found'], 404);
-        }
     }
     public function updateUser($id, array $data, $e)
     {
-        try{
-        $user = User::find($id);
+        $user = User::findOrFail($id);
         $user->update($data);
         return $user;
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => 'Record not found'], 404);
-        }
     }
-
     public function deleteUser($id ,$e)
     {
-        try{
-        $user = User::find($id);
+        $user = User::findOrFail($id);
         $user->delete();
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => 'Record not found'], 404);
-        }
     }
 
     public function getUsers($data)
@@ -84,7 +69,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function getAllDirectReportsById($id, $e)
     {
-        $user = User::findOrfail($id);
+        $user = User::findOrFail($id);
         $userDirectReports = $user->employees;
         foreach($userDirectReports as $userDirectReport){
         $userDirectReport->position;
@@ -94,5 +79,4 @@ class UserRepository implements UserRepositoryInterface
         }
         return $userDirectReports;
     }
-
 }

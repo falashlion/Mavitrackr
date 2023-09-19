@@ -11,34 +11,26 @@ class StrategicDomainRepository implements StrategicDomainRepositoryInterface
     {
         return StrategicDomain::all();
     }
-
     public function getById($id)
     {
-        return StrategicDomain::find($id);
+        $strategicDomain = StrategicDomain::findOrFail($id);
+        return $strategicDomain;
     }
 
     public function create(array $data)
     {
         return StrategicDomain::create($data);
     }
-
     public function update($id, array $data)
     {
-        $strategicDomain = StrategicDomain::find($id);
-        if (!$strategicDomain) {
-            return false;
-        }
-
-        return $strategicDomain->update($data);
+        $strategicDomain = StrategicDomain::findOrFail($id);
+        $strategicDomain->update($data);
+        return $strategicDomain;
     }
-
     public function delete($id)
     {
-        $strategicDomain = StrategicDomain::find($id);
-        if (!$strategicDomain) {
-            return false;
-        }
-
-        return $strategicDomain->delete();
+        $strategicDomain = StrategicDomain::findOrFail($id);
+        $strategicDomain->delete();
+        return $strategicDomain;
     }
 }
