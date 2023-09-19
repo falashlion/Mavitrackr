@@ -16,14 +16,15 @@ class KpaRepository implements KpaRepositoryInterface
 
     public function getById($id, $e)
     {
-        return Kpa::findOrFail($id);
+        $kpa = Kpa::findOrFail($id);
+         return $kpa;
     }
 
     public function create($data)
     {
         return Kpa::create($data);
     }
-    public function update($id, $data , $e)
+    public function update($id, $e, $data)
     {
         $kpa = Kpa::findOrFail($id);
         $kpa->update($data);

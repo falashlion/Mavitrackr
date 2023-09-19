@@ -60,13 +60,9 @@ class AuthController extends Controller
     }
     public function getUserById($id, Exception $e)
      {
-        // try {
         $userData = $this->userRepository->getUserById($id, $e);
         $userData =[ 'user'=> $userData];
         return ResponseBuilder::success($userData,200);
-        // } catch (\Throwable $th) {
-        //     return ResponseBuilder::error(400);
-        // }
     }
     public function getAllUsers(Request $request)
     {
@@ -78,8 +74,10 @@ class AuthController extends Controller
     public function updateUserDetails( $id, UserUpdateRequest $request, Exception $e)
     {
         $user = $this->userRepository->updateUser($id,$request->all(), $e);
-        $this->storeProfileImage($user, $request);
+        $filePath = $this->storeProfileImage($user, $request);
+        if(!empty($filePath)){
         $user->profile_image = $this-> getImageUrl($user->profile_image);
+        }
         $userArray = $user->toArray();
         $user->assignRole($request->input('roles'));
         $user->save();
@@ -113,7 +111,9 @@ class AuthController extends Controller
             $fileName = time(). '_' . $file->getClientOriginalName();
             $filePath = $file->storeAs('/public/images/' . $fileName);
             $user->profile_image = 'images/'.$fileName;
+            return $filePath;
         }
+        return '';
     }
      public function getImageUrl($Path)
      {

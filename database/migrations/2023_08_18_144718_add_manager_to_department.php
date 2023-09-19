@@ -24,7 +24,7 @@ return new class extends Migration
     {
         Schema::table('department', function (Blueprint $table) {
             $table->dropConstrainedForeignId('manager_id');
-            // $table->dropColumn('manager_id');
+            $table->dropColumn('manager_id');
         });
     }
 };

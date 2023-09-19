@@ -44,8 +44,8 @@ class UserRepository implements UserRepositoryInterface
             $user->department;
             $user->lineManager;
             $user->roles;
+            }
             return $users;
-        }
     }
     public function getDepartmentMembers()
      {

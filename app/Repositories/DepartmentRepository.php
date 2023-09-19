@@ -9,12 +9,8 @@ use PhpParser\Node\Stmt\Catch_;
 class DepartmentRepository implements DepartmentRepositoryInterface
 {
     public function getDepartmentById($id ,$e) {
-        try {
-            $department = Department::find($id);
-            return $department;
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => 'Record not found'], 404);
-        }
+        $department = Department::findOrFail($id);
+        return $department;
     }
 
     public function getDepartments() {
@@ -28,19 +24,18 @@ class DepartmentRepository implements DepartmentRepositoryInterface
     }
 
     public function updateDepartment($id, array $data, $e) {
-
-        $department = Department::find($id);
+        $department = Department::findOrFail($id);
         $department->update($data);
         return $department;
     }
 
     public function deleteDepartment($id, $e) {
-            $department = Department::find($id);
+            $department = Department::findOrFail($id);
             $department->delete();
             return true;
     }
     public function getMembers($id, $e){
-            $department = Department::find($id);
+            $department = Department::findOrFail($id);
             $members = $department->users;
             return $members;
 

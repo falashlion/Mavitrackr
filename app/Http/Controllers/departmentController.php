@@ -19,12 +19,8 @@ class departmentController extends Controller {
     }
 
     public function getdepartmentsbyid(Request $request, $id, Exception $e) {
-       try {
         $department = $this->departmentRepository->getDepartmentById($id, $e);
         return ResponseBuilder::success($department,200);
-       } catch (\Throwable $th) {
-        return ResponseBuilder::error(400);
-       }
     }
     public function getAllDepartments() {
         $departments = $this->departmentRepository->getDepartments();
@@ -36,32 +32,20 @@ class departmentController extends Controller {
         return ResponseBuilder::success($department,200);
     }
     public function updateDepartmentDetails(DepartmentUpdateRequest $request, $id, Exception $e) {
-        try {
-            $validatedData = $request->validated();
-            $department = $this->departmentRepository->updateDepartment($id, $validatedData, $e);
+        $validatedData = $request->validated();
+        $department = $this->departmentRepository->updateDepartment($id, $validatedData, $e);
         return ResponseBuilder::success($department,200);
-        } catch (\Throwable $th) {
-            return ResponseBuilder::error(400);
-        }
     }
     public function deleteDepartmentDetails($id, Exception $e)
     {
-        try {
-            $department = $this->departmentRepository->deleteDepartment($id, $e);
-            return ResponseBuilder::success($department,204);
-        } catch (\Throwable $th) {
-            return ResponseBuilder::error(400);
-        }
+        $department = $this->departmentRepository->deleteDepartment($id, $e);
+        return ResponseBuilder::success($department,204);
     }
 
     public function getDepartmentMembers($id, Exception $e)
     {
-        try {
-            $department = $this->departmentRepository->getMembers($id, $e);
-            return ResponseBuilder::success($department,200);
-        } catch (\Throwable $th) {
-            return ResponseBuilder::error(400);
-        }
+        $department = $this->departmentRepository->getMembers($id, $e);
+        return ResponseBuilder::success($department,200);
     }
 }
 

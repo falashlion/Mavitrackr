@@ -54,7 +54,7 @@ class objectivesController extends Controller
         return ResponseBuilder::success($strategicDomain, 200 );
     }
 
-    public function deleteStrategicDomain(Request $request, $id)
+    public function deleteStrategicDomain($id)
     {
        $strategicDomain = $this->strategicDomainRepository->delete($id);
         return ResponseBuilder::success($strategicDomain, 204);

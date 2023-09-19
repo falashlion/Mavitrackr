@@ -26,14 +26,10 @@ class KpaController extends Controller
         return ResponseBuilder::success($kpas,200);
     }
 
-    public function getKpaById(Request $request, $id, Exception $e)
+    public function getKpaById($id, Exception $e)
     {
-        try {
-            $kpa = $this->KpaRepository->getById($id, $e);
-            return ResponseBuilder::success($kpa,200);
-        } catch (\Throwable $th) {
-            return ResponseBuilder::error(400);
-        }
+        $kpa = $this->KpaRepository->getById($id, $e);
+        return ResponseBuilder::success($kpa,200);
     }
 
     public function createKpa(KpaRequest $request)
@@ -44,22 +40,13 @@ class KpaController extends Controller
 
     public function updateKpa(KpaRequest $request, $id, Exception $e)
     {
-        try {
-            $kpa = $this->KpaRepository->update($id, $request->all(), $e);
-            return ResponseBuilder::success($kpa,200);
-        } catch (\Throwable $th) {
-            return ResponseBuilder::error(400);
-        }
+        $kpa = $this->KpaRepository->update($id, $e, $request->all());
+        return ResponseBuilder::success($kpa,200);
     }
 
-    public function deleteKpa(Request $request, $id, Exception $e)
+    public function deleteKpa($id, Exception $e)
     {
-        try {
-            $kpa = $this->KpaRepository->delete($id, $e);
-            return ResponseBuilder::success($kpa,204);
-        } catch (\Throwable $th) {
-            return ResponseBuilder::error(400);
-        }
-
+        $kpa = $this->KpaRepository->delete($id, $e);
+        return ResponseBuilder::success($kpa,204);
     }
 }

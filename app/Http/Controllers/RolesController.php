@@ -46,6 +46,7 @@ class RolesController extends Controller
     public function show(string $id)
     {
         $role = Role::findOrFail($id);
+        $role->permissions;
         return ResponseBuilder::success($role,200);
     }
 

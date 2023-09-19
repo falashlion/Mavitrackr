@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as ApiResponseBuilder;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\JsonResponse;
 class DepartmentUpdateRequest extends FormRequest
 {
     /**
@@ -30,7 +31,16 @@ class DepartmentUpdateRequest extends FormRequest
     }
     protected function failedValidation(Validator $validator)
     {
-        $response = ApiResponseBuilder::error(400);
-        throw new HttpResponseException($response);
+        if ($this->expectsJson()) {
+            throw new HttpResponseException(response()->json([
+                'success' => false,
+                'code'=> 422,
+                'locale'=> 'en',
+                'message'=> 'Invalid request',
+                'data'=>$validator->errors()
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY));
+        }
+
+        parent::failedValidation($validator);
     }
 }

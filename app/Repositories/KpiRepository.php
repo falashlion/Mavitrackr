@@ -22,15 +22,11 @@ class KpiRepository implements KpiRepositoryInterface
     }
     public function getById($id, $e)
     {
-        try {
             $kpi = Kpi::findOrFail($id);
             $kpi->keyPerformanceArea;
             $kpi->keyPerformanceArea->strategicDomain;
             $kpi->feedback;
             return $kpi;
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => 'Record not found'], 404);
-        }
     }
     public function create($data)
     {
@@ -38,13 +34,9 @@ class KpiRepository implements KpiRepositoryInterface
     }
     public function update($id, $data, $e)
     {
-    try{
         $kpi = Kpi::findOrFail($id);
         $kpi->update($data);
         return $kpi;
-    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-        return response()->json(['error' => 'Record not found'], 404);
-    }
     }
 
     public function delete($id, $e)
@@ -55,14 +47,9 @@ class KpiRepository implements KpiRepositoryInterface
     }
     public function createWeight($id, $data, $e)
     {
-        try {
             $kpi = Kpi::findOrFail($id);
             $kpi -> update($data);
             return $kpi;
-        }  catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => 'Record not found'], 404);
-        }
-
     }
 
     public function createScore($id, $data, $e)

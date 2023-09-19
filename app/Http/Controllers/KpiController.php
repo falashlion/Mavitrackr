@@ -24,7 +24,7 @@ class KpiController extends Controller
         $this->middleware('role:Manager')->only('updateKpi','createKpiWeight','createKpiScore','getKpiByUserId');
     }
 
-    public function getAllKpis(Request $request)
+    public function getAllKpis()
     {
     Auth::user();
     $id = auth()->id();
@@ -33,12 +33,8 @@ class KpiController extends Controller
     }
     public function getKpiById($id , Exception $e)
     {
-        // try {
-            $kpi = $this->KpiRepository->getById($id, $e);
-            return ResponseBuilder::success($kpi, 200);
-        // } catch (\Throwable $th) {
-        //     return ResponseBuilder::error(404);
-        // }
+        $kpi = $this->KpiRepository->getById($id, $e);
+        return ResponseBuilder::success($kpi, 200);
     }
     public function createKpi(KpiRequest $request)
     {
@@ -49,21 +45,13 @@ class KpiController extends Controller
     }
     public function updateKpi(KpiRequest $request, $id, Exception $e)
     {
-        try {
         $kpi = $this->KpiRepository->update($id, $request->all(),$e);
         return ResponseBuilder::success($kpi,200);
-        } catch (\Throwable $th) {
-        return ResponseBuilder::error(404);
-        }
     }
-    public function deleteKpiDetails(Request $request, $id, Exception $e)
+    public function deleteKpiDetails($id, Exception $e)
     {
-        try {
         $this->KpiRepository->delete($id, $e);
-        return ResponseBuilder::success(204);
-        } catch (\Throwable $th) {
-        return ResponseBuilder::error(400);
-        }
+        return ResponseBuilder::success(null,204);
     }
     public function createKpiWeight(kpiStoreRequest $request, $id, Exception $e){
         $kpi = $this->KpiRepository->createWeight($id,  $request->all(), $e);

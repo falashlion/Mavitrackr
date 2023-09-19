@@ -7,6 +7,7 @@ use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Spatie\Permission\Exceptions\UnauthorizedException;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 use Illuminate\Auth\Access\AuthorizationException;
 use Throwable;
@@ -66,7 +67,15 @@ class Handler extends ExceptionHandler
                 'data'=>''
             ], 404);
         }
-
+        if ($exception instanceof HttpResponseException) {
+            return response()->json([
+                'success' => false,
+                'code'=> 400,
+                'locale'=> 'en',
+                'message'=> 'Invalid request',
+                'data'=>''
+            ], 400);
+        }
         return parent::render($request, $exception);
         //
     }

@@ -10,7 +10,7 @@ interface KpaRepositoryInterface
 
     public function create($data);
 
-    public function update($id, $data, $e);
+    public function update($id, $e, $data);
 
     public function delete($id, $e);
 }
