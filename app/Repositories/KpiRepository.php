@@ -20,50 +20,58 @@ class KpiRepository implements KpiRepositoryInterface
         }
         return $kpis;
     }
-    public function getById($id)
+    public function getById($id, $e)
     {
-        $kpi = Kpi::findOrFail($id);
-        $kpi->keyPerformanceArea->title;
-        $kpi->keyPerformanceArea->strategicDomain;
-        $kpi->feedback;
-        return $kpi;
+        try {
+            $kpi = Kpi::findOrFail($id);
+            $kpi->keyPerformanceArea;
+            $kpi->keyPerformanceArea->strategicDomain;
+            $kpi->feedback;
+            return $kpi;
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
     }
     public function create($data)
     {
         return Kpi::create($data);
     }
-    public function update($id, $data)
+    public function update($id, $data, $e)
     {
+    try{
         $kpi = Kpi::findOrFail($id);
         $kpi->update($data);
         return $kpi;
+    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        return response()->json(['error' => 'Record not found'], 404);
+    }
     }
 
-    public function delete($id)
+    public function delete($id, $e)
     {
-        $kpi = Kpi::findOrFail($id)->first();
-        if ($kpi->user_id !== auth()->user()->id)
-        {
-            return ResponseBuilder::error(400);
-        }
+        $kpi = Kpi::findOrFail($id);
         $kpi->delete();
         return true;
     }
+    public function createWeight($id, $data, $e)
+    {
+        try {
+            $kpi = Kpi::findOrFail($id);
+            $kpi -> update($data);
+            return $kpi;
+        }  catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
 
-    public function createWeight($id, $data)
+    }
+
+    public function createScore($id, $data, $e)
     {
         $kpi = Kpi::findOrFail($id);
         $kpi -> update($data);
         return $kpi;
     }
-
-    public function createScore($id, $data)
-    {
-        $kpi = Kpi::findOrFail($id);
-        $kpi -> update($data);
-        return $kpi;
-    }
-    public function getByUserId($id)
+    public function getByUserId($id, $e)
     {
         $user = User::findOrFail($id);
         $kpis = Kpi::where('user_id',$id)->get();

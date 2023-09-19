@@ -14,7 +14,7 @@ class KpaRepository implements KpaRepositoryInterface
         return $kpas;
     }
 
-    public function getById($id)
+    public function getById($id, $e)
     {
         return Kpa::findOrFail($id);
     }
@@ -23,14 +23,14 @@ class KpaRepository implements KpaRepositoryInterface
     {
         return Kpa::create($data);
     }
-    public function update($id, $data)
+    public function update($id, $data , $e)
     {
         $kpa = Kpa::findOrFail($id);
         $kpa->update($data);
         return $kpa;
     }
 
-    public function delete($id)
+    public function delete($id, $e)
     {
         $kpa = Kpa::findOrFail($id);
         $kpa->delete();

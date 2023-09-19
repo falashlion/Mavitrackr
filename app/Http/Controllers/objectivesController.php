@@ -37,25 +37,20 @@ class objectivesController extends Controller
         ];
         return ResponseBuilder::success($data,200);
     }
-    public function getStrategicDomainById(Request $request, $id)
+    public function getStrategicDomainById($id)
     {
         $strategicDomain = $this->strategicDomainRepository->getById($id);
-        if (!$strategicDomain) {
-            return ResponseBuilder::error(404);
-        }
         return ResponseBuilder::success($strategicDomain,200);
     }
     public function createStrategicDomain(StrategicDomainsRequest $request)
     {
-        $validatedData = $request->validated();
-        $strategicDomain = $this->strategicDomainRepository->create($validatedData);
+        $strategicDomain = $this->strategicDomainRepository->create($request->all());
         return ResponseBuilder::success($strategicDomain, 201);
     }
 
     public function updateStrategicDomain(StrategicDomainsRequest $request, $id)
     {
-        $validatedData = $request->validated();
-        $strategicDomain = $this->strategicDomainRepository->update($id, $validatedData);
+        $strategicDomain = $this->strategicDomainRepository->update($id, $request->all());
         return ResponseBuilder::success($strategicDomain, 200 );
     }
 

@@ -3,7 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-
+use Illuminate\Contracts\Validation\Validator;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as ApiResponseBuilder;
+use Illuminate\Http\Exceptions\HttpResponseException;
 class kpiStoreRequest extends FormRequest
 {
     /**
@@ -24,5 +26,10 @@ class kpiStoreRequest extends FormRequest
         return [
             'weight'=> 'required|string',
         ];
+    }
+    protected function failedValidation(Validator $validator)
+    {
+        $response = ApiResponseBuilder::error(400);
+        throw new HttpResponseException($response);
     }
 }

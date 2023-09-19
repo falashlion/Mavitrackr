@@ -52,6 +52,7 @@ function ()
         Route::post('/users/{id}', [AuthController::class, 'updateUserDetails']);
         Route::delete('/users/{id}', [AuthController::class, 'deleteUser']);
         Route::get('/reports/users',[AuthController::class,'getAllDirectReportsForUser']);
+        Route::get('/users/{id}/direct-reports', [AuthController::class, 'getAllDirectReportsByUserId']);
     }
 );
 Route::
@@ -88,7 +89,7 @@ function()
         Route::get('/kpis', [KpiController::class, 'getAllKpis']);
         Route::post('/kpis', [KpiController::class, 'createKpi']);
         Route::put('/kpis/{id}', [KpiController::class,'updateKpi']);
-        Route::delete('/kpis/{id}',[KpiController::class,'deleteKpi']);
+        Route::delete('/kpis/{id}',[KpiController::class,'deleteKpiDetails']);
         Route::get('/kpis/{id}',[KpiController::class,'getKpiById']);
         Route::get('/kpis/reports',[KpiController::class,'getKpisForAllDirectReports']);
         Route::post('kpis/weights/{id}',[KpiController::class,'createKpiWeight']);

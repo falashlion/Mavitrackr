@@ -3,7 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-
+use Illuminate\Contracts\Validation\Validator;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as ApiResponseBuilder;
+use Illuminate\Http\Exceptions\HttpResponseException;
 class ImageStoreRequest extends FormRequest
 {
     /**
@@ -26,5 +28,10 @@ class ImageStoreRequest extends FormRequest
             'profile_image'  => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
 
         ];
+    }
+    protected function failedValidation(Validator $validator)
+    {
+        $response = ApiResponseBuilder::error(400);
+        throw new HttpResponseException($response);
     }
 }

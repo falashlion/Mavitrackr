@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\LoginRequest;
+use Exception;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
@@ -41,8 +42,10 @@ class AuthController extends Controller
         ];
         return ResponseBuilder::success($data, 200);
     }
-
     public function register(UserStoreRequest $request) {
+        if(!$request->validated()){
+            return ResponseBuilder::error(400);
+        }
         $user = $this->userRepository->createUser($request->all());
         $this->storeProfileImage($user, $request);
         $user->profile_image = config('app.url') . "/storage/" . $user->profile_image;
@@ -55,13 +58,15 @@ class AuthController extends Controller
         $user->save();
         return ResponseBuilder::success($userArray, 201);
     }
-    public function getUserById($id)
+    public function getUserById($id, Exception $e)
      {
-        $userData = $this->userRepository->getUserById($id);
-        $userData = [
-            'user'=> $userData
-        ];
+        // try {
+        $userData = $this->userRepository->getUserById($id, $e);
+        $userData =[ 'user'=> $userData];
         return ResponseBuilder::success($userData,200);
+        // } catch (\Throwable $th) {
+        //     return ResponseBuilder::error(400);
+        // }
     }
     public function getAllUsers(Request $request)
     {
@@ -70,19 +75,19 @@ class AuthController extends Controller
         return ResponseBuilder::success($users,200);
     }
 
-    public function updateUserDetails( $id, UserUpdateRequest $request)
+    public function updateUserDetails( $id, UserUpdateRequest $request, Exception $e)
     {
-        $user = $this->userRepository->updateUser($id, $request->all());
+        $user = $this->userRepository->updateUser($id,$request->all(), $e);
         $this->storeProfileImage($user, $request);
         $user->profile_image = $this-> getImageUrl($user->profile_image);
         $userArray = $user->toArray();
-        $user->syncRole($request->input('roles'));
+        $user->assignRole($request->input('roles'));
         $user->save();
         return ResponseBuilder::success($userArray,200);
     }
-    public function deleteUser($id)
+    public function deleteUser($id ,Exception $e)
     {
-        $this->userRepository->deleteUser($id);
+        $this->userRepository->deleteUser($id, $e);
         return ResponseBuilder::success(204);
     }
     public function logout()
@@ -92,8 +97,14 @@ class AuthController extends Controller
     }
     public function getAllDirectReportsForUser()
     {
-    $kpis = $this->userRepository->getAllDirectReports();
-    return ResponseBuilder::success($kpis, 200);
+        $kpis = $this->userRepository->getAllDirectReports();
+        return ResponseBuilder::success($kpis, 200);
+    }
+
+    public function getAllDirectReportsByUserId($id, Exception $e)
+    {
+        $kpis = $this->userRepository->getAllDirectReportsById($id, $e);
+        return ResponseBuilder::success($kpis, 200);
     }
     public function storeProfileImage($user, $request)
     {

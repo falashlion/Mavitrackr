@@ -4,36 +4,34 @@ namespace App\Repositories;
 
 use App\Models\User;
 use App\Interfaces\UserRepositoryInterface;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 
 class UserRepository implements UserRepositoryInterface
 {
     public function createUser(array $data)
     {
-
         $user = User::create($data);
         return $user;
     }
-
-    public function getUserById($id)
+    public function getUserById($id, $e)
     {
-        $user = User::find($id);
-        $user->position;
-        $user->department;
-        $user->lineManager;
-        $user->roles;
-        return $user;
+            $user = User::findorFail($id);
+            $user->position;
+            $user->department;
+            $user->lineManager;
+            $user->roles;
+            return $user;
     }
-    public function updateUser($id, array $data)
+    public function updateUser($id, array $data, $e)
     {
-        $user = User::find($id);
+        $user = User::findOrFail($id);
         $user->update($data);
         return $user;
     }
-
-    public function deleteUser($id)
+    public function deleteUser($id ,$e)
     {
-        $user = User::find($id);
+        $user = User::findOrFail($id);
         $user->delete();
     }
 
@@ -69,4 +67,16 @@ class UserRepository implements UserRepositoryInterface
         return $userDirectReports;
     }
 
+    public function getAllDirectReportsById($id, $e)
+    {
+        $user = User::findOrFail($id);
+        $userDirectReports = $user->employees;
+        foreach($userDirectReports as $userDirectReport){
+        $userDirectReport->position;
+        $userDirectReport->department;
+        $userDirectReport->lineManager;
+        $userDirectReport->roles;
+        }
+        return $userDirectReports;
+    }
 }

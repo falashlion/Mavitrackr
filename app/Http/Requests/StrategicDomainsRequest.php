@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder as ApiResponseBuilder;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class StrategicDomainsRequest extends FormRequest
 {
@@ -31,5 +34,10 @@ class StrategicDomainsRequest extends FormRequest
             'title.*' =>'The title field must be a string.',
 
         ];
+    }
+    protected function failedValidation(Validator $validator)
+    {
+        $response = ApiResponseBuilder::error(400);
+        throw new HttpResponseException($response);
     }
 }

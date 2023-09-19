@@ -3,6 +3,12 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Spatie\Permission\Exceptions\UnauthorizedException;
+
+use Illuminate\Auth\Access\AuthorizationException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -17,14 +23,51 @@ class Handler extends ExceptionHandler
         'password',
         'password_confirmation',
     ];
+    protected $dontReport = [
+        //
+    ];
 
     /**
      * Register the exception handling callbacks for the application.
      */
-    public function register(): void
+    public function register()
     {
         $this->reportable(function (Throwable $e) {
             //
+        return false;
         });
+    }
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof UnauthorizedHttpException) {
+            return response()->json([
+                'success' => false,
+                'code'=> 401,
+                'locale'=> 'en',
+                'message'=> 'Unauthorized',
+                'data'=>''
+            ], 401);
+        }
+        if ($exception instanceof UnauthorizedException) {
+            return response()->json([
+                'success' => false,
+                'code'=> 403,
+                'locale'=> 'en',
+                'message'=> 'You are not authorized to perform this action.',
+                'data'=>''
+            ], 403);
+        }
+        if ($exception instanceof ModelNotFoundException) {
+            return response()->json([
+                'success' => false,
+                'code'=> 404,
+                'locale'=> 'en',
+                'message'=> 'Resource not found',
+                'data'=>''
+            ], 404);
+        }
+
+        return parent::render($request, $exception);
+        //
     }
 }
