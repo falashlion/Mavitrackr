@@ -15,7 +15,7 @@ class departmentController extends Controller {
 
     public function __construct(DepartmentRepositoryInterface $departmentRepository) {
         $this->departmentRepository = $departmentRepository;
-        // $this->middleware('jwt.auth');
+        $this->middleware('jwt.auth');
     }
 
     public function getdepartmentsbyid(Request $request, $id, Exception $e) {
