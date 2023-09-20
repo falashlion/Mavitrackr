@@ -13,18 +13,18 @@ return new class extends Migration
     {
         Schema::table('departments', function (Blueprint $table) {
             $table->uuid('manager_id')->nullable();
-            $table->foreign('manager_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('manager_id')->references('id')->on('users');
         });
     }
-
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('department', function (Blueprint $table) {
-            $table->dropConstrainedForeignId('manager_id');
-            $table->dropColumn('manager_id');
+        Schema::table('departments', function (Blueprint $table) {
+            // $table->dropForeign(['manager_id']);
+            // $table->dropColumn('manager_id');
         });
+        Schema::dropIfExists('departments');
     }
 };

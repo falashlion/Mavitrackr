@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Listeners\UpdateLineManagerId;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Database\Events\Updating;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
@@ -17,9 +19,15 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
+        // Registered::class => [
+        //     SendEmailVerificationNotification::class,
+        // ],
         Registered::class => [
-            SendEmailVerificationNotification::class,
+            SetLineManagerId::class,
         ],
+        Updating::class => [
+            UpdateLineManagerId::class,
+        ]
     ];
 
     /**
@@ -27,26 +35,7 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Department::updated(function ($department) {
-            $users = User::where('departments_id', $department->id)->get();
 
-            foreach ($users as $user) {
-                if ($user->line_manager === $department->manager_id) {
-                    $user->line_manager = $department->new_manager_id;
-                    $user->save();
-                }
-            }
-        });
-        User::deleted(function ($user) {
-            $users = User::where('departments_id', $user->id)->get();
-
-            foreach ($users as $user) {
-                if ($user->line_manager === $user->manager_id) {
-                    $user->line_manager = $user->manager_id;
-                    $user->save();
-                }
-            }
-        });
 
     }
 

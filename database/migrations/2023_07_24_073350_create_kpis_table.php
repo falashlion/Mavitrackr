@@ -31,6 +31,11 @@ use Illuminate\Support\Facades\Schema;
      */
     public function down(): void
     {
+        Schema::table('kpis', function (Blueprint $table) {
+            // Drop foreign key constraints
+            $table->dropForeign(['user_id']);
+            $table->dropColumn('user_id');
+        });
         Schema::dropIfExists('kpis');
     }
 };

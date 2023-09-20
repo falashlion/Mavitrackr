@@ -19,7 +19,7 @@ return new class extends Migration
             $table->dateTime('duedate_author');
             $table->dateTime('duedate_manager');
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -28,6 +28,11 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('reviews', function (Blueprint $table) {
+            // Drop foreign key constraints
+            $table->dropForeign(['user_id']);
+            $table->dropColumn('user_id');
+        });
         Schema::dropIfExists('reviews');
     }
 };

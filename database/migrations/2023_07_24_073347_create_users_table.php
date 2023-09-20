@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
- class CreateUsersTable extends Migration
+class CreateUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -26,17 +26,24 @@ use Illuminate\Support\Facades\Schema;
             $table->rememberToken();
             $table->uuid('departments_id')->nullable();
             $table->uuid('positions_id')->nullable();
-            $table->foreign('departments_id')->references('id')->on('departments');
+            $table->foreign('departments_id')->references('id')->on('departments')->onDelete('cascade');
             $table->foreign('positions_id')->references('id')->on('positions');
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
+        Schema::table('users', function (Blueprint $table) {
+            // Drop foreign key constraints
+            $table->dropForeign(['departments_id']);
+            $table->dropForeign(['positions_id']);
+            // Drop columns
+            $table->dropColumn('departments_id');
+            $table->dropColumn('positions_id');
+        });
         Schema::dropIfExists('users');
     }
-};
+}

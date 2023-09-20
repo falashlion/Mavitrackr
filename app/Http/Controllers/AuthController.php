@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\LoginRequest;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
@@ -19,14 +20,14 @@ class AuthController extends Controller
     public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;
-        $this->middleware('jwt.auth')->except('login');
+        // $this->middleware('jwt.auth')->except('login');
     }
     public function login(LoginRequest $request)
     {
         $credentials = $request->all();
         if(!$token = JWTAuth::attempt($credentials) )
         {
-            return ResponseBuilder::error(400);
+            return ResponseBuilder::error(400,[''],'Invalid Credentials',);
         }
         $user = Auth::user();
         $expiration = JWTAuth::factory()->getTTL()*60;
@@ -85,8 +86,8 @@ class AuthController extends Controller
     }
     public function deleteUser($id ,Exception $e)
     {
-        $this->userRepository->deleteUser($id, $e);
-        return ResponseBuilder::success(204);
+       $user = $this->userRepository->deleteUser($id, $e);
+        return ResponseBuilder::success($user,204);
     }
     public function logout()
     {
