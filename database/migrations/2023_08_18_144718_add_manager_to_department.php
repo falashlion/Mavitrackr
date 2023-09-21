@@ -22,8 +22,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('departments', function (Blueprint $table) {
-            // $table->dropForeign(['manager_id']);
-            // $table->dropColumn('manager_id');
+            $table->dropForeign(['manager_id']);
+            $table->dropColumn('manager_id');
         });
         Schema::dropIfExists('departments');
     }
