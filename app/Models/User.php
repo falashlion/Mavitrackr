@@ -77,6 +77,10 @@ class User extends Authenticatable  implements JWTSubject
     {
         return $this->belongsTo(User::class, 'line_manager');
     }
+    public function review()
+    {
+        return $this->hasOne(Review::class, 'user_id');
+    }
 
  /**
      * Get the identifier that will be stored in the subject claim of the JWT.

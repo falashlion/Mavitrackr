@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table-> string('form_name')->default('Manager Assement Form');
+            $table-> string('form_name')->default('Manager Assessment Form');
             $table-> uuid('user_id');
-            $table-> enum('status',['Pending','Completed','Aproved'])->default('Pending');
-            $table->dateTime('author_duedate')->nullable();
+            $table-> enum('status',['Pending','Completed','Approved'])->default('Pending');
+            $table->dateTime('author_dueDate')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });

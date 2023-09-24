@@ -10,6 +10,7 @@ use App\Http\Controllers\KpaController;
 use App\Http\Controllers\KpiController;
 use App\Http\Controllers\KpiScoringController;
 use App\Http\Controllers\RolesController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -116,6 +117,12 @@ function()
         Route::put('/roles/{id}', [RolesController::class,'update']);
         Route::delete('/roles/{id}',[RolesController::class,'destroy']);
         Route::get('/roles/{id}',[RolesController::class,'show']);
+        // Review endpoints
+        Route::post('/reviews', [ReviewController::class, 'store']);
+        Route::get('/reviews', [ReviewController::class, 'getAll']);
+        Route::get('/reviews/{id}', [ReviewController::class, 'show']);
+        Route::put('/reviews/{id}', [ReviewController::class, 'update']);
+        Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']);
     }
 );
 
