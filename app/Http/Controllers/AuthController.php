@@ -43,13 +43,12 @@ class AuthController extends Controller
         ];
         return ResponseBuilder::success($data, 200);
     }
-    public function register(Request $request, $data) {
-        $request = new UserStoreRequest($data);
+    public function register(UserStoreRequest $request) {
         if(!$request->validated()){
             return ResponseBuilder::error(400);
         }
         $user = $this->userRepository->createUser($request->all());
-        $this->storeProfileImage($user, $data);
+        $this->storeProfileImage($user, $request);
         $user->profile_image = config('app.url') . "/storage/" . $user->profile_image;
         $userArray = $user->toArray();
         if ($user->line_manager === null) {

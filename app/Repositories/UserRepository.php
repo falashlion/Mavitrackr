@@ -10,7 +10,7 @@ use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 class UserRepository implements UserRepositoryInterface
 {
-    public function createUser(array $data)
+    public function createUser($data)
     {
         $user = User::create($data);
         return $user;

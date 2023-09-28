@@ -18,18 +18,12 @@ class Review extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class)->select(['id', 'first_name', 'profile_image','last_name']);
     }
 
     protected $table = 'reviews';
     protected $primaryKey = 'id';
     protected $keyType = 'string';
-    public $incrementing = false;
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'author_dueDate'
-    ];
     protected $hidden = [
         'created_at',
         'updated_at',

@@ -4,7 +4,7 @@ namespace App\Interfaces;
 
 
 interface UserRepositoryInterface {
-    public function createUser(array $data);
+    public function createUser($data);
     public function getUserById($id, $e);
     public function updateUser($id, array $data, $e);
     public function deleteUser($id, $e);

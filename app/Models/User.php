@@ -71,15 +71,15 @@ class User extends Authenticatable  implements JWTSubject
 
     public function employees()
     {
-        return $this->hasMany(User::class, 'line_manager');
+        return $this->hasMany(User::class, 'line_manager')->select(['id', 'first_name', 'profile_image','last_name','line_manager']);
     }
     public function lineManager()
     {
-        return $this->belongsTo(User::class, 'line_manager');
+        return $this->belongsTo(User::class, 'line_manager')->select(['id', 'first_name', 'profile_image','last_name','line_manager']);
     }
-    public function review()
+    public function reviews()
     {
-        return $this->hasOne(Review::class, 'user_id');
+    return $this->hasMany(Review::class, 'user_id');
     }
 
  /**

@@ -2,7 +2,9 @@
 namespace App\Repositories;
 
 use App\Interfaces\ReviewInterface;
+use App\Models\Kpi;
 use App\Models\Review;
+use App\Models\User;
 
 class ReviewRepository implements ReviewInterface
 {
@@ -16,9 +18,7 @@ class ReviewRepository implements ReviewInterface
     }
     public function find($id)
     {
-        $review = Review::with(['user_id' => function ($query) {
-            $query->select('first_name', 'last_name', 'profile_image');
-        }])->findOrFail($id);
+        $review = Review::findOrFail($id);
 
         return $review;
     }
@@ -35,9 +35,18 @@ class ReviewRepository implements ReviewInterface
         $review = Review::findOrFail($id);
         $review->delete();
     }
-    public function getAll($directReports)
+    public function getAll($users)
     {
-        $review = Review:: where('user_id', $directReports)->get();
-        return $review;
+        $user_id = auth()->user()->id;
+        $query = Review::where('user_id', $user_id);
+        if (!empty($users)) {
+            $query->orWhereIn('user_id', $users);
+        }
+        $reviews = $query->get();
+        foreach ($reviews as $review) {
+            $review->user;
+            $review->user->lineManager;
+        }
+        return $reviews;
     }
 }

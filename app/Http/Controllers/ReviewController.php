@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Http\Requests\CreateReviewRequest;
 use App\Http\Requests\UpdateReviewRequest;
+use App\Models\Kpi;
+use App\Models\User;
 use App\Repositories\ReviewRepository;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
@@ -39,9 +41,13 @@ class ReviewController extends Controller
     }
     public function index()
     {
-      $user = auth()->user();
-      $directReports = $user->employees->pluck(['id']);
-      $review =  $this->repository->getAll($directReports);
-      return ResponseBuilder::success($review, 200);
+        $user = auth()->user()->id;
+        $users = User::where('line_manager', $user)->get('id');
+        $has_kpi = Kpi::where('user_id', $user)->exists();
+        if (!$has_kpi) {
+            return ResponseBuilder::success([], 200);
+        }
+        $review = $this->repository->getAll($users);
+        return ResponseBuilder::success($review, 200);
     }
 }
