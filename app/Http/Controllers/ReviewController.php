@@ -40,7 +40,7 @@ class ReviewController extends Controller
     public function index()
     {
       $user = auth()->user();
-      $directReports = $user->employees->pluck('id');
+      $directReports = $user->employees->pluck(['id']);
       $review =  $this->repository->getAll($directReports);
       return ResponseBuilder::success($review, 200);
     }

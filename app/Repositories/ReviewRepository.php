@@ -16,7 +16,7 @@ class ReviewRepository implements ReviewInterface
     }
     public function find($id)
     {
-        $review = Review::with(['user' => function ($query) {
+        $review = Review::with(['user_id' => function ($query) {
             $query->select('first_name', 'last_name', 'profile_image');
         }])->findOrFail($id);
 
@@ -37,7 +37,7 @@ class ReviewRepository implements ReviewInterface
     }
     public function getAll($directReports)
     {
-        $review = Review:: all();
+        $review = Review:: where('user_id', $directReports)->get();
         return $review;
     }
 }
