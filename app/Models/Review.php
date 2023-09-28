@@ -20,6 +20,10 @@ class Review extends Model
     {
         return $this->belongsTo(User::class)->select(['id', 'first_name', 'profile_image','last_name']);
     }
+    public function lineManager()
+    {
+        return $this->belongsTo(User::class, 'line_manager')->select(['id', 'first_name', 'profile_image','last_name']);
+    }
 
     protected $table = 'reviews';
     protected $primaryKey = 'id';

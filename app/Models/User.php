@@ -56,11 +56,6 @@ class User extends Authenticatable  implements JWTSubject
     {
         return $this->belongsTo(Department::class, 'departments_id');
     }
-
-    // public function roles()
-    // {
-    //     return $this->belongsToMany( Role::class, 'accesses', 'role_id','user_id');
-    // }
     /**
      * Summary of positions
      */
@@ -71,18 +66,18 @@ class User extends Authenticatable  implements JWTSubject
 
     public function employees()
     {
-        return $this->hasMany(User::class, 'line_manager')->select(['id', 'first_name', 'profile_image','last_name','line_manager']);
+        return $this->hasMany(User::class, 'line_manager');
     }
     public function lineManager()
     {
-        return $this->belongsTo(User::class, 'line_manager')->select(['id', 'first_name', 'profile_image','last_name','line_manager']);
+        return $this->belongsTo(User::class, 'line_manager')->select(['id', 'first_name', 'profile_image','last_name']);
     }
     public function reviews()
     {
     return $this->hasMany(Review::class, 'user_id');
     }
 
- /**
+    /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed

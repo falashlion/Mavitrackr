@@ -27,7 +27,7 @@ class AuthController extends Controller
         $credentials = $request->all();
         if(!$token = JWTAuth::attempt($credentials) )
         {
-            return ResponseBuilder::error(400,[''],'Invalid Credentials',);
+            return ResponseBuilder::error(400,[''],['Invalid Credentials'],);
         }
         $user = Auth::user();
         $expiration = JWTAuth::factory()->getTTL()*60;
