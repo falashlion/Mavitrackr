@@ -3,17 +3,17 @@ namespace App\Repositories;
 
 use App\Interfaces\ReviewInterface;
 use App\Models\Review;
-use PHPOpenSourceSaver\JWTAuth\Contracts\Providers\auth;
 
 class ReviewRepository implements ReviewInterface
 {
-    public function create($data)
+    public function createReview($data)
     {
-        $review = Review::create($data);
-        $review->user;
+        $review = Review::updateOrCreate(
+            ['user_id' => $data['user_id']],
+            $data
+        );
         return $review;
     }
-
     public function find($id)
     {
         $review = Review::with(['user' => function ($query) {
@@ -35,10 +35,9 @@ class ReviewRepository implements ReviewInterface
         $review = Review::findOrFail($id);
         $review->delete();
     }
-    public function getAll($userIds)
+    public function getAll($directReports)
     {
-        $review = Review::whereIn('user_id', $userIds)->select('first_name', 'last_name', 'profile_image')->get();
-        $review->user->employees;
+        $review = Review:: all();
         return $review;
     }
 }

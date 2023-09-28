@@ -28,24 +28,20 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::group([
+Route::group(
+[
     'middleware' => 'api',
-    //prefix' => 'api',
 ],
-function () {
+function ()
+{
     Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/register', [AuthController::class, 'register']);
 });
-
-
-
 Route::group
 ([
     'middleware' => 'api',
-    // 'prefix' => 'auth'
-
-],
-function ()
+ ],
+    function ()
     {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/users', [AuthController::class, 'getAllUsers']);
@@ -60,7 +56,6 @@ Route::
 group([],
 function()
     {
-
         //departments endpoints
         Route::get('/departments', [departmentController::class, 'getAllDepartments']);
         Route::post('/departments', [departmentController::class, 'createNewDepartment']);
@@ -119,7 +114,7 @@ function()
         Route::get('/roles/{id}',[RolesController::class,'show']);
         // Review endpoints
         Route::post('/reviews', [ReviewController::class, 'store']);
-        Route::get('/reviews', [ReviewController::class, 'getAll']);
+        Route::get('/reviews', [ReviewController::class, 'index']);
         Route::get('/reviews/{id}', [ReviewController::class, 'show']);
         Route::put('/reviews/{id}', [ReviewController::class, 'update']);
         Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']);

@@ -4,7 +4,7 @@ namespace App\Interfaces;
 
 interface ReviewInterface
 {
-    public function create($data);
+    public function createReview($data);
 
     public function find($id);
 
@@ -12,5 +12,5 @@ interface ReviewInterface
 
     public function delete($id);
 
-    public function getAll($userIds);
+    public function getAll($directReports);
 }

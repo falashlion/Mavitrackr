@@ -19,26 +19,22 @@ class ReviewController extends Controller
     {
         $data = $request->validated();
         $data['user_id'] = auth()->user()->id;
-        $review = $this->repository->create($request->all($data));
+        $review = $this->repository->createReview($data);
         return ResponseBuilder::success($review, 201);
     }
-
     public function show($id)
     {
         $review = $this->repository->find($id);
         return ResponseBuilder::success($review, 200);
     }
-
     public function update(UpdateReviewRequest $request, $id)
     {
         $review = $this->repository->update($id, $request->all());
         return ResponseBuilder::success($review, 200);
     }
-
     public function destroy($id)
     {
         $this->repository->delete($id);
-
         return ResponseBuilder::success(null, 204);
     }
     public function index()
