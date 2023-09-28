@@ -70,7 +70,7 @@ class User extends Authenticatable  implements JWTSubject
     }
     public function lineManager()
     {
-        return $this->belongsTo(User::class, 'line_manager')->select(['id', 'first_name', 'profile_image','last_name']);
+        return $this->belongsTo(User::class, 'line_manager')->select(['id', 'first_name', 'profile_image','last_name','user_matricule']);
     }
     public function reviews()
     {

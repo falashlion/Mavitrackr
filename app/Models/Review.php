@@ -18,11 +18,11 @@ class Review extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class)->select(['id', 'first_name', 'profile_image','last_name']);
+        return $this->belongsTo(User::class)->select(['id', 'first_name', 'profile_image','last_name', 'user_matricule']);
     }
     public function lineManager()
     {
-        return $this->belongsTo(User::class, 'line_manager')->select(['id', 'first_name', 'profile_image','last_name']);
+        return $this->belongsTo(User::class, 'line_manager')->select(['id', 'first_name', 'profile_image','last_name','user_matricule']);
     }
 
     protected $table = 'reviews';

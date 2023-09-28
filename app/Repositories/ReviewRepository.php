@@ -44,8 +44,9 @@ class ReviewRepository implements ReviewInterface
         }
         $reviews = $query->get();
         foreach ($reviews as $review) {
-            $review->user;
+            // $review->user;
             $review->user->lineManager;
+            $lineManager = $review->user->lineManager;
         }
         return $reviews;
     }
