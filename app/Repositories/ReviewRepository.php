@@ -35,19 +35,25 @@ class ReviewRepository implements ReviewInterface
         $review = Review::findOrFail($id);
         $review->delete();
     }
-    public function getAll($users)
+    public function getAll()
     {
         $user_id = auth()->user()->id;
-        $query = Review::where('user_id', $user_id);
+        $users = User::where('line_manager', $user_id)->get('id');
+        if ($users->isEmpty()) {
+            $has_kpi = Kpi::where('user_id', $user_id)->exists() || Kpi::where('user_id', $user_id)->exists();;
+
+            if (!$has_kpi) {
+                return [];
+            }}
+        $query = Review::with(['user', 'user.lineManager'])->where('user_id', $user_id);
         if (!empty($users)) {
-            $query->orWhereIn('user_id', $users);
+            foreach ($users as $user){
+                $has_kpi = Kpi::where('user_id', $user)->exists();
+                $query->orWhereIn('user_id', $user);
+            }
+
         }
         $reviews = $query->get();
-        foreach ($reviews as $review) {
-            // $review->user;
-            $review->user->lineManager;
-            $lineManager = $review->user->lineManager;
-        }
         return $reviews;
     }
 }

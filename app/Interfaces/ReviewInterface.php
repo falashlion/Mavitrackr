@@ -12,5 +12,5 @@ interface ReviewInterface
 
     public function delete($id);
 
-    public function getAll($users);
+    public function getAll();
 }

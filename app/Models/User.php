@@ -72,10 +72,7 @@ class User extends Authenticatable  implements JWTSubject
     {
         return $this->belongsTo(User::class, 'line_manager')->select(['id', 'first_name', 'profile_image','last_name','user_matricule']);
     }
-    public function reviews()
-    {
-    return $this->hasMany(Review::class, 'user_id');
-    }
+
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

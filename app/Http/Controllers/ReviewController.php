@@ -41,15 +41,7 @@ class ReviewController extends Controller
     }
     public function index()
     {
-        $user = auth()->user()->id;
-        $users = User::where('line_manager', $user)->get('id');
-        if (!$users->isEmpty()) {
-            $user_id = auth()->user()->id;
-            $has_kpi = Kpi::where('user_id', $user_id)->exists();
-            if (!$has_kpi) {
-                return ResponseBuilder::success([], 200);
-            }}
-            $review = $this->repository->getAll($users);
-            return ResponseBuilder::success($review, 200);
+        $review = $this->repository->getAll();
+        return ResponseBuilder::success($review, 200);
     }
 }

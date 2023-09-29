@@ -18,16 +18,13 @@ class Review extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class)->select(['id', 'first_name', 'profile_image','last_name', 'user_matricule']);
+        return $this->belongsTo(User::class)->select(['id', 'first_name', 'profile_image','last_name', 'user_matricule','line_manager']);
     }
-    public function lineManager()
-    {
-        return $this->belongsTo(User::class, 'line_manager')->select(['id', 'first_name', 'profile_image','last_name','user_matricule']);
-    }
+
 
     protected $table = 'reviews';
     protected $primaryKey = 'id';
-    protected $keyType = 'string';
+    // protected $keyType = 'string';
     protected $hidden = [
         'created_at',
         'updated_at',
