@@ -45,4 +45,7 @@ class Kpi extends Model
     {
         return $this->hasMany(Feedback::class,'kpis_id');
     }
+    // public function reviews(){
+    //     return $this->hasOne(Review::class);
+    // }
 }

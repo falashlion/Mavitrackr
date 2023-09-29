@@ -25,7 +25,7 @@ class kpiScoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'score'=>'required|string'
+            'score'=>'required|integer|max:4'
         ];
     }
     protected function failedValidation(Validator $validator)

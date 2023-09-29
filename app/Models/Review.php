@@ -20,6 +20,9 @@ class Review extends Model
     {
         return $this->belongsTo(User::class)->select(['id', 'first_name', 'profile_image','last_name', 'user_matricule','line_manager']);
     }
+    // public function kpis(){
+    //     return $this->belongsToMany(Kpi::class);
+    // }
 
 
     protected $table = 'reviews';

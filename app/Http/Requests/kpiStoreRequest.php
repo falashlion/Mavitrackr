@@ -24,8 +24,13 @@ class kpiStoreRequest extends FormRequest
      */
     public function rules(): array
     {
+        $totalWeight = auth()->user()->keyPerformanceIndicators->sum('weight');
         return [
-            'weight'=> 'required|string',
+            'weight' => [
+                'required',
+                'integer',
+                'max:'.(100 - $totalWeight),
+            ],
         ];
     }
     protected function failedValidation(Validator $validator)
@@ -39,7 +44,6 @@ class kpiStoreRequest extends FormRequest
                 'data'=>$validator->errors()
             ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY));
         }
-
         parent::failedValidation($validator);
     }
 }

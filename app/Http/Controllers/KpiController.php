@@ -57,7 +57,7 @@ class KpiController extends Controller
         $kpi = $this->KpiRepository->createWeight($id,  $request->all(), $e);
         return ResponseBuilder::success($kpi,200);
     }
-    public function createKpiScore(kpiScoreRequest $request, $id, $e){
+    public function createKpiScore(kpiScoreRequest $request, $id, Exception $e){
         $kpi = $this->KpiRepository->createScore($id, $request->all(), $e);
         return ResponseBuilder::success($kpi,200);
     }
