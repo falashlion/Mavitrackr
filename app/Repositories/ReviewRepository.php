@@ -36,59 +36,31 @@ class ReviewRepository implements ReviewInterface
         $review = Review::findOrFail($id);
         $review->delete();
     }
-    // public function getAll()
-    // {
-    //     $user_id = auth()->user()->id;
-    //     $users = User::where('line_manager', $user_id)->get('id');
-    //     $query = Review::with(['user', 'user.lineManager']);
-    //     if ($users->isEmpty()) {
-    //         $has_kpi = Kpi::where('user_id', $user_id)->exists();
-    //         if (!$has_kpi) {
-    //             return [];
-    //         }
-    //         $query->where('user_id', $user_id);
-    //     }
-
-    //     if (!empty($users)) {
-    //         $user_ids = $users->pluck('id')->toArray();
-    //         $kpis = Kpi::whereIn('user_id', $user_ids)->pluck('user_id')->toArray();
-    //         $user_ids_with_kpis = array_intersect($user_ids, $kpis);
-    //         if (!empty($user_ids_with_kpis)) {
-    //             if (Kpi::where('user_id', $user_id)->exists()) {
-    //                 $query = Review::with(['user', 'user.lineManager']);
-    //                 $query->orWhere('user_id', $user_id);
-    //             }
-    //             $query = Review::with(['user', 'user.lineManager']);
-    //             $query->orWhereIn('user_id', $user_ids_with_kpis);
-    //             $reviews = $query->get();
-    //         }
-    //         else {
-    //             return[];
-    //         }
-    //     }
-    //     return $reviews;
-    // }
     public function getAll()
     {
         $user_id = auth()->id();
-        if (Kpi::whereIn('user_id', $user_id)->pluck('user_id')->toArray()->exists()) {
-            $que= Review::with(['user', 'user.lineManager'])
-            ->where('user_id', $user_id)
+        $users_id = array($user_id);
+        if (Kpi::whereIn('user_id', $users_id)->exists()) {
+            $query1= Review::with(['user', 'user.lineManager'])
+            ->where('user_id', $users_id)
             ->get();
+            $query1 = array($query1);
+            if (empty($query1)) {
+                return [];
+            }
         }
         $users = User::where('line_manager', $user_id)->pluck('id');
         $user_ids = $users->toArray();
         $user_ids_with_kpis = Kpi::whereIn('user_id', $user_ids)->pluck('user_id')->toArray();
-        // $user_ids_with_kpis[] = $user_id;
         $query = Review::with(['user', 'user.lineManager'])
             ->whereIn('user_id', $user_ids_with_kpis)
             ->orderByDesc('created_at')
             ->get();
+        $query = array($query);
         if (empty($query)) {
             return [];
         }
-        return $query;
+        $review = array_merge($query1 ?? [], $query ?? []);
+        return response()->json([ 'success' => true, 'code' => 200, 'locale' => 'en', 'message' => 'OK', 'data'=> ['items' => $review,]]);
     }
-
-
 }

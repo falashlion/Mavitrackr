@@ -41,7 +41,7 @@ class ReviewController extends Controller
     }
     public function index()
     {
-        $review = $this->repository->getAll();
-        return ResponseBuilder::success($review, 200);
+        $reviews = $this->repository->getAll();
+        return $reviews;
     }
 }
