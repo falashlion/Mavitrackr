@@ -56,25 +56,6 @@ class KpiRepository implements KpiRepositoryInterface
     {
         $kpi = Kpi::findOrFail($id);
         $kpi -> update($data);
-        // Calculate weighted average score per user_id
-        $kpis = Kpi::select('user_id')->distinct()->get();
-        foreach ($kpis as $kpi_user)
-        {
-            $user_id = $kpi_user->user_id;
-            $kpi_scores = Kpi::where('user_id', $user_id)->get();
-            $total_weight = 0;
-            $weighted_sum = 0;
-            foreach ($kpi_scores as $score) {
-                $total_weight += $score->weight;
-                $weighted_sum += $score->score * $score->weight;
-            }
-            if ($total_weight > 0) {
-                $weighted_average = $weighted_sum / $total_weight;
-            } else {
-                $weighted_average = null;
-            }
-            Kpi::where('user_id', $user_id)->update(['weighted_average_score' => $weighted_average]);
-        }
         return $kpi;
     }
     public function getByUserId($id, $e)
@@ -88,22 +69,4 @@ class KpiRepository implements KpiRepositoryInterface
         }
         return $kpis;
     }
-
-    // $kpi = Kpi::findOrFail($id);
-    // $kpi->update($data);
-    // Calculate weighted average score per user_id
-    // $kpis = Kpi::select('user_id')->distinct()->get();
-    // foreach ($kpis as $kpi) {
-    //     $user_id = $kpi->user_id;
-    //     $kpi_scores = Kpi::where('user_id', $user_id)->get();
-    //     $total_weight = 0;
-    //     $weighted_sum = 0;
-    //     foreach ($kpi_scores as $score) {
-    //         $total_weight += $score->weight;
-    //         $weighted_sum += $score->score * $score->weight;
-    //     }
-    //     $weighted_average = $weighted_sum / $total_weight;
-    //     Kpi::where('user_id', $user_id)->update(['weighted_average_score' => $weighted_average]);
-    // }
-
 }

@@ -21,6 +21,11 @@ class AuthController extends Controller
     {
         $this->userRepository = $userRepository;
         $this->middleware('jwt.auth')->except('login');
+        $this->middleware('permission:user create')->only('register');
+        $this->middleware('permission:user delete')->only('deleteUser');
+        $this->middleware('permission:user edit')->only('updateUserDetails');
+        $this->middleware('permission:user list')->only('getAllUsers',);
+        $this->middleware('permission:direct reports list')->only('getAllDirectReportsByUserId','getAllDirectReportsForUser');
     }
     public function login(LoginRequest $request)
     {
@@ -49,13 +54,20 @@ class AuthController extends Controller
         }
         $user = $this->userRepository->createUser($request->all());
         $this->storeProfileImage($user, $request);
-        $user->profile_image = config('app.url') . "/storage/" . $user->profile_image;
+        $user->profile_image = $this->getImageUrl($user->profile_image);
         $userArray = $user->toArray();
         if ($user->line_manager === null) {
             $department = Department::find($user->departments_id);
             $user->line_manager = $department->manager_id;
         }
-        $user->assignRole($request->input('roles'));
+        $roles = $request->input('roles');
+        if (is_array($roles)) {
+            foreach ($roles as $role) {
+                $user->assignRole($role);
+            }
+        } else {
+            $user->assignRole($roles);
+        }
         $user->save();
         return ResponseBuilder::success($userArray, 201);
     }
@@ -77,10 +89,17 @@ class AuthController extends Controller
         $user = $this->userRepository->updateUser($id,$request->all(), $e);
         $filePath = $this->storeProfileImage($user, $request);
         if(!empty($filePath)){
-        $user->profile_image = $this-> getImageUrl($user->profile_image);
+        $user->profile_image = $this->getImageUrl($user->profile_image);
         }
         $userArray = $user->toArray();
-        $user->assignRole($request->input('roles'));
+        $roles = $request->input('roles');
+        if (is_array($roles)) {
+            foreach ($roles as $role) {
+                $user->assignRole($role);
+            }
+        } else {
+            $user->assignRole($roles);
+        }
         $user->save();
         return ResponseBuilder::success($userArray,200);
     }
