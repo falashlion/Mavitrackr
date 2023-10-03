@@ -19,6 +19,10 @@ class KpaController extends Controller
     {
         $this->KpaRepository = $KpaRepository;
         $this->middleware('jwt.auth');
+        $this->middleware('permission:kpas edit')->only('updateKpa');
+        $this->middleware('permission:kpas list')->only('getAllKpa');
+        $this->middleware('permission:kpas delete')->only('deleteKpa');
+        $this->middleware('permission:kpas create')->only('createKpa');
     }
     public function getAllKpa()
     {

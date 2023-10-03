@@ -24,7 +24,7 @@ class AuthController extends Controller
         $this->middleware('permission:user create')->only('register');
         $this->middleware('permission:user delete')->only('deleteUser');
         $this->middleware('permission:user edit')->only('updateUserDetails');
-        $this->middleware('permission:user list')->only('getAllUsers',);
+        $this->middleware('permission:user list')->only('getAllUsers');
         $this->middleware('permission:direct reports list')->only('getAllDirectReportsByUserId','getAllDirectReportsForUser');
     }
     public function login(LoginRequest $request)

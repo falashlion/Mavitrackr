@@ -42,7 +42,6 @@ class UserRepository implements UserRepositoryInterface
         $user->delete();
         return true;
     }
-
     public function getUsers($data)
     {
             $page = $data->query('paginate') ?? '8';

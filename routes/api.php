@@ -104,8 +104,8 @@ function()
         Route::delete('/feedbacks/kpis/{id}',[FeedbackController::class,'deleteFeedback']);
         Route::get('/feedbacks/kpis/{id}', [FeedbackController::class, 'getFeedbackByKpiId']);
         //password reset endpoints
-        Route::post('/forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
-        Route::post('/reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
+        Route::post('/forget-password', [ForgotPasswordController::class, 'forgotPassword']);
+        Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword']);
         // Roles endpoint
         Route::get('/roles', [RolesController::class, 'index']);
         Route::post('/roles', [RolesController::class, 'create']);

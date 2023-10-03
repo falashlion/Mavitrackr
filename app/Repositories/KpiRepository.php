@@ -51,7 +51,6 @@ class KpiRepository implements KpiRepositoryInterface
             $kpi -> update($data);
             return $kpi;
     }
-
     public function createScore($id, $data, $e)
     {
         $kpi = Kpi::findOrFail($id);

@@ -26,6 +26,7 @@ class KpiController extends Controller
         $this->middleware('permission:kpisweight edit')->only('createKpiWeight');
         $this->middleware('permission:kpisScore edit')->only('createKpiScore');
         $this->middleware('permission:kpis list')->only('getKpiByUserId',);
+        $this->middleware('permission:kpis delete')->only(['deleteKpiDetails']);
     }
 
     public function getAllKpis()
