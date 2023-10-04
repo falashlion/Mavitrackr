@@ -20,12 +20,12 @@ class AuthController extends Controller
     public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;
-        $this->middleware('jwt.auth')->except('login');
-        $this->middleware('permission:user create')->only('register');
-        $this->middleware('permission:user delete')->only('deleteUser');
-        $this->middleware('permission:user edit')->only('updateUserDetails');
-        $this->middleware('permission:user list')->only('getAllUsers');
-        $this->middleware('permission:direct reports list')->only('getAllDirectReportsByUserId','getAllDirectReportsForUser');
+        // $this->middleware('jwt.auth')->except('login');
+        // $this->middleware('permission:user create')->only('register');
+        // $this->middleware('permission:user delete')->only('deleteUser');
+        // $this->middleware('permission:user edit')->only('updateUserDetails');
+        // $this->middleware('permission:user list')->only('getAllUsers');
+        // $this->middleware('permission:direct reports list')->only('getAllDirectReportsByUserId','getAllDirectReportsForUser');
     }
     public function login(LoginRequest $request)
     {
