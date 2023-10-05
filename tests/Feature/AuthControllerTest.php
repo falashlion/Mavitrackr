@@ -1,6 +1,11 @@
 <?php
+use App\Models\Role;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
+use Spatie\Permission\Contracts\Permission;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Department;
@@ -10,18 +15,20 @@ use Illuminate\Support\Facades\Hash;
 class AuthControllerTest extends TestCase
 {
     use RefreshDatabase;
+    // HasFactory,WithFaker;
+
 
     protected function setUp(): void
     {
         parent::setUp();
         // Add any necessary setup code here, like creating roles or permissions.
+
     }
 
     public function testLoginWithValidCredentials()
     {
              // Create a department for testing
          $department = Department::factory()->create();
-
          // Create a position for testing
          $position = Position::factory()->create();
         // Create a user for testing
@@ -35,6 +42,7 @@ class AuthControllerTest extends TestCase
                 'departments_id' => $department->id,
                 'positions_id' => $position->id,
                 'gender' => 'Male',
+                // 'roles'=> 'Admin'
         ]);
 
         // Make a POST request to the login endpoint
@@ -43,33 +51,28 @@ class AuthControllerTest extends TestCase
             'password' => 'password',
         ]);
 
-        // $response->assertStatus(200);
-        $response->assertJsonStructure(['success',
+        $response->assertStatus(200)
+        ->assertJsonStructure(['success',
             'code',
             'locale',
             'message',
-            'data']);
+            'data'=> [
+                'user' => [
+                    'id',
+                    'name',
+                    'email',
+                    'position',
+                    'department',
+                    'lineManager',
+                    'roles',
+                ],
+            'token',
+            'expiration',
+            ],]);
     }
 
     public function testLoginWithInvalidCredentials()
     {
-         // Create a department for testing
-        //  $department = Department::factory()->create();
-
-        //  // Create a position for testing
-        //  $position = Position::factory()->create();
-        // // Create a user for testing
-        // $user = $this->postJson([
-        //         'user_matricule' => '789012',
-        //         'password' => 'password',
-        //         'first_name' => 'John',
-        //         'last_name' => 'Doe',
-        //         'phone' => '1234567890',
-        //         'email' => 'john.doe@example.com',
-        //         'departments_id' => $department->id,
-        //         'positions_id' => $position->id,
-        //         'gender' => 'Male',
-        // ]);
 
         // Make a POST request to the login endpoint with incorrect password
         $response = $this->postJson('/api/login', [
@@ -79,10 +82,10 @@ class AuthControllerTest extends TestCase
 
         $response->assertStatus(400)
             ->assertJsonStructure(['success',
-            'code',
+            'code'=>'400',
             'locale',
             'message',
-            'data',]);
+            'data']);
     }
 
     public function testRegister()
@@ -104,19 +107,287 @@ class AuthControllerTest extends TestCase
             'departments_id' => $department->id,
             'positions_id' => $position->id,
             'gender' => 'Male',
+            // 'roles'=>'Admin'
             // Add other required fields
         ]);
 
-        $response->assertStatus(201)
-        //     ->assertJsonStructure(['user']);
-       ->assertJsonStructure([
-            'success',
-            'code',
-            'locale',
-            'message',
-            'data',
-        ]);
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'success',
+                'code',
+                'locale',
+                'message',
+                'data'
+            ]);
     }
 
     // Add test cases for other controller methods...
+        public function testLoginWith1InvalidCredentials()
+        {
+            // Make a POST request to the login endpoint with incorrect password
+            $response = $this->postJson('/api/login', [
+                'email' => 'test@example.com',
+                'password' => 'incorrect_password',
+            ]);
+
+            $response->assertStatus(400)
+                ->assertJsonStructure([
+                    'success',
+                    'code',
+                    'locale',
+                    'message',
+                    'data',
+                ])
+                ->assertJson([
+                    'success' => false,
+                    'code' => 400,
+                    'message' => ['Invalid Credentials'],
+                ]);
+        }
+
+        public function testJWTAuthAttemptCalledWithCorrectCredentials()
+        {
+            $credentials = [
+                'email' => 'test@example.com',
+                'password' => 'password',
+            ];
+
+            JWTAuth::shouldReceive('attempt')
+                ->once()
+                ->with($credentials)
+                ->andReturn('token');
+
+            $response = $this->postJson('/api/login', $credentials);
+
+            $response->assertStatus(200);
+        }
+
+        public function testResponseBuilderErrorCalledWithCorrectParametersWhenLoginFails()
+        {
+            $credentials = [
+                'email' => 'test@example.com',
+                'password' => 'incorrect_password',
+            ];
+
+            JWTAuth::shouldReceive('attempt')
+                ->once()
+                ->with($credentials)
+                ->andReturn(false);
+
+            ResponseBuilder::shouldReceive('error')
+                ->once()
+                ->with(400, [''], ['Invalid Credentials'])
+                ->andReturn(['success' => false, 'code' => 400, 'message' => ['Invalid Credentials']]);
+
+            $response = $this->postJson('/api/login', $credentials);
+
+            $response->assertStatus(400)
+                ->assertJsonStructure([
+                    'success',
+                    'code',
+                    'locale',
+                    'message',
+                    'data',
+                ])
+                ->assertJson([
+                    'success' => false,
+                    'code' => 400,
+                    'message' => ['Invalid Credentials'],
+                ]);
+        }
+
+        public function testAuthUserCalledToRetrieveUserObjectAfterSuccessfulLogin()
+        {
+            $credentials = [
+                'email' => 'test@example.com',
+                'password' => 'password',
+            ];
+
+            JWTAuth::shouldReceive('attempt')
+                ->once()
+                ->with($credentials)
+                ->andReturn('token');
+
+            Auth::shouldReceive('user')
+                ->once()
+                ->andReturn(User::factory()->create());
+
+            $response = $this->postJson('/api/login', $credentials);
+
+            $response->assertStatus(200);
+        }
+
+        public function testJWTAuthFactoryGetTTLMethodCalledToRetrieveTokenExpirationTime()
+        {
+            $credentials = [
+                'email' => 'test@example.com',
+                'password' => 'password',
+            ];
+
+            JWTAuth::shouldReceive('attempt')
+                ->once()
+                ->with($credentials)
+                ->andReturn('token');
+
+            JWTAuth::shouldReceive('factory->getTTL')
+                ->once()
+                ->andReturn(60);
+
+            $response = $this->postJson('/api/login', $credentials);
+
+            $response->assertStatus(200);
+        }
+
+        public function testResponseBuilderSuccessCalledWithCorrectParametersWhenLoginSucceeds()
+        {
+            $credentials = [
+                'email' => 'test@example.com',
+                'password' => 'password',
+            ];
+
+            JWTAuth::shouldReceive('attempt')
+                ->once()
+                ->with($credentials)
+                ->andReturn('token');
+
+            Auth::shouldReceive('user')
+                ->once()
+                ->andReturn(User::factory()->create());
+
+            JWTAuth::shouldReceive('factory->getTTL')
+                ->once()
+                ->andReturn(60);
+
+            ResponseBuilder::shouldReceive('success')
+                ->once()
+                ->with([
+                    'user' => [
+                        'id',
+                        'name',
+                        'email',
+                        'position',
+                        'department',
+                        'lineManager',
+                        'roles',
+                    ],
+                    'token' => 'token',
+                    'expiration' => 60,
+                ], 200)
+                ->andReturn(['success' => true, 'code' => 200, 'data' => []]);
+
+            $response = $this->postJson('/api/login', $credentials);
+
+            $response->assertStatus(200)
+                ->assertJsonStructure([
+                    'success',
+                    'code',
+                    'locale',
+                    'message',
+                    'data',
+                ]);
+        }
+
+        public function testResponseJsonStructureContainsAllRequiredFieldsAndDataAfterSuccessfulLogin()
+        {
+            $credentials = [
+                'email' => 'test@example.com',
+                'password' => 'password',
+            ];
+
+            JWTAuth::shouldReceive('attempt')
+                ->once()
+                ->with($credentials)
+                ->andReturn('token');
+
+            Auth::shouldReceive('user')
+                ->once()
+                ->andReturn(User::factory()->create());
+
+            JWTAuth::shouldReceive('factory->getTTL')
+                ->once()
+                ->andReturn(60);
+
+            ResponseBuilder::shouldReceive('success')
+                ->once()
+                ->with([
+                    'user' => [
+                        'id',
+                        'name',
+                        'email',
+                        'position',
+                        'department',
+                        'lineManager',
+                        'roles',
+                    ],
+                    'token' => 'token',
+                    'expiration' => 60,
+                ], 200)
+                ->andReturn(['success' => true, 'code' => 200, 'data' => []]);
+
+            $response = $this->postJson('/api/login', $credentials);
+
+            $response->assertStatus(200)
+                ->assertJsonStructure([
+                    'success',
+                    'code',
+                    'locale',
+                    'message',
+                    'data' => [
+                        'user' => [
+                            'id',
+                            'name',
+                            'email',
+                            'position',
+                            'department',
+                            'lineManager',
+                            'roles',
+                        ],
+                        'token',
+                        'expiration',
+                    ],
+                ]);
+        }
+
+        public function testResponseJsonStructureContainsCorrectErrorMessageWhenLoginFails()
+        {
+            $credentials = [
+                'email' => 'test@example.com',
+                'password' => 'incorrect_password',
+            ];
+
+            JWTAuth::shouldReceive('attempt')
+                ->once()
+                ->with($credentials)
+                ->andReturn(false);
+
+            ResponseBuilder::shouldReceive('error')
+                ->once()
+                ->with(400, [''], ['Invalid Credentials'])
+                ->andReturn(['success' => false, 'code' => 400, 'message' => ['Invalid Credentials']]);
+
+            $response = $this->postJson('/api/login', $credentials);
+
+            $response->assertStatus(400)
+                ->assertJson([
+                    'message' => ['Invalid Credentials'],
+                ]);
+        }
+
+        public function testResponseJsonStructureContainsCorrectErrorCodeWhenLoginFails()
+        {
+            $credentials = [
+                'email' => 'test@example.com',
+                'password' => 'incorrect_password',
+            ];
+
+            JWTAuth::shouldReceive('attempt')
+                ->once()
+                ->with($credentials)
+                ->andReturn(false);
+
+            ResponseBuilder::shouldReceive('error')
+                ->once()
+                ->with(400, [''], ['Invalid Credentials'])
+                ->andReturn(['success' => false, 'code' => 400, 'message' => ['Invalid']]);
+            }
 }
