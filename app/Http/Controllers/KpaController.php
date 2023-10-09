@@ -39,7 +39,7 @@ class KpaController extends Controller
     public function createKpa(KpaRequest $request)
     {
         $kpa = $this->KpaRepository->create($request->all());
-        return ResponseBuilder::success($kpa,200);
+        return ResponseBuilder::success($kpa,201,null,201);
     }
 
     public function updateKpa(KpaRequest $request, $id, Exception $e)
@@ -51,6 +51,6 @@ class KpaController extends Controller
     public function deleteKpa($id, Exception $e)
     {
         $kpa = $this->KpaRepository->delete($id, $e);
-        return ResponseBuilder::success($kpa,204);
+        return ResponseBuilder::success($kpa,204,null,204);
     }
 }

@@ -27,7 +27,7 @@ class positionsController extends Controller
     public function createPositions(PositionRequest $request)
     {
         $position = $this->positionRepository->createPosition($request->all());
-        return ResponseBuilder::success($position, 201);
+        return ResponseBuilder::success($position,201,null,201);
     }
     public function updatePositions(PositionRequest $request, $id)
     {
@@ -43,7 +43,7 @@ class positionsController extends Controller
         if (!$result) {
             return ResponseBuilder::error(404);
         }
-        return ResponseBuilder::success([], 204);
+        return ResponseBuilder::success([],204,null,204);
     }
     public function getPositionsbyid(Request $request, $id)
     {

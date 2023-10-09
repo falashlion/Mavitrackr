@@ -69,7 +69,7 @@ class AuthController extends Controller
             $user->assignRole($roles);
         }
         $user->save();
-        return ResponseBuilder::success($userArray, 201);
+        return ResponseBuilder::success($userArray,201,null,201);
     }
     public function getUserById($id, Exception $e)
      {
@@ -106,7 +106,7 @@ class AuthController extends Controller
     public function deleteUser($id ,Exception $e)
     {
        $user = $this->userRepository->deleteUser($id, $e);
-        return ResponseBuilder::success($user,204);
+        return ResponseBuilder::success(204,null,null,204);
     }
     public function logout()
     {

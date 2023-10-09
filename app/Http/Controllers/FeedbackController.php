@@ -34,7 +34,7 @@ public function getFeedbackByKpiId($id)
 public function createFeedback(FeedbackRequest $request)
 {
     $feedback = $this->feedbackRepository->create($request->all());
-    return ResponseBuilder::success($feedback,201);
+    return ResponseBuilder::success($feedback,201,null,201,);
 }
 public function updateFeedbacks(FeedbackRequest $request, $id)
 {
@@ -53,7 +53,7 @@ public function deleteFeedback($id)
     }
     $feedback = $this->feedbackRepository->delete($id);
 
-    return ResponseBuilder::success($feedback,204);
+    return ResponseBuilder::success($feedback,204,null,204);
 }
 
 }

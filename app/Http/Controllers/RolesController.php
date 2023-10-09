@@ -33,7 +33,7 @@ class RolesController extends Controller
        'name'=> $request->input('name'),
     ]);
     $role->syncPermissions($request->input('permissions'));
-    return ResponseBuilder::success($role, 201);
+    return ResponseBuilder::success($role,201,null,201);
     }
 
     /**
@@ -82,6 +82,6 @@ class RolesController extends Controller
     {
         $role = Role::findOrFail($id);
         $role->delete();
-        return ResponseBuilder::success(204);
+        return ResponseBuilder::success( [],204,null,204);
     }
 }

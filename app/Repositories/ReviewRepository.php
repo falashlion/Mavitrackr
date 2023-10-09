@@ -41,26 +41,23 @@ class ReviewRepository implements ReviewInterface
         $user_id = auth()->id();
         $users_id = array($user_id);
         if (Kpi::whereIn('user_id', $users_id)->exists()) {
-            $query1= Review::with(['user', 'user.lineManager'])
-            ->where('user_id', $users_id)
-            ->get();
-            $query1 = array($query1);
-            if (empty($query1)) {
-                return [];
-            }
+            $query1 = Review::with(['user', 'user.lineManager'])
+                ->where('user_id', $users_id)
+                ->get();
+        } else {
+            $query1 = collect([]);
         }
+
         $users = User::where('line_manager', $user_id)->pluck('id');
         $user_ids = $users->toArray();
-        $user_ids_with_kpis = Kpi::whereIn('user_id', $user_ids)->pluck('user_id')->toArray();
-        $query = Review::with(['user', 'user.lineManager'])
-            ->whereIn('user_id', $user_ids_with_kpis)
+        $user_ids_with_kpis = Kpi::whereIn('user_id', $user_ids )->pluck('user_id')->toArray();
+        $query2 = Review::with(['user', 'user.lineManager'])
+            ->where('user_id', $user_ids_with_kpis)
             ->orderByDesc('created_at')
             ->get();
-        $query = array($query);
-        if (empty($query)) {
-            return [];
-        }
-        $review = array_merge($query1 ?? [], $query ?? []);
-        return response()->json([ 'success' => true, 'code' => 200, 'locale' => 'en', 'message' => 'OK', 'data'=> ['items' => $review,]]);
+
+        $query = $query1->merge($query2);
+
+        return $query;
     }
 }

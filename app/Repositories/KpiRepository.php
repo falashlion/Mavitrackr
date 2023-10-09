@@ -6,6 +6,7 @@ use App\Models\Kpi;
 use App\Models\User;
 use App\Interfaces\KpiRepositoryInterface;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use PHPOpenSourceSaver\JWTAuth\Contracts\Providers\Auth;
 
 class KpiRepository implements KpiRepositoryInterface
 {
@@ -56,6 +57,12 @@ class KpiRepository implements KpiRepositoryInterface
         $kpi = Kpi::findOrFail($id);
         $kpi -> update($data);
         return $kpi;
+    }
+    public function getAverageScore(){
+        $user_id = auth()->user()->id;
+        $averages=Kpi::where('user_id', $user_id)->select('weighted_average_score')->get();
+        return $averages;
+
     }
     public function getByUserId($id, $e)
     {

@@ -45,7 +45,7 @@ class objectivesController extends Controller
     public function createStrategicDomain(StrategicDomainsRequest $request)
     {
         $strategicDomain = $this->strategicDomainRepository->create($request->all());
-        return ResponseBuilder::success($strategicDomain, 201);
+        return ResponseBuilder::success($strategicDomain, 201,null,201);
     }
 
     public function updateStrategicDomain(StrategicDomainsRequest $request, $id)
@@ -57,7 +57,7 @@ class objectivesController extends Controller
     public function deleteStrategicDomain($id)
     {
        $strategicDomain = $this->strategicDomainRepository->delete($id);
-        return ResponseBuilder::success($strategicDomain, 204);
+        return ResponseBuilder::success($strategicDomain, 204, null,204);
     }
     // enpoints for feeedback
     public function getfeedback()
@@ -80,7 +80,7 @@ class objectivesController extends Controller
             "comment"   =>  $request['comment'],
             "kpis_id" => $id,
         ]);
-        return ResponseBuilder::success( $feedback,200);
+        return ResponseBuilder::success( $feedback,201,null,201);
     }
     public function updatefeedback(FeedbackRequest $request, $id)
     {
@@ -98,6 +98,6 @@ class objectivesController extends Controller
         if (!$result) {
             return ResponseBuilder::success(404);
         }
-        return ResponseBuilder::success(200);
+        return ResponseBuilder::success($result,204,null,204);
     }
 }

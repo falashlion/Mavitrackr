@@ -21,7 +21,7 @@ class departmentController extends Controller {
         $this->middleware('permission:departments create')->only('createNewDepartment');
     }
 
-    public function getdepartmentsbyid(Request $request, $id, Exception $e) {
+    public function getdepartmentsbyid($id, Exception $e) {
         $department = $this->departmentRepository->getDepartmentById($id, $e);
         return ResponseBuilder::success($department,200);
     }
@@ -32,7 +32,7 @@ class departmentController extends Controller {
     public function createNewDepartment(DepartmentRequest $request) {
         $validatedData = $request->validated();
         $department = $this->departmentRepository->createDepartment($validatedData);
-        return ResponseBuilder::success($department,200);
+        return ResponseBuilder::success($department,201,null,201);
     }
     public function updateDepartmentDetails(DepartmentUpdateRequest $request, $id, Exception $e) {
         $validatedData = $request->validated();
@@ -42,7 +42,7 @@ class departmentController extends Controller {
     public function deleteDepartmentDetails($id, Exception $e)
     {
         $department = $this->departmentRepository->deleteDepartment($id, $e);
-        return ResponseBuilder::success($department,204);
+        return ResponseBuilder::success($department,204,null,204);
     }
     public function getDepartmentMembers($id, Exception $e)
     {

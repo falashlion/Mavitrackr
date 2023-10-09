@@ -53,7 +53,7 @@ class ForgotPasswordController extends Controller
         if ($status === Password::PASSWORD_RESET) {
             return ResponseBuilder::asSuccess()
                 ->withMessage('Password reset successfully')
-                ->withHttpCode(200)
+                ->withHttpCode(201)
                 ->build();
         } else {
             return ResponseBuilder::asError($status)

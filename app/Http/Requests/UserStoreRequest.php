@@ -39,7 +39,7 @@ class UserStoreRequest extends FormRequest
             'departments_id'=> 'exists:departments,id',
             'positions_id'=> 'exists:positions,id',
             // 'roles'=> 'required|exists:roles,name',
-            'line_manager' => 'exists:users,id'
+            // 'line_manager' => 'exists:users,id'
         ];
     }
 

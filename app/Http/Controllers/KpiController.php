@@ -22,11 +22,11 @@ class KpiController extends Controller
     {
         $this->KpiRepository = $KpiRepository;
         $this->middleware('jwt.auth');
-        $this->middleware('permission:kpis edit')->only('updateKpi');
-        $this->middleware('permission:kpisweight edit')->only('createKpiWeight');
-        $this->middleware('permission:kpisScore edit')->only('createKpiScore');
-        $this->middleware('permission:kpis list')->only('getKpiByUserId',);
-        $this->middleware('permission:kpis delete')->only(['deleteKpiDetails']);
+        // $this->middleware('permission:kpis edit')->only('updateKpi');
+        // $this->middleware('permission:kpisweight edit')->only('createKpiWeight');
+        // $this->middleware('permission:kpisScore edit')->only('createKpiScore');
+        // $this->middleware('permission:kpis list')->only('getKpiByUserId',);
+        // $this->middleware('permission:kpis delete')->only(['deleteKpiDetails']);
     }
 
     public function getAllKpis()
@@ -47,7 +47,7 @@ class KpiController extends Controller
         $data['user_id'] = auth()->user()->id;
         $kpi = $this->KpiRepository->create($data);
         $this->weightedAverageScore();
-        return ResponseBuilder::success($kpi,200);
+        return ResponseBuilder::success($kpi,201,null,201);
     }
     public function updateKpi(KpiRequest $request, $id, Exception $e)
     {
@@ -58,22 +58,28 @@ class KpiController extends Controller
     {
         $this->KpiRepository->delete($id, $e);
         $this->weightedAverageScore();
-        return ResponseBuilder::success(null,204);
+        return ResponseBuilder::success(204,null,null,204);
     }
     public function createKpiWeight(kpiStoreRequest $request, $id, Exception $e){
         $kpi = $this->KpiRepository->createWeight($id,  $request->all(), $e);
         $this->weightedAverageScore();
-        return ResponseBuilder::success($kpi,200);
+        return ResponseBuilder::success($kpi,201,null,201);
     }
     public function createKpiScore(kpiScoreRequest $request, $id, Exception $e){
         $kpi = $this->KpiRepository->createScore($id, $request->all(), $e);
         $this->weightedAverageScore();
-        return ResponseBuilder::success($kpi,200);
+        return ResponseBuilder::success($kpi,201,null,201);
     }
     public function getKpiByUserId($id, Exception $e)
     {
         $kpi = $this->KpiRepository->getByUserId($id, $e);
         return ResponseBuilder::success($kpi,200);
+    }
+
+    public function averageScore(){
+        $this->weightedAverageScore();
+        $average = $this->KpiRepository->getAverageScore();
+        return ResponseBuilder::success($average,200);
     }
     public function weightedAverageScore () {
         // Calculate weighted average score per user_id

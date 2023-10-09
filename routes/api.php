@@ -91,6 +91,7 @@ function()
         Route::post('kpis/weights/{id}',[KpiController::class,'createKpiWeight']);
         Route::post('kpis/scores/{id}',[KpiController::class,'createKpiScore']);
         Route::get('/users/kpis/{id}',[KpiController::class,'getKpiByUserId']);
+        Route::get('/weighted-average-score/kpis/',[KpiController::class,'averageScore']);
         // key performance indicators scoring
         Route::get('/kpis/scorings', [KpiScoringController::class,'getKpiScoring']);
         Route::post('/kpis/{id}/scorings', [KpiScoringController::class,'updateKpiScoring']);

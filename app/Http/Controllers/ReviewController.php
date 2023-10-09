@@ -22,7 +22,7 @@ class ReviewController extends Controller
         $data = $request->validated();
         $data['user_id'] = auth()->user()->id;
         $review = $this->repository->createReview($data);
-        return ResponseBuilder::success($review, 201);
+        return ResponseBuilder::success($review, 201,null,201);
     }
     public function show($id)
     {
@@ -37,11 +37,11 @@ class ReviewController extends Controller
     public function destroy($id)
     {
         $this->repository->delete($id);
-        return ResponseBuilder::success(null, 204);
+        return ResponseBuilder::success(null, 204,null,204);
     }
     public function index()
     {
         $reviews = $this->repository->getAll();
-        return $reviews;
+        return ResponseBuilder::success($reviews,200,null,200);
     }
 }

@@ -12,4 +12,5 @@ interface KpiRepositoryInterface
     public function createWeight($id, $data, $e);
     public function createScore($id, $data, $e);
     public function getByUserId($id, $e);
+    public function getAverageScore();
 }

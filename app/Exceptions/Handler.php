@@ -10,6 +10,7 @@ use Spatie\Permission\Exceptions\UnauthorizedException;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Response;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -47,7 +48,7 @@ class Handler extends ExceptionHandler
                 'locale'=> 'en',
                 'message'=> 'Unauthorized',
                 'data'=>''
-            ], 401);
+            ],Response::HTTP_UNAUTHORIZED);
         }
         if ($exception instanceof UnauthorizedException) {
             return response()->json([
@@ -56,7 +57,7 @@ class Handler extends ExceptionHandler
                 'locale'=> 'en',
                 'message'=> 'You are not authorized to perform this action.',
                 'data'=>''
-            ], 403);
+            ], Response::HTTP_FORBIDDEN);
         }
         if ($exception instanceof ModelNotFoundException) {
             return response()->json([
@@ -65,7 +66,7 @@ class Handler extends ExceptionHandler
                 'locale'=> 'en',
                 'message'=> 'Resource not found',
                 'data'=>''
-            ], 404);
+            ], Response::HTTP_NOT_FOUND);
         }
         if ($exception instanceof HttpResponseException) {
             return response()->json([
@@ -74,7 +75,7 @@ class Handler extends ExceptionHandler
                 'locale'=> 'en',
                 'message'=> 'Invalid request',
                 'data'=>''
-            ], 400);
+            ], Response::HTTP_BAD_REQUEST);
         }
         return parent::render($request, $exception);
         //
