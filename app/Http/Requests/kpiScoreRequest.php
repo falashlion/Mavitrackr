@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Kpi;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as ApiResponseBuilder;
@@ -22,11 +23,24 @@ class kpiScoreRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
-    public function rules(): array
+    public function rules()
     {
-        return [
-            'score'=>'required|integer|max:4'
+        $kpi = Kpi::find($this->route('id'));
+
+        $rules = [
+            'score' => 'required|integer|max:4',
         ];
+        if (!$kpi) {
+            $rules['score'] .= '|nullable';
+        } else {
+            $weight = $kpi->weight;
+            if (!$weight) {
+                $rules['score'] .= '|nullable';
+            } else {
+                $rules['score'] .= "|numeric|min:0|max:$weight";
+            }
+        }
+        return $rules;
     }
     protected function failedValidation(Validator $validator)
     {

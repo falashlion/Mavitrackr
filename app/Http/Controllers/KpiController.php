@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\kpiScoreRequest;
 use App\Models\Kpi;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\interfaces\KpiRepositoryInterface;
 use App\Http\Requests\KpiRequest;
@@ -66,6 +67,18 @@ class KpiController extends Controller
         return ResponseBuilder::success($kpi,201,null,201);
     }
     public function createKpiScore(kpiScoreRequest $request, $id, Exception $e){
+        $kpi = Kpi::findOrFail($id);
+
+        if (!$kpi->weight) {
+            return response()->json([
+                'success' => false,
+                'code' => 422,
+                'locale' => 'en',
+                'message' => 'Invalid request',
+                'data' => 'KPI does not have a weight',
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
         $kpi = $this->KpiRepository->createScore($id, $request->all(), $e);
         $this->weightedAverageScore();
         return ResponseBuilder::success($kpi,201,null,201);
@@ -77,9 +90,15 @@ class KpiController extends Controller
     }
 
     public function averageScore(){
-        $this->weightedAverageScore();
         $average = $this->KpiRepository->getAverageScore();
-        return ResponseBuilder::success($average,200);
+        $this->weightedAverageScore();
+        return ResponseBuilder::success($average,200,null,200);
+    }
+
+    public function averageScoreByUserId($id){
+        $average = $this->KpiRepository->getAverageScoreByUserId($id);
+        $this->weightedAverageScore();
+        return ResponseBuilder::success($average,200,null,200);
     }
     public function weightedAverageScore () {
         // Calculate weighted average score per user_id

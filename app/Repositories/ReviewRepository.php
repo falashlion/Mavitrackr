@@ -50,9 +50,10 @@ class ReviewRepository implements ReviewInterface
 
         $users = User::where('line_manager', $user_id)->pluck('id');
         $user_ids = $users->toArray();
+        // dd($users);
         $user_ids_with_kpis = Kpi::whereIn('user_id', $user_ids )->pluck('user_id')->toArray();
         $query2 = Review::with(['user', 'user.lineManager'])
-            ->where('user_id', $user_ids_with_kpis)
+            ->whereIn('user_id', $user_ids_with_kpis)
             ->orderByDesc('created_at')
             ->get();
 

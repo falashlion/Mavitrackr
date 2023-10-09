@@ -13,4 +13,5 @@ interface KpiRepositoryInterface
     public function createScore($id, $data, $e);
     public function getByUserId($id, $e);
     public function getAverageScore();
+    public function getAverageScoreByUserId($id);
 }
