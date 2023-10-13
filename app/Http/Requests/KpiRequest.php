@@ -26,10 +26,12 @@ class KpiRequest extends FormRequest
      */
     public function rules(): array
     {
+        $totalWeight = auth()->user()->keyPerformanceIndicators->sum('weight');
         return [
             'title' => 'required|string',
             'kpas_id' => 'exists:kpas,id',
-            'weight'=> 'string',
+            'weight'=> 'integer',
+            'max:'.(100 - $totalWeight),
         ];
     }
     protected function failedValidation(Validator $validator)
