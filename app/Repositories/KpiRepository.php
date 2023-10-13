@@ -60,7 +60,7 @@ class KpiRepository implements KpiRepositoryInterface
     }
     public function getAverageScore(){
         $user_id = auth()->user()->id;
-        $averages=Kpi::where('user_id', $user_id)->select('weighted_average_score')->get();
+        $averages=Kpi::where('user_id', $user_id)->select('weighted_average_score')->first();
         return $averages;
 
     }
