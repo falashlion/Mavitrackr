@@ -29,11 +29,30 @@ class ReviewController extends Controller
         $review = $this->repository->find($id);
         return ResponseBuilder::success($review, 200);
     }
+    // public function update(UpdateReviewRequest $request, $id)
+    // {
+
+    //     $review = $this->repository->update($id, $request->all());
+    //     return ResponseBuilder::success($review, 200);
+    // }
+
     public function update(UpdateReviewRequest $request, $id)
-    {
-        $review = $this->repository->update($id, $request->all());
-        return ResponseBuilder::success($review, 200);
+{
+    $review = $this->repository->update($id, $request->all());
+    $userId = $review->user_id;
+
+    $kpis = Kpi::where('user_id', $userId)->get();
+
+    foreach ($kpis as $kpi) {
+        if (empty($kpi->weight) || empty($kpi->score)) {
+            return ResponseBuilder::error(400,null,'Not all KPIs have a weight and a score',400);
+        }
     }
+    $review->status = 'completed';
+    $review->save();
+    return ResponseBuilder::success($review, 200);
+}
+
     public function destroy($id)
     {
         $this->repository->delete($id);
