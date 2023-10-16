@@ -22,6 +22,7 @@ class KpaFactory extends Factory
     public function definition()
     {
         return [
+            'id'=>$this->faker->uuid,
             'title' => $this->faker->sentence,
             'strategic_domains_id' => function () {
                 return \App\Models\StrategicDomain::factory()->create()->id;

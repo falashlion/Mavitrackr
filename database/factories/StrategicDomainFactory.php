@@ -22,6 +22,7 @@ class StrategicDomainFactory extends Factory
     public function definition()
     {
         return [
+            'id' =>$this->faker->uuid,
             'title' => $this->faker->randomElement(['Financial', 'Customer', 'Process', 'People']),
         ];
     }

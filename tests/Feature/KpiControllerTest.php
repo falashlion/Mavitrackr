@@ -15,28 +15,6 @@ class KpiControllerTest extends TestCase
 {
     use RefreshDatabase, HasFactory, Notifiable;
 
-    public static function createUser($attributes = [])
-    {
-        $user = new User;
-
-        $user->password = Hash::make($attributes['password']);
-        $user->user_matricule = $attributes['user_matricule'];
-        $user->profile_image = $attributes['profile_image'];
-        $user->first_name = $attributes['first_name'];
-        $user->last_name = $attributes['last_name'];
-        $user->phone = $attributes['phone'];
-        $user->address = $attributes['address'];
-        $user->line_manager = $attributes['line_manager'];
-        $user->gender = $attributes['gender'];
-        $user->email = $attributes['email'];
-        $user->departments_id = $attributes['departments_id'];
-        $user->positions_id = $attributes['positions_id'];
-
-        $user->save();
-
-        return $user;
-    }
-
     public function testWeightedAverageScoreMethodCalculatesCorrectly()
     {
         // Create a user with KPIs
@@ -55,23 +33,7 @@ class KpiControllerTest extends TestCase
     public function testGetAllKpisReturnsAllKpisForGivenUser()
     {
         // Create a user with KPIs
-        // $user = User::factory()->create();
-        $this->seed();
-        $user = $this->createUser([
-
-            'password' => 'password123',
-            'user_matricule' => '12345',
-            'profile_image' => 'profile.jpg',
-            'first_name' => 'John',
-            'last_name' => 'Doe',
-            'phone' => '555-555-5555',
-            'address' => '123 Main St',
-            'line_manager' => 1,
-            'gender' => 'male',
-            'email' => 'john.doe@example.com',
-            'departments_id' => 1,
-            'positions_id' => 1,
-        ]);
+        $user = User::factory()->create();
         $kpis = Kpi::factory()->count(3)->create(['user_id' => $user->id]);
 
         // Call the getAllKpis method
@@ -99,27 +61,11 @@ class KpiControllerTest extends TestCase
     public function testCreateKpiCreatesNewKpiWithCorrectData()
     {
             // Create a user
-            $user = User::create([
-                'password' => 'password123',
-                'user_matricule' => '12345',
-                'profile_image' => 'profile.jpg',
-                'first_name' => 'John',
-                'last_name' => 'Doe',
-                'phone' => '555-555-5555',
-                'address' => '123 Main St',
-                'line_manager' => 1,
-                'gender' => 'male',
-                'email' => 'john.doe@example.com',
-                'departments_id' => 1,
-                'positions_id' => 1,
-            ]);
-
+            $user = User::factory()->create();
             // Call the createKpi method
             $data = [
                 'title' => 'Test KPI',
-                'description' => 'This is a test KPI',
                 'weight' => 10,
-                'score' => 5,
             ];
             $response = $this->actingAs($user)->post('/api/kpis', $data);
 

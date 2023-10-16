@@ -22,6 +22,7 @@ class KpiFactory extends Factory
     public function definition()
     {
         return [
+            'id'=>$this->faker->uuid,
             'title' => $this->faker->sentence,
             'kpas_id' => function () {
                 return \App\Models\Kpa::factory()->create()->id;
@@ -29,10 +30,9 @@ class KpiFactory extends Factory
             'users_id' => function () {
                 return \App\Models\User::factory()->create()->id;
             },
-            //'indicators' => $this->faker->sentence,
-            'weight' => $this->faker->randomFloat(2, 0, 1),
-            'weighted_average_score' => $this->faker->numberBetween(0, 100),
-            'score' => $this->faker->numberBetween(0, 100),
+            'weight' => $this->faker->numberBetween(0, 100),
+            'weighted_average_score' => $this->faker->numberBetween(0, 4),
+            'score' => $this->faker->numberBetween(0, 4),
         ];
     }
 }
