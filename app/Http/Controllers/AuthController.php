@@ -20,7 +20,7 @@ class AuthController extends Controller
     public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;
-        // $this->middleware('jwt.auth')->except('login');
+        $this->middleware('jwt.auth')->except('login');
         // $this->middleware('permission:user create')->only('register');
         // $this->middleware('permission:user delete')->only('deleteUser');
         // $this->middleware('permission:user edit')->only('updateUserDetails');

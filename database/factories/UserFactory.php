@@ -44,6 +44,7 @@ class UserFactory extends Factory
             'positions_id' =>function () {
                 return \App\Models\Position::factory()->create()->id;
             }, // Set appropriate values for foreign keys
+            'roles' => $this->faker->randomElement(['Admin','Employee','Manager']),
             'created_at' => now(),
             'updated_at' => now(),
 
