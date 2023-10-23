@@ -100,6 +100,12 @@ class KpiController extends Controller
         $this->weightedAverageScore();
         return ResponseBuilder::success($average,200,null,200);
     }
+
+    public function getKpisForAllDirectReports(){
+        $kpis = $this->KpiRepository->getDirectReportKpis();
+        $this->weightedAverageScore();
+        return ResponseBuilder::success($kpis,200,null,200);
+    }
     public function weightedAverageScore () {
         // Calculate weighted average score per user_id
         $kpis = Kpi::select('user_id')->distinct()->get();

@@ -39,13 +39,13 @@ class Kpi extends Model
     }
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id')->select(['id', 'first_name', 'profile_image','last_name','user_matricule']);
     }
     public function feedback()
     {
         return $this->hasMany(Feedback::class,'kpis_id');
     }
     // public function reviews(){
-    //     return $this->hasOne(Review::class);
+    //     return $this->hasOne(Review::class, 'user_id');
     // }
 }

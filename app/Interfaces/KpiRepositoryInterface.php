@@ -14,4 +14,5 @@ interface KpiRepositoryInterface
     public function getByUserId($id, $e);
     public function getAverageScore();
     public function getAverageScoreByUserId($id);
+    public function getDirectReportKpis();
 }

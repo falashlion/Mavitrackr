@@ -87,18 +87,12 @@ function()
         Route::put('/kpis/{id}', [KpiController::class,'updateKpi']);
         Route::delete('/kpis/{id}',[KpiController::class,'deleteKpiDetails']);
         Route::get('/kpis/{id}',[KpiController::class,'getKpiById']);
-        Route::get('/kpis/reports',[KpiController::class,'getKpisForAllDirectReports']);
+        Route::get('/reports/kpis',[KpiController::class,'getKpisForAllDirectReports']);
         Route::post('kpis/weights/{id}',[KpiController::class,'createKpiWeight']);
         Route::post('kpis/scores/{id}',[KpiController::class,'createKpiScore']);
         Route::get('/users/kpis/{id}',[KpiController::class,'getKpiByUserId']);
         Route::get('/weighted-average-score/kpis/',[KpiController::class,'averageScore']);
         Route::get('/weighted-average-score/kpis/{id}/',[KpiController::class,'averageScoreByUserId']);
-        // key performance indicators scoring
-        Route::get('/kpis/scorings', [KpiScoringController::class,'getKpiScoring']);
-        Route::post('/kpis/{id}/scorings', [KpiScoringController::class,'updateKpiScoring']);
-        Route::put('/kpis/{id}/scorings', [KpiScoringController::class,'updateKpisScoring']);
-        Route::delete('/kpis/{id}/scorings',[KpiScoringController::class,'deleteKpiScoring']);
-        Route::get('/kpis/{id}/scorings',[KpiScoringController::class,'getKpiScoringbyid']);
         // feedbacks endpoints
         Route::get('/feedbacks/kpis', [FeedbackController::class, 'getAllFeedbacks']);
         Route::post('/feedbacks/kpis', [FeedbackController::class, 'createFeedback']);

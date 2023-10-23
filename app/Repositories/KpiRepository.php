@@ -79,4 +79,10 @@ class KpiRepository implements KpiRepositoryInterface
         }
         return $kpis;
     }
+
+    public function getDirectReportKpis(){
+        $directReports = auth()->user()->employees->pluck('id')->toArray();
+        $kpis = Kpi::with('user')->whereIn('user_id', $directReports)->get();
+        return $kpis;
+    }
 }
