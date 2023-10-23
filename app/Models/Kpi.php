@@ -39,7 +39,7 @@ class Kpi extends Model
     }
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id')->select(['id', 'first_name', 'profile_image','last_name','user_matricule']);
+        return $this->belongsTo(User::class, 'user_id')->select(['id', 'first_name', 'profile_image','last_name']);
     }
     public function feedback()
     {
