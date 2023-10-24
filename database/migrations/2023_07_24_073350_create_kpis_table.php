@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Schema;
             $table->uuid('user_id');
             $table->json('indicators')->nullable();
             $table->integer('weight')->nullable();
-            $table->integer('weighted_average_score')->nullable();
+            $table->float('weighted_average_score')->nullable();
             $table->integer('score')->nullable();
             $table->foreign('kpas_id')->references('id')->on('kpas');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

@@ -80,7 +80,7 @@ class KpiController extends Controller
         }
 
         $kpi = $this->KpiRepository->createScore($id, $request->all(), $e);
-        $this->weightedAverageScore();
+         $this->weightedAverageScore();
         return ResponseBuilder::success($kpi,201,null,201);
     }
     public function getKpiByUserId($id, Exception $e)
@@ -113,17 +113,19 @@ class KpiController extends Controller
         {
             $user_id = $kpi_user->user_id;
             $kpi_scores = Kpi::where('user_id', $user_id)->get();
-            $total_weight = 0;
             $weighted_sum = 0;
+            $num_scores = count($kpi_scores);
             foreach ($kpi_scores as $score) {
-                $total_weight += $score->weight;
-                $weighted_sum += $score->score * $score->weight;
+                $weighted_sum += ($score->score * $score->weight) / 100; // multiply score by weight and divide by 100
             }
-            if ($total_weight > 0) {
-                $weighted_average = $weighted_sum / $total_weight;
+            if ($num_scores > 0) {
+                $weighted_average = $weighted_sum ;
             } else {
                 $weighted_average = null;
             }
+           if ($weighted_average > 4){
+            return 'error';
+           }
             Kpi::where('user_id', $user_id)->update(['weighted_average_score' => $weighted_average]);
         }
     }
