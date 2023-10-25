@@ -28,6 +28,7 @@ class KpiRepository implements KpiRepositoryInterface
     public function getById(string $id)
     {
             $kpi = Kpi::findOrFail($id);
+            $kpi->user;
             $kpi->keyPerformanceArea;
             $kpi->keyPerformanceArea->strategicDomain;
             $kpi->feedback;
