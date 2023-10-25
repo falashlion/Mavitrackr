@@ -1,16 +1,16 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Repositories;
 
 use App\Models\Kpi;
 use App\Models\User;
 use App\Interfaces\KpiRepositoryInterface;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-use PHPOpenSourceSaver\JWTAuth\Contracts\Providers\Auth;
 
 class KpiRepository implements KpiRepositoryInterface
 {
-    public function getAll($id)
+    public function getAll($id): array
     {
         $kpis = Kpi::where('user_id', $id)->get();
         foreach ($kpis as $user)
@@ -19,40 +19,42 @@ class KpiRepository implements KpiRepositoryInterface
             $user->keyPerformanceArea->strategicDomain;
             $user->feedback;
         }
+
         return $kpis;
     }
-    public function getById($id, $e)
+    public function getById($id)
     {
             $kpi = Kpi::findOrFail($id);
             $kpi->keyPerformanceArea;
             $kpi->keyPerformanceArea->strategicDomain;
             $kpi->feedback;
+
             return $kpi;
     }
     public function create($data)
     {
         return Kpi::create($data);
     }
-    public function update($id, $data, $e)
+    public function update($id, $data)
     {
         $kpi = Kpi::findOrFail($id);
         $kpi->update($data);
         return $kpi;
     }
 
-    public function delete($id, $e)
+    public function delete($id)
     {
-        $kpi = Kpi::findOrFail($id);
+        $kpi = Kpi::where('weight', null && 0)->findOrFail($id);
         $kpi->delete();
         return true;
     }
-    public function createWeight($id, $data, $e)
+    public function createWeight($id, $data)
     {
             $kpi = Kpi::findOrFail($id);
             $kpi -> update($data);
             return $kpi;
     }
-    public function createScore($id, $data, $e)
+    public function createScore($id, $data)
     {
         $kpi = Kpi::findOrFail($id);
         $kpi -> update($data);
@@ -68,7 +70,7 @@ class KpiRepository implements KpiRepositoryInterface
         $averages=Kpi::where('user_id', $id)->select('weighted_average_score')->first();
         return $averages;
     }
-    public function getByUserId($id, $e)
+    public function getByUserId($id)
     {
         $user = User::findOrFail($id);
         $kpis = Kpi::where('user_id',$id)->get();

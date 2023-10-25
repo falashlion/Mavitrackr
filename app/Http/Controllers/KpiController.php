@@ -35,11 +35,13 @@ class KpiController extends Controller
     Auth::user();
     $id = auth()->id();
     $kpis = $this->KpiRepository->getAll($id);
+
     return ResponseBuilder::success($kpis, 200);
     }
-    public function getKpiById($id , Exception $e)
+    public function getKpiById($id)
     {
-        $kpi = $this->KpiRepository->getById($id, $e);
+        $kpi = $this->KpiRepository->getById($id);
+
         return ResponseBuilder::success($kpi, 200);
     }
     public function createKpi(KpiRequest $request)
@@ -48,25 +50,29 @@ class KpiController extends Controller
         $data['user_id'] = auth()->user()->id;
         $kpi = $this->KpiRepository->create($data);
         $this->weightedAverageScore();
+
         return ResponseBuilder::success($kpi,201,null,201);
     }
-    public function updateKpi(KpiRequest $request, $id, Exception $e)
+    public function updateKpi(KpiRequest $request, $id)
     {
-        $kpi = $this->KpiRepository->update($id, $request->all(),$e);
+        $kpi = $this->KpiRepository->update($id, $request->all());
+
         return ResponseBuilder::success($kpi,200);
     }
-    public function deleteKpiDetails($id, Exception $e)
+    public function deleteKpiDetails($id)
     {
-        $this->KpiRepository->delete($id, $e);
+        $this->KpiRepository->delete($id);
         $this->weightedAverageScore();
+
         return ResponseBuilder::success(204,null,null,204);
     }
-    public function createKpiWeight(kpiStoreRequest $request, $id, Exception $e){
-        $kpi = $this->KpiRepository->createWeight($id,  $request->all(), $e);
+    public function createKpiWeight(kpiStoreRequest $request, $id){
+        $kpi = $this->KpiRepository->createWeight($id,  $request->all());
         $this->weightedAverageScore();
+
         return ResponseBuilder::success($kpi,201,null,201);
     }
-    public function createKpiScore(kpiScoreRequest $request, $id, Exception $e){
+    public function createKpiScore(kpiScoreRequest $request, $id){
         $kpi = Kpi::findOrFail($id);
 
         if (!$kpi->weight) {
@@ -79,31 +85,37 @@ class KpiController extends Controller
             ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $kpi = $this->KpiRepository->createScore($id, $request->all(), $e);
+        $kpi = $this->KpiRepository->createScore($id, $request->all());
          $this->weightedAverageScore();
+
         return ResponseBuilder::success($kpi,201,null,201);
     }
+
     public function getKpiByUserId($id, Exception $e)
     {
-        $kpi = $this->KpiRepository->getByUserId($id, $e);
+        $kpi = $this->KpiRepository->getByUserId($id);
+
         return ResponseBuilder::success($kpi,200);
     }
 
     public function averageScore(){
         $average = $this->KpiRepository->getAverageScore();
         $this->weightedAverageScore();
+
         return ResponseBuilder::success($average,200,null,200);
     }
 
     public function averageScoreByUserId($id){
         $average = $this->KpiRepository->getAverageScoreByUserId($id);
         $this->weightedAverageScore();
+
         return ResponseBuilder::success($average,200,null,200);
     }
 
     public function getKpisForAllDirectReports(){
         $kpis = $this->KpiRepository->getDirectReportKpis();
         $this->weightedAverageScore();
+
         return ResponseBuilder::success($kpis,200,null,200);
     }
     public function weightedAverageScore () {
@@ -123,9 +135,6 @@ class KpiController extends Controller
             } else {
                 $weighted_average = null;
             }
-           if ($weighted_average > 4){
-            return 'error';
-           }
             Kpi::where('user_id', $user_id)->update(['weighted_average_score' => $weighted_average]);
         }
     }
