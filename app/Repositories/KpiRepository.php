@@ -7,10 +7,11 @@ namespace App\Repositories;
 use App\Models\Kpi;
 use App\Models\User;
 use App\Interfaces\KpiRepositoryInterface;
+use Illuminate\Http\Response;
 
 class KpiRepository implements KpiRepositoryInterface
 {
-    public function getAll($id): array
+    public function getAll($id): object
     {
         $kpis = Kpi::where('user_id', $id)->get();
         foreach ($kpis as $user)
@@ -22,6 +23,7 @@ class KpiRepository implements KpiRepositoryInterface
 
         return $kpis;
     }
+
     public function getById($id)
     {
             $kpi = Kpi::findOrFail($id);
@@ -31,43 +33,64 @@ class KpiRepository implements KpiRepositoryInterface
 
             return $kpi;
     }
-    public function create($data)
+    public function create($data): object
     {
         return Kpi::create($data);
     }
     public function update($id, $data)
     {
         $kpi = Kpi::findOrFail($id);
+        $kpiUserId = $kpi->user_id;
+        $userId = auth()->user()->id;
+        if ($kpiUserId == $userId){
+            $weight = ['weight'];
+            $data = collect($data)->except($weight)->toArray();
+        }else {
+            $data;
+        }
+
         $kpi->update($data);
+
         return $kpi;
     }
 
     public function delete($id)
     {
-        $kpi = Kpi::where('weight', null && 0)->findOrFail($id);
+        $kpi = Kpi::findOrFail($id);
         $kpi->delete();
+
         return true;
     }
     public function createWeight($id, $data)
     {
-            $kpi = Kpi::findOrFail($id);
-            $kpi -> update($data);
-            return $kpi;
+        $kpi = Kpi::findOrFail($id);
+        $kpi -> update($data);
+
+        return $kpi;
     }
     public function createScore($id, $data)
     {
         $kpi = Kpi::findOrFail($id);
+        $kpiUserId = $kpi->user_id;
+        $userId = auth()->user()->id;
+        if ($kpiUserId == $userId){
+            $score = ['score'];
+            $data = collect($data)->except($score)->toArray();
+        }
         $kpi -> update($data);
+
         return $kpi;
     }
     public function getAverageScore(){
         $user_id = auth()->user()->id;
         $averages=Kpi::where('user_id', $user_id)->select('weighted_average_score')->first();
+
         return $averages;
 
     }
     public function getAverageScoreByUserId($id){
         $averages=Kpi::where('user_id', $id)->select('weighted_average_score')->first();
+
         return $averages;
     }
     public function getByUserId($id)
@@ -79,12 +102,14 @@ class KpiRepository implements KpiRepositoryInterface
         $kpi->keyPerformanceArea->strategicDomain;
         $kpi->feedback;
         }
+
         return $kpis;
     }
 
     public function getDirectReportKpis(){
         $directReports = auth()->user()->employees->pluck('id')->toArray();
         $kpis = Kpi::with('user')->whereIn('user_id', $directReports)->orderBy('created_at','DESC')->get();
+
         return $kpis;
     }
 }

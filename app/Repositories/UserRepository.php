@@ -15,7 +15,7 @@ class UserRepository implements UserRepositoryInterface
         $user = User::create($data);
         return $user;
     }
-    public function getUserById($id, $e)
+    public function getUserById($id)
     {
             $user = User::findorFail($id);
             $user->position;
@@ -24,13 +24,13 @@ class UserRepository implements UserRepositoryInterface
             $user->roles;
             return $user;
     }
-    public function updateUser($id, array $data, $e)
+    public function updateUser($id, array $data)
     {
         $user = User::findOrFail($id);
         $user->update($data);
         return $user;
     }
-    public function deleteUser($id ,$e)
+    public function deleteUser($id)
     {
         $user = User::findOrFail($id);
         $department = Department::where('manager_id', $id)->first();
@@ -74,7 +74,7 @@ class UserRepository implements UserRepositoryInterface
         return $userDirectReports;
     }
 
-    public function getAllDirectReportsById($id, $e)
+    public function getAllDirectReportsById($id)
     {
         $user = User::findOrFail($id);
         $userDirectReports = $user->employees;

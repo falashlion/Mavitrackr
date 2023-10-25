@@ -71,22 +71,24 @@ class AuthController extends Controller
         $user->save();
         return ResponseBuilder::success($userArray,201,null,201);
     }
-    public function getUserById($id, Exception $e)
+    public function getUserById($id)
      {
-        $userData = $this->userRepository->getUserById($id, $e);
+        $userData = $this->userRepository->getUserById($id);
         $userData =[ 'user'=> $userData];
+
         return ResponseBuilder::success($userData,200);
     }
     public function getAllUsers(Request $request)
     {
         $user = Auth::user();
         $users = $this->userRepository->getUsers($request);
+
         return ResponseBuilder::success($users,200);
     }
 
-    public function updateUserDetails( $id, UserUpdateRequest $request, Exception $e)
+    public function updateUserDetails( $id, UserUpdateRequest $request)
     {
-        $user = $this->userRepository->updateUser($id,$request->all(), $e);
+        $user = $this->userRepository->updateUser($id,$request->all());
         $filePath = $this->storeProfileImage($user, $request);
         if(!empty($filePath)){
         $user->profile_image = $this->getImageUrl($user->profile_image);
@@ -101,11 +103,13 @@ class AuthController extends Controller
             $user->assignRole($roles);
         }
         $user->save();
+
         return ResponseBuilder::success($userArray,200);
     }
-    public function deleteUser($id ,Exception $e)
+    public function deleteUser($id)
     {
-       $user = $this->userRepository->deleteUser($id, $e);
+       $user = $this->userRepository->deleteUser($id);
+
         return ResponseBuilder::success(204,null,null,204);
     }
     public function logout()
@@ -116,12 +120,14 @@ class AuthController extends Controller
     public function getAllDirectReportsForUser()
     {
         $kpis = $this->userRepository->getAllDirectReports();
+
         return ResponseBuilder::success($kpis, 200);
     }
 
-    public function getAllDirectReportsByUserId($id, Exception $e)
+    public function getAllDirectReportsByUserId($id)
     {
-        $kpis = $this->userRepository->getAllDirectReportsById($id, $e);
+        $kpis = $this->userRepository->getAllDirectReportsById($id);
+
         return ResponseBuilder::success($kpis, 200);
     }
     public function storeProfileImage($user, $request)
@@ -133,6 +139,7 @@ class AuthController extends Controller
             $user->profile_image = 'images/'.$fileName;
             return $filePath;
         }
+
         return '';
     }
      public function getImageUrl($Path)

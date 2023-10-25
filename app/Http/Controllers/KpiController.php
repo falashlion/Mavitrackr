@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\kpiScoreRequest;
+use App\Http\Requests\kpiUpdateRequest;
 use App\Models\Kpi;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\kpiStoreRequest;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
@@ -53,21 +55,35 @@ class KpiController extends Controller
 
         return ResponseBuilder::success($kpi,201,null,201);
     }
-    public function updateKpi(KpiRequest $request, $id)
+    public function updateKpi(kpiUpdateRequest $request, $id)
     {
-        $kpi = $this->KpiRepository->update($id, $request->all());
+        $kpi = $this->KpiRepository->update($id,$request->all());
 
         return ResponseBuilder::success($kpi,200);
     }
     public function deleteKpiDetails($id)
     {
+        $kpi = Kpi::findOrFail($id);
+        $kpiUserId = $kpi->user_id;
+        $userId = auth()->user()->id;
+        if ($kpiUserId == $userId){
+            if (!$kpi->weight == null){
+                return response()->json([
+                    'success' => false,
+                    'code'=> 403,
+                    'locale'=> 'en',
+                    'message'=> 'You are not authorized to delete this KPI.',
+                    'data'=>''
+                ], Response::HTTP_FORBIDDEN);
+            }
+        }
         $this->KpiRepository->delete($id);
         $this->weightedAverageScore();
 
         return ResponseBuilder::success(204,null,null,204);
     }
     public function createKpiWeight(kpiStoreRequest $request, $id){
-        $kpi = $this->KpiRepository->createWeight($id,  $request->all());
+        $kpi = $this->KpiRepository->createWeight($id, $request->all());
         $this->weightedAverageScore();
 
         return ResponseBuilder::success($kpi,201,null,201);
@@ -91,7 +107,7 @@ class KpiController extends Controller
         return ResponseBuilder::success($kpi,201,null,201);
     }
 
-    public function getKpiByUserId($id, Exception $e)
+    public function getKpiByUserId($id, )
     {
         $kpi = $this->KpiRepository->getByUserId($id);
 
