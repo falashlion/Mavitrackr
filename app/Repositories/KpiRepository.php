@@ -7,11 +7,12 @@ namespace App\Repositories;
 use App\Models\Kpi;
 use App\Models\User;
 use App\Interfaces\KpiRepositoryInterface;
+use Doctrine\DBAL\Types\BooleanType;
 use Illuminate\Http\Response;
 
 class KpiRepository implements KpiRepositoryInterface
 {
-    public function getAll($id): object
+    public function getAll( string $id): object
     {
         $kpis = Kpi::where('user_id', $id)->get();
         foreach ($kpis as $user)
@@ -24,7 +25,7 @@ class KpiRepository implements KpiRepositoryInterface
         return $kpis;
     }
 
-    public function getById($id)
+    public function getById(string $id)
     {
             $kpi = Kpi::findOrFail($id);
             $kpi->keyPerformanceArea;
@@ -33,11 +34,11 @@ class KpiRepository implements KpiRepositoryInterface
 
             return $kpi;
     }
-    public function create($data): object
+    public function create( array $data): object
     {
         return Kpi::create($data);
     }
-    public function update($id, $data)
+    public function update(string $id, array $data)
     {
         $kpi = Kpi::findOrFail($id);
         $kpiUserId = $kpi->user_id;
@@ -54,21 +55,21 @@ class KpiRepository implements KpiRepositoryInterface
         return $kpi;
     }
 
-    public function delete($id)
+    public function delete(string $id)
     {
         $kpi = Kpi::findOrFail($id);
         $kpi->delete();
 
         return true;
     }
-    public function createWeight($id, $data)
+    public function createWeight(string $id, array $data)
     {
         $kpi = Kpi::findOrFail($id);
         $kpi -> update($data);
 
         return $kpi;
     }
-    public function createScore($id, $data)
+    public function createScore(string $id, array $data)
     {
         $kpi = Kpi::findOrFail($id);
         $kpiUserId = $kpi->user_id;
@@ -81,19 +82,20 @@ class KpiRepository implements KpiRepositoryInterface
 
         return $kpi;
     }
-    public function getAverageScore(){
+    public function getAverageScore():object
+    {
         $user_id = auth()->user()->id;
         $averages=Kpi::where('user_id', $user_id)->select('weighted_average_score')->first();
 
         return $averages;
 
     }
-    public function getAverageScoreByUserId($id){
+    public function getAverageScoreByUserId(string $id){
         $averages=Kpi::where('user_id', $id)->select('weighted_average_score')->first();
 
         return $averages;
     }
-    public function getByUserId($id)
+    public function getByUserId(string $id)
     {
         $user = User::findOrFail($id);
         $kpis = Kpi::where('user_id',$id)->get();
@@ -106,7 +108,8 @@ class KpiRepository implements KpiRepositoryInterface
         return $kpis;
     }
 
-    public function getDirectReportKpis(){
+    public function getDirectReportKpis(): object
+    {
         $directReports = auth()->user()->employees->pluck('id')->toArray();
         $kpis = Kpi::with('user')->whereIn('user_id', $directReports)->orderBy('created_at','DESC')->get();
 

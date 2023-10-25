@@ -4,15 +4,15 @@ namespace App\Interfaces;
 
 interface KpiRepositoryInterface
 {
-    public function getAll($id);
-    public function getById($id, );
-    public function create($data);
-    public function update($id, $data );
-    public function delete($id);
-    public function createWeight($id, $data);
-    public function createScore($id, $data);
-    public function getByUserId($id);
+    public function getAll(string $id);
+    public function getById(string $id);
+    public function create(array $data);
+    public function update(string $id, array $data );
+    public function delete(string $id);
+    public function createWeight(string $id, array $data);
+    public function createScore(string $id, array $data);
+    public function getByUserId(string $id);
     public function getAverageScore();
-    public function getAverageScoreByUserId($id);
+    public function getAverageScoreByUserId(string $id);
     public function getDirectReportKpis();
 }
