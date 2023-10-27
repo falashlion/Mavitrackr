@@ -6,7 +6,6 @@ use App\Http\Requests\RolesRequest;
 use App\Http\Requests\RolesUpdateRequest;
 use Illuminate\Http\Request;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-use Spatie\Permission\Contracts\Role as ContractsRole;
 use Spatie\Permission\Models\Role;
 
 class RolesController extends Controller
@@ -18,6 +17,11 @@ class RolesController extends Controller
     /**
      * Display a listing of the resource.
      */
+    /**
+     * index
+     *
+     * @return object
+     */
     public function index()
     {
         $roles = Role::all();
@@ -26,6 +30,12 @@ class RolesController extends Controller
 
     /**
      * Show the form for creating a new resource.
+     */
+    /**
+     * create
+     *
+     * @param  object $request
+     * @return object
      */
     public function create(RolesRequest $request)
     {
@@ -45,7 +55,13 @@ class RolesController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the roles resource.
+     */
+    /**
+     * show
+     *
+     * @param  string $id
+     * @return object
      */
     public function show(string $id)
     {
@@ -65,6 +81,13 @@ class RolesController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    /**
+     * update
+     *
+     * @param  object $request
+     * @param  string $id
+     * @return object
+     */
     public function update(RolesUpdateRequest $request, string $id)
     {
         $role = Role::findOrFail($id);
@@ -77,6 +100,12 @@ class RolesController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     */
+    /**
+     * destroy
+     *
+     * @param  string $id
+     * @return object
      */
     public function destroy(string $id)
     {

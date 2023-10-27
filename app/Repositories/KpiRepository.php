@@ -45,12 +45,8 @@ class KpiRepository implements KpiRepositoryInterface
         $kpiUserId = $kpi->user_id;
         $userId = auth()->user()->id;
         if ($kpiUserId == $userId){
-            $weight = ['weight'];
-            $data = collect($data)->except($weight)->toArray();
-        }else {
-            $data;
+            $data = collect($data)->except(['weight'])->toArray();
         }
-
         $kpi->update($data);
 
         return $kpi;
@@ -76,8 +72,7 @@ class KpiRepository implements KpiRepositoryInterface
         $kpiUserId = $kpi->user_id;
         $userId = auth()->user()->id;
         if ($kpiUserId == $userId){
-            $score = ['score'];
-            $data = collect($data)->except($score)->toArray();
+            $data = collect($data)->except(['score'])->toArray();
         }
         $kpi -> update($data);
 

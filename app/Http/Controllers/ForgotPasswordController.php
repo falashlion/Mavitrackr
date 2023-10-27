@@ -5,12 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\passwordResetRequest;
 use App\Http\Requests\passwordSetRequest;
 use App\Repositories\PasswordResetRepository;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use App\Repositories\UserRepository;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 class ForgotPasswordController extends Controller
@@ -23,12 +20,18 @@ class ForgotPasswordController extends Controller
     {
         $this->PasswordResetRepository = $PasswordResetRepository;
     }
+    /**
+     * forgotPassword
+     *
+     * @param  object $request
+     * @return object
+     */
     public function forgotPassword(passwordResetRequest $request)
     {
     $status = Password::sendResetLink($request->all());
     if ($status === Password::RESET_LINK_SENT) {
         return ResponseBuilder::asSuccess()
-            ->withMessage('Reset link sent to your email.')
+        ->withMessage('Reset link sent to your email.')
             ->withHttpCode(200)
             ->build();
     } else {
@@ -40,6 +43,12 @@ class ForgotPasswordController extends Controller
 
     }
 
+    /**
+     * resetPassword
+     *
+     * @param  object $request
+     * @return object
+     */
     public function resetPassword(passwordSetRequest $request)
     {
         $status = Password::reset($request->all(),

@@ -17,11 +17,22 @@ public function __construct(FeedbackRepositoryInterface $feedbackRepository)
     $this->feedbackRepository = $feedbackRepository;
     $this->middleware('jwt.auth');
 }
+/**
+ * getAllFeedbacks
+ *
+ * @return object
+ */
 public function getAllFeedbacks()
 {
     $feedback = $this->feedbackRepository->allFeedbacks();
     return ResponseBuilder::success($feedback,200);
 }
+/**
+ * getFeedbackByKpiId
+ *
+ * @param  string $id
+ * @return object
+ */
 public function getFeedbackByKpiId($id)
 {
     if (!$id)
@@ -29,14 +40,29 @@ public function getFeedbackByKpiId($id)
         return ResponseBuilder::error(404);
     }
     $feedback = $this->feedbackRepository->getByKpiId($id);
+
     return ResponseBuilder::success($feedback,200);
 }
+/**
+ * createFeedback
+ *
+ * @param  mixed $request
+ * @return object
+ */
 public function createFeedback(FeedbackRequest $request)
 {
     $feedback = $this->feedbackRepository->create($request->all());
+
     return ResponseBuilder::success($feedback,201,null,201,);
 }
-public function updateFeedbacks(FeedbackRequest $request, $id)
+/**
+ * updateFeedbacks
+ *
+ * @param  mixed $request
+ * @param  array $id
+ * @return object
+ */
+public function updateFeedbacks(FeedbackRequest $request, array $id)
 {
     $feedback = $this->feedbackRepository->updateFeedback($id, $request->all());
     if (!$id)
@@ -45,6 +71,12 @@ public function updateFeedbacks(FeedbackRequest $request, $id)
     }
     return ResponseBuilder::success($feedback,200);
 }
+/**
+ * deleteFeedback
+ *
+ * @param  string $id
+ * @return mixed
+ */
 public function deleteFeedback($id)
 {
     if (!$id)

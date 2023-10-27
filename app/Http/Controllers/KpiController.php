@@ -100,7 +100,6 @@ class KpiController extends Controller
                 'data' => 'KPI does not have a weight',
             ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }
-
         $kpi = $this->KpiRepository->createScore($id, $request->all());
          $this->weightedAverageScore();
 

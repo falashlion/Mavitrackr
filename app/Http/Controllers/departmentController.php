@@ -21,32 +21,75 @@ class departmentController extends Controller {
         $this->middleware('permission:departments create')->only('createNewDepartment');
     }
 
-    public function getdepartmentsbyid($id, Exception $e) {
-        $department = $this->departmentRepository->getDepartmentById($id, $e);
+    /**
+     * getdepartmentsbyid
+     *
+     * @param  mixed $id
+     * @return object
+     * @expectedException
+     */
+    public function getdepartmentsbyid($id) {
+        $department = $this->departmentRepository->getDepartmentById($id);
+
         return ResponseBuilder::success($department,200);
     }
+    /**
+     * getAllDepartments
+     *
+     * @return object
+     */
     public function getAllDepartments() {
         $departments = $this->departmentRepository->getDepartments();
+
         return ResponseBuilder::success($departments,200);
     }
+    /**
+     * createNewDepartment
+     *
+     * @param  mixed $request
+     * @return object
+     */
     public function createNewDepartment(DepartmentRequest $request) {
         $validatedData = $request->validated();
         $department = $this->departmentRepository->createDepartment($validatedData);
+
         return ResponseBuilder::success($department,201,null,201);
     }
-    public function updateDepartmentDetails(DepartmentUpdateRequest $request, $id, Exception $e) {
+    /**
+     * updateDepartmentDetails
+     *
+     * @param  object $request
+     * @param  string $id
+     * @return object
+     */
+    public function updateDepartmentDetails(DepartmentUpdateRequest $request, $id) {
         $validatedData = $request->validated();
-        $department = $this->departmentRepository->updateDepartment($id, $validatedData, $e);
+        $department = $this->departmentRepository->updateDepartment($id, $validatedData);
+
         return ResponseBuilder::success($department,200);
     }
-    public function deleteDepartmentDetails($id, Exception $e)
+    /**
+     * deleteDepartmentDetails
+     *
+     * @param  string $id
+     * @return object
+     */
+    public function deleteDepartmentDetails($id)
     {
-        $department = $this->departmentRepository->deleteDepartment($id, $e);
+        $department = $this->departmentRepository->deleteDepartment($id);
+
         return ResponseBuilder::success($department,204,null,204);
     }
-    public function getDepartmentMembers($id, Exception $e)
+    /**
+     * getDepartmentMembers
+     *
+     * @param  string $id
+     * @return object
+     */
+    public function getDepartmentMembers($id)
     {
-        $department = $this->departmentRepository->getMembers($id, $e);
+        $department = $this->departmentRepository->getMembers($id);
+
         return ResponseBuilder::success($department,200);
     }
 }

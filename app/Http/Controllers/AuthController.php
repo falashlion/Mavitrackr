@@ -17,6 +17,12 @@ class AuthController extends Controller
 {
     private $userRepository;
 
+    /**
+     * __construct
+     *
+     * @param  mixed $userRepository
+     * @return void
+     */
     public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;
@@ -27,6 +33,12 @@ class AuthController extends Controller
         // $this->middleware('permission:user list')->only('getAllUsers');
         // $this->middleware('permission:direct reports list')->only('getAllDirectReportsByUserId','getAllDirectReportsForUser');
     }
+    /**
+     * login
+     *
+     * @param  mixed $request
+     * @return object
+     */
     public function login(LoginRequest $request)
     {
         $credentials = $request->all();
@@ -46,10 +58,18 @@ class AuthController extends Controller
             'token' => $token,
             'expiration' => $expiration,
         ];
+
         return ResponseBuilder::success($data, 200);
     }
+    /**
+     * register
+     *
+     * @param  mixed $request
+     * @return object
+     */
     public function register(UserStoreRequest $request) {
         if(!$request->validated()){
+
             return ResponseBuilder::error(400);
         }
         $user = $this->userRepository->createUser($request->all());
@@ -69,8 +89,15 @@ class AuthController extends Controller
             $user->assignRole($roles);
         }
         $user->save();
+
         return ResponseBuilder::success($userArray,201,null,201);
     }
+    /**
+     * getAUserByTheirId
+     *
+     * @param  string $id
+     * @return object
+     */
     public function getUserById($id)
      {
         $userData = $this->userRepository->getUserById($id);
@@ -78,14 +105,27 @@ class AuthController extends Controller
 
         return ResponseBuilder::success($userData,200);
     }
-    public function getAllUsers(Request $request)
+    /**
+     * getAllUsers
+     *
+     * @param  mixed $request
+     * @return object
+     */
+    public function getAllUsers( Request $request)
     {
         $user = Auth::user();
-        $users = $this->userRepository->getUsers($request);
+        $users = $this->userRepository->getUsers($request->all());
 
         return ResponseBuilder::success($users,200);
     }
 
+    /**
+     * updateUserDetails
+     *
+     * @param  mixed $id
+     * @param  mixed $request
+     * @return object
+     */
     public function updateUserDetails( $id, UserUpdateRequest $request)
     {
         $user = $this->userRepository->updateUser($id,$request->all());
@@ -106,15 +146,27 @@ class AuthController extends Controller
 
         return ResponseBuilder::success($userArray,200);
     }
+    /**
+     * deleteUser
+     *
+     * @param  string $id
+     * @return object
+     */
     public function deleteUser($id)
     {
        $user = $this->userRepository->deleteUser($id);
 
         return ResponseBuilder::success(204,null,null,204);
     }
+    /**
+     * logout
+     *
+     * @return object
+     */
     public function logout()
     {
         Auth::logout();
+
         return ResponseBuilder::success(200 );
     }
     public function getAllDirectReportsForUser()
@@ -124,12 +176,27 @@ class AuthController extends Controller
         return ResponseBuilder::success($kpis, 200);
     }
 
+    /**
+     * getAllDirectReportsByUserId
+     *
+     * @param  string $id
+     * @return object
+     */
     public function getAllDirectReportsByUserId($id)
     {
         $kpis = $this->userRepository->getAllDirectReportsById($id);
 
         return ResponseBuilder::success($kpis, 200);
     }
+    /**
+     * storeProfileImage
+     *
+     * @param  mixed $user
+     * @param  mixed $request
+     * @return object
+     * @return string
+     * @implements
+     */
     public function storeProfileImage($user, $request)
     {
         if ($request->hasFile('profile_image')) {
@@ -142,6 +209,12 @@ class AuthController extends Controller
 
         return '';
     }
+     /**
+      * getImageUrl
+      *
+      * @param  string $Path
+      * @return string
+      */
      public function getImageUrl($Path)
      {
         return config('app.url') . "/storage/" . $Path;
