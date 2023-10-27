@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Feedback;
 use App\Interfaces\FeedbackRepositoryInterface;
-use App\Models\Kpi;
+
 
 class FeedbackRepository implements FeedbackRepositoryInterface
 {
@@ -30,7 +30,7 @@ class FeedbackRepository implements FeedbackRepositoryInterface
     /**
      * create
      *
-     * @param  mixed $data
+     * @param  array $data
      * @return object
      */
     public function create($data)
@@ -41,7 +41,7 @@ class FeedbackRepository implements FeedbackRepositoryInterface
      * updateFeedback
      *
      * @param  string $id
-     * @param  mixed $data
+     * @param  array $data
      * @return object
      */
     public function updateFeedback($id, $data)
@@ -54,7 +54,7 @@ class FeedbackRepository implements FeedbackRepositoryInterface
      * delete
      *
      * @param  string $id
-     * @return object
+     * @return boolean
      */
     public function delete($id)
     {

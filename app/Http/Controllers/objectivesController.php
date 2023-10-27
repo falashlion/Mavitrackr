@@ -138,7 +138,7 @@ class objectivesController extends Controller
     /**
      * updatefeedback
      *
-     * @param  mixed $request
+     * @param  object $request
      * @param  string $id
      * @return object
      */

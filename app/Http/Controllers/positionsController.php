@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\interfaces\PositionRepositoryInterface;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Repositories\PositionRepository;
 use App\Http\Requests\PositionRequest;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 

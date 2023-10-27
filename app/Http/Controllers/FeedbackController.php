@@ -46,7 +46,7 @@ public function getFeedbackByKpiId($id)
 /**
  * createFeedback
  *
- * @param  mixed $request
+ * @param  object $request
  * @return object
  */
 public function createFeedback(FeedbackRequest $request)
@@ -58,7 +58,7 @@ public function createFeedback(FeedbackRequest $request)
 /**
  * updateFeedbacks
  *
- * @param  mixed $request
+ * @param  object $request
  * @param  array $id
  * @return object
  */
@@ -75,7 +75,7 @@ public function updateFeedbacks(FeedbackRequest $request, array $id)
  * deleteFeedback
  *
  * @param  string $id
- * @return mixed
+ * @return object
  */
 public function deleteFeedback($id)
 {

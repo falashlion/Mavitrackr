@@ -7,11 +7,16 @@ namespace App\Repositories;
 use App\Models\Kpi;
 use App\Models\User;
 use App\Interfaces\KpiRepositoryInterface;
-use Doctrine\DBAL\Types\BooleanType;
-use Illuminate\Http\Response;
+
 
 class KpiRepository implements KpiRepositoryInterface
 {
+    /**
+     * getAll
+     *
+     * @param  string $id
+     * @return object
+     */
     public function getAll( string $id): object
     {
         $kpis = Kpi::where('user_id', $id)->get();
@@ -25,6 +30,12 @@ class KpiRepository implements KpiRepositoryInterface
         return $kpis;
     }
 
+    /**
+     * getById
+     *
+     * @param  string $id
+     * @return object
+     */
     public function getById(string $id)
     {
             $kpi = Kpi::findOrFail($id);
@@ -35,6 +46,12 @@ class KpiRepository implements KpiRepositoryInterface
 
             return $kpi;
     }
+    /**
+     * create
+     *
+     * @param  array $data
+     * @return object
+     */
     public function create( array $data): object
     {
         return Kpi::create($data);
@@ -52,6 +69,12 @@ class KpiRepository implements KpiRepositoryInterface
         return $kpi;
     }
 
+    /**
+     * delete
+     *
+     * @param  string $id
+     * @return boolean
+     */
     public function delete(string $id)
     {
         $kpi = Kpi::findOrFail($id);
@@ -59,6 +82,13 @@ class KpiRepository implements KpiRepositoryInterface
 
         return true;
     }
+    /**
+     * createWeight
+     *
+     * @param  string $id
+     * @param  array $data
+     * @return object
+     */
     public function createWeight(string $id, array $data)
     {
         $kpi = Kpi::findOrFail($id);
@@ -66,6 +96,13 @@ class KpiRepository implements KpiRepositoryInterface
 
         return $kpi;
     }
+    /**
+     * createScore
+     *
+     * @param  string $id
+     * @param  array $data
+     * @return object
+     */
     public function createScore(string $id, array $data)
     {
         $kpi = Kpi::findOrFail($id);
@@ -78,6 +115,11 @@ class KpiRepository implements KpiRepositoryInterface
 
         return $kpi;
     }
+    /**
+     * getAverageScore
+     *
+     * @return object
+     */
     public function getAverageScore():object
     {
         $user_id = auth()->user()->id;
@@ -86,11 +128,23 @@ class KpiRepository implements KpiRepositoryInterface
         return $averages;
 
     }
+    /**
+     * getAverageScoreByUserId
+     *
+     * @param  string $id
+     * @return object
+     */
     public function getAverageScoreByUserId(string $id){
         $averages=Kpi::where('user_id', $id)->select('weighted_average_score')->first();
 
         return $averages;
     }
+    /**
+     * getByUserId
+     *
+     * @param  string $id
+     * @return object
+     */
     public function getByUserId(string $id)
     {
         $user = User::findOrFail($id);
@@ -104,6 +158,11 @@ class KpiRepository implements KpiRepositoryInterface
         return $kpis;
     }
 
+    /**
+     * getDirectReportKpis
+     *
+     * @return object
+     */
     public function getDirectReportKpis(): object
     {
         $directReports = auth()->user()->employees->pluck('id')->toArray();

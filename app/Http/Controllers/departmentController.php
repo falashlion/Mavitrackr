@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DepartmentUpdateRequest;
 use App\interfaces\DepartmentRepositoryInterface;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use App\Http\Requests\DepartmentRequest;
-use Exception;
+
 
 class departmentController extends Controller {
     private $departmentRepository;
@@ -24,7 +23,7 @@ class departmentController extends Controller {
     /**
      * getdepartmentsbyid
      *
-     * @param  mixed $id
+     * @param  string $id
      * @return object
      * @expectedException
      */
@@ -46,7 +45,7 @@ class departmentController extends Controller {
     /**
      * createNewDepartment
      *
-     * @param  mixed $request
+     * @param  object $request
      * @return object
      */
     public function createNewDepartment(DepartmentRequest $request) {

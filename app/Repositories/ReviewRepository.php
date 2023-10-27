@@ -9,6 +9,12 @@ use Illuminate\Validation\Rules\Exists;
 
 class ReviewRepository implements ReviewInterface
 {
+    /**
+     * createReview
+     *
+     * @param  array $data
+     * @return object
+     */
     public function createReview($data)
     {
         $review = Review::updateOrCreate(
@@ -17,6 +23,12 @@ class ReviewRepository implements ReviewInterface
         );
         return $review;
     }
+    /**
+     * find
+     *
+     * @param  string $id
+     * @return object
+     */
     public function find($id)
     {
         $review = Review::findOrFail($id);
@@ -24,6 +36,13 @@ class ReviewRepository implements ReviewInterface
         return $review;
     }
 
+    /**
+     * update
+     *
+     * @param  string $id
+     * @param  array $data
+     * @return object
+     */
     public function update($id, $data)
     {
         $review = Review::findOrFail($id);
@@ -31,11 +50,23 @@ class ReviewRepository implements ReviewInterface
         return $review;
     }
 
+    /**
+     * delete
+     *
+     * @param  string $id
+     * @return boolean
+     */
     public function delete($id)
     {
         $review = Review::findOrFail($id);
         $review->delete();
+        return true;
     }
+    /**
+     * getAll
+     *
+     * @return object
+     */
     public function getAll()
     {
         $user_id = auth()->id();
@@ -50,13 +81,11 @@ class ReviewRepository implements ReviewInterface
 
         $users = User::where('line_manager', $user_id)->pluck('id');
         $user_ids = $users->toArray();
-        // dd($users);
         $user_ids_with_kpis = Kpi::whereIn('user_id', $user_ids )->pluck('user_id')->toArray();
         $query2 = Review::with(['user', 'user.lineManager'])
             ->whereIn('user_id', $user_ids_with_kpis)
             ->orderByDesc('created_at')
             ->get();
-
         $query = $query1->merge($query2);
 
         return $query;

@@ -10,11 +10,23 @@ use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 class UserRepository implements UserRepositoryInterface
 {
+    /**
+     * createUser
+     *
+     * @param  array $data
+     * @return object
+     */
     public function createUser($data)
     {
         $user = User::create($data);
         return $user;
     }
+    /**
+     * getUserById
+     *
+     * @param  string $id
+     * @return object
+     */
     public function getUserById($id)
     {
             $user = User::findorFail($id);
@@ -24,12 +36,25 @@ class UserRepository implements UserRepositoryInterface
             $user->roles;
             return $user;
     }
+    /**
+     * updateUser
+     *
+     * @param  string $id
+     * @param  array $data
+     * @return object
+     */
     public function updateUser($id, array $data)
     {
         $user = User::findOrFail($id);
         $user->update($data);
         return $user;
     }
+    /**
+     * deleteUser
+     *
+     * @param  string $id
+     * @return boolean
+     */
     public function deleteUser($id)
     {
         $user = User::findOrFail($id);
@@ -42,6 +67,12 @@ class UserRepository implements UserRepositoryInterface
         $user->delete();
         return true;
     }
+    /**
+     * getUsers
+     *
+     * @param  object $data
+     * @return object
+     */
     public function getUsers($data)
     {
             $page = $data->query('paginate') ?? '8';
@@ -54,6 +85,11 @@ class UserRepository implements UserRepositoryInterface
             }
             return $users;
     }
+    /**
+     * getDepartmentMembers
+     *
+     * @return mixed
+     */
     public function getDepartmentMembers()
      {
         if ('departments_id' === auth()->user()->departments_id){
@@ -61,6 +97,11 @@ class UserRepository implements UserRepositoryInterface
         return $users;
         }
      }
+    /**
+     * getAllDirectReports
+     *
+     * @return object
+     */
     public function getAllDirectReports()
     {
         $userDetails = auth()->user();
@@ -74,6 +115,12 @@ class UserRepository implements UserRepositoryInterface
         return $userDirectReports;
     }
 
+    /**
+     * getAllDirectReportsById
+     *
+     * @param  string $id
+     * @return object
+     */
     public function getAllDirectReportsById($id)
     {
         $user = User::findOrFail($id);

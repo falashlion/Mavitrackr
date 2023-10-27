@@ -8,8 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\LoginRequest;
-use Exception;
-use Illuminate\Http\JsonResponse;
+use AWS\CRT\Options;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
@@ -26,7 +25,7 @@ class AuthController extends Controller
     public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;
-        $this->middleware('jwt.auth')->except('login');
+        $this->middleware('jwt.auth')->except('login','getAllUsers');
         // $this->middleware('permission:user create')->only('register');
         // $this->middleware('permission:user delete')->only('deleteUser');
         // $this->middleware('permission:user edit')->only('updateUserDetails');
@@ -64,7 +63,7 @@ class AuthController extends Controller
     /**
      * register
      *
-     * @param  mixed $request
+     * @param  object $request
      * @return object
      */
     public function register(UserStoreRequest $request) {
@@ -108,7 +107,7 @@ class AuthController extends Controller
     /**
      * getAllUsers
      *
-     * @param  mixed $request
+     * @param  object $request
      * @return object
      */
     public function getAllUsers( Request $request)
@@ -122,8 +121,8 @@ class AuthController extends Controller
     /**
      * updateUserDetails
      *
-     * @param  mixed $id
-     * @param  mixed $request
+     * @param  string $id
+     * @param  object $request
      * @return object
      */
     public function updateUserDetails( $id, UserUpdateRequest $request)
@@ -192,7 +191,7 @@ class AuthController extends Controller
      * storeProfileImage
      *
      * @param  mixed $user
-     * @param  mixed $request
+     * @param  object $request
      * @return object
      * @return string
      * @implements
@@ -202,7 +201,7 @@ class AuthController extends Controller
         if ($request->hasFile('profile_image')) {
             $file = $request->file('profile_image');
             $fileName = time(). '_' . $file->getClientOriginalName();
-            $filePath = $file->storeAs('/public/images/' . $fileName);
+            $filePath = $file->storeAs(path:'images/' . $fileName, options:'s3');
             $user->profile_image = 'images/'.$fileName;
             return $filePath;
         }
