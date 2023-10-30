@@ -12,6 +12,11 @@ class CreateReviewRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
+    /**
+     * authorize
+     *
+     * @return bool
+     */
     public function authorize(): bool
     {
         return true;
@@ -31,6 +36,13 @@ class CreateReviewRequest extends FormRequest
             'author_dueDate' => 'date',
         ];
     }
+    /**
+     * failedValidation
+     *
+     * @param  object $validator
+     * @return object
+     * @return mixed
+     */
     protected function failedValidation(Validator $validator)
     {
         if ($this->expectsJson()) {

@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 
 class Department extends Model
@@ -26,10 +25,20 @@ class Department extends Model
         'id'
     ];
 
+    /**
+     * users
+     *
+     * @return object
+     */
     public function users(){
         return $this->hasMany(User::class, 'departments_id'); //one to many relationship with the user model
     }
 
+    /**
+     * manager
+     *
+     * @return object
+     */
     public function manager()
     {
         return $this->belongsTo(User::class, 'manager_id');

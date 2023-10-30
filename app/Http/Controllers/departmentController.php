@@ -23,8 +23,8 @@ class departmentController extends Controller {
     /**
      * getdepartmentsbyid
      *
-     * @param  string $id
-     * @return object
+     * @param  string $id The department id for the department whose information is to be gotten.
+     * @return object ResponseBuilder  The department object is returned
      * @expectedException
      */
     public function getdepartmentsbyid($id) {
@@ -35,7 +35,7 @@ class departmentController extends Controller {
     /**
      * getAllDepartments
      *
-     * @return object
+     * @return object returns an object containing the array of all departments
      */
     public function getAllDepartments() {
         $departments = $this->departmentRepository->getDepartments();
@@ -45,8 +45,8 @@ class departmentController extends Controller {
     /**
      * createNewDepartment
      *
-     * @param  object $request
-     * @return object
+     * @param  DepartmentRequest $request The parameters required to create a department
+     * @return object $department object this  returns the object of the created depart
      */
     public function createNewDepartment(DepartmentRequest $request) {
         $validatedData = $request->validated();

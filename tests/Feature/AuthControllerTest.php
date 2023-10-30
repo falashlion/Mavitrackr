@@ -1,4 +1,5 @@
 <?php
+use GuzzleHttp\Psr7\UploadedFile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
@@ -313,4 +314,15 @@ class AuthControllerTest extends TestCase
                     'message' => 'Error #400',
                 ]);
             }
+        public function testStoreProfileImage()
+        {
+            $user = User::factory()->create();
+            $file = UploadedFile::factory()->faker()->image('profile.jpg');
+            $request = new Illuminate\Http\Request();
+            $request->merge(['profile_image' => $file]);
+            $filePath = $this->app->make(ProfileImageController::class)->storeProfileImage($user, $request);
+            $this->assertStringContainsString('images/', $filePath);
+            $this->assertFileExists(storage_path('app/' . $filePath));
+            $this->assertEquals('images/' . $file->hashName(), $user->profile_image);
+        }
 }

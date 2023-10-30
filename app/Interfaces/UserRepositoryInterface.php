@@ -9,7 +9,7 @@ interface UserRepositoryInterface {
     public function getUserById(string $id);
     public function updateUser(string $id, array $data);
     public function deleteUser(string $id);
-    public function getUsers(array $request);
+    public function getUsers();
     public function getAllDirectReports();
     public function getAllDirectReportsById($id);
     public function getDepartmentMembers();

@@ -4,11 +4,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserUpdateRequest;
 use App\interfaces\UserRepositoryInterface;
 use App\Models\Department;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\LoginRequest;
-use AWS\CRT\Options;
+use Illuminate\Support\Facades\Storage;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
@@ -19,8 +18,9 @@ class AuthController extends Controller
     /**
      * __construct
      *
-     * @param  mixed $userRepository
-     * @return void
+     * @param  object $userRepository
+     * creates the connection between the controller and the repository the
+     * through the interfaces
      */
     public function __construct(UserRepositoryInterface $userRepository)
     {
@@ -35,8 +35,8 @@ class AuthController extends Controller
     /**
      * login
      *
-     * @param  mixed $request
-     * @return object
+     * @param  object $request login credetials passed in the request body
+     * @return object the object of the user's information is returned
      */
     public function login(LoginRequest $request)
     {
@@ -63,8 +63,9 @@ class AuthController extends Controller
     /**
      * register
      *
-     * @param  object $request
-     * @return object
+     * @param  object $request data required to create a new user passed in the body of the request.
+     *
+     * @return object the object of the user's information is returned
      */
     public function register(UserStoreRequest $request) {
         if(!$request->validated()){
@@ -94,8 +95,8 @@ class AuthController extends Controller
     /**
      * getAUserByTheirId
      *
-     * @param  string $id
-     * @return object
+     * @param  string $id the user's id passed in the url
+     * @return object the object of the user's information is returned
      */
     public function getUserById($id)
      {
@@ -110,10 +111,9 @@ class AuthController extends Controller
      * @param  object $request
      * @return object
      */
-    public function getAllUsers( Request $request)
+    public function getAllUsers()
     {
-        $user = Auth::user();
-        $users = $this->userRepository->getUsers($request->all());
+        $users = $this->userRepository->getUsers();
 
         return ResponseBuilder::success($users,200);
     }
@@ -121,9 +121,10 @@ class AuthController extends Controller
     /**
      * updateUserDetails
      *
-     * @param  string $id
-     * @param  object $request
-     * @return object
+     * @param  string $id user's id
+     * @param  object $request object of user data
+     * @return object user object
+     * updates a particular user in the mavitrackr application
      */
     public function updateUserDetails( $id, UserUpdateRequest $request)
     {
@@ -138,9 +139,9 @@ class AuthController extends Controller
             foreach ($roles as $role) {
                 $user->assignRole($role);
             }
-        } else {
-            $user->assignRole($roles);
-        }
+            } else {
+                $user->assignRole($roles);
+            }
         $user->save();
 
         return ResponseBuilder::success($userArray,200);
@@ -190,10 +191,9 @@ class AuthController extends Controller
     /**
      * storeProfileImage
      *
-     * @param  mixed $user
-     * @param  object $request
-     * @return object
-     * @return string
+     * @param  object $user
+     * @param  object $request user object parameters
+     * @return string it returns the path of the image
      * @implements
      */
     public function storeProfileImage($user, $request)
@@ -201,9 +201,10 @@ class AuthController extends Controller
         if ($request->hasFile('profile_image')) {
             $file = $request->file('profile_image');
             $fileName = time(). '_' . $file->getClientOriginalName();
-            $filePath = $file->storeAs(path:'images/' . $fileName, options:'s3');
-            $user->profile_image = 'images/'.$fileName;
-            return $filePath;
+            $filePath = 'images/' . $fileName;
+            $path = Storage::disk('s3')->put($filePath,file_get_contents($file));
+            $user->profile_image = $filePath;
+            return $fileName;
         }
 
         return '';
@@ -211,11 +212,11 @@ class AuthController extends Controller
      /**
       * getImageUrl
       *
-      * @param  string $Path
-      * @return string
+      * @param  string $Path the image path
+      * @return string Returns the image url with the aws url attached
       */
      public function getImageUrl($Path)
      {
-        return config('app.url') . "/storage/" . $Path;
+        return env('AWS_URL').$Path;
      }
   }

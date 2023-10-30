@@ -185,12 +185,9 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        // 'Example' => App\Facades\Example::class,
+    // 'Example' => App\Facades\Example::class,
     'JWTAuth' => App\Tymon\JWTAuth\Facades\JWTAuth::class,
     'JWTFactory' => App\Tymon\JWTAuth\Facades\JWTFactory::class,
     ])->toArray(),
-
-    // config/app.php
-
 
 ];

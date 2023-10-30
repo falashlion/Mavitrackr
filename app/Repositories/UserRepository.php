@@ -70,13 +70,12 @@ class UserRepository implements UserRepositoryInterface
     /**
      * getUsers
      *
-     * @param  object $data
-     * @return object
+     *
+     * @return object this returns the object of all the users in the application.
      */
-    public function getUsers($data)
+    public function getUsers()
     {
-            $page = $data->query('paginate') ?? '8';
-            $users = User::select()->paginate($page);
+            $users = User::paginate();
             foreach ($users as $user){
             $user->position;
             $user->department;
@@ -88,12 +87,13 @@ class UserRepository implements UserRepositoryInterface
     /**
      * getDepartmentMembers
      *
-     * @return mixed
+     * @return mixed returns the object of the users
      */
     public function getDepartmentMembers()
      {
-        if ('departments_id' === auth()->user()->departments_id){
-        $users = User::all();
+        $department = 'departments_id' === auth()->user()->departments_id;
+        if ($department){
+        $users = User::where('departments_id',$department)->with('user', 'user.position','user.lineManager', 'user.roles')->get();
         return $users;
         }
      }
