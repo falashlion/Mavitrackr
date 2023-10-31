@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\Department;
 use App\Models\User;
 use App\Interfaces\UserRepositoryInterface;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+
 
 
 class UserRepository implements UserRepositoryInterface
@@ -13,8 +13,10 @@ class UserRepository implements UserRepositoryInterface
     /**
      * createUser
      *
-     * @param  array $data
-     * @return object
+     * Creates a new user
+     *
+     * @param  array $data An array of data to create the user with
+     * @return object Returns an object containing the newly created user data
      */
     public function createUser($data)
     {
@@ -24,8 +26,10 @@ class UserRepository implements UserRepositoryInterface
     /**
      * getUserById
      *
-     * @param  string $id
-     * @return object
+     * Retrieves a user by ID
+     *
+     * @param  string $id The ID of the user to retrieve
+     * @return object Returns an object containing the user data
      */
     public function getUserById($id)
     {
@@ -39,9 +43,11 @@ class UserRepository implements UserRepositoryInterface
     /**
      * updateUser
      *
-     * @param  string $id
-     * @param  array $data
-     * @return object
+     * Updates an existing user
+     *
+     * @param  string $id The ID of the user to update
+     * @param  array $data An array of data to update the user with
+     * @return object Returns an object containing the updated user data
      */
     public function updateUser($id, array $data)
     {
@@ -52,8 +58,10 @@ class UserRepository implements UserRepositoryInterface
     /**
      * deleteUser
      *
-     * @param  string $id
-     * @return boolean
+     * Deletes a user by ID
+     *
+     * @param  string $id The ID of the user to delete
+     * @return boolean Returns true if the user was successfully deleted, false otherwise
      */
     public function deleteUser($id)
     {
@@ -70,8 +78,9 @@ class UserRepository implements UserRepositoryInterface
     /**
      * getUsers
      *
+     * Retrieves all users
      *
-     * @return object this returns the object of all the users in the application.
+     * @return object Returns an object containing all users in the application
      */
     public function getUsers()
     {
@@ -87,20 +96,22 @@ class UserRepository implements UserRepositoryInterface
     /**
      * getDepartmentMembers
      *
-     * @return mixed returns the object of the users
+     * Retrieves all users in a department
+     *
+     * @return object Returns an object containing all users in the department
      */
     public function getDepartmentMembers()
      {
-        $department = 'departments_id' === auth()->user()->departments_id;
-        if ($department){
+        $department = auth()->user()->departments_id;
         $users = User::where('departments_id',$department)->with('user', 'user.position','user.lineManager', 'user.roles')->get();
         return $users;
-        }
      }
     /**
      * getAllDirectReports
      *
-     * @return object
+     * Retrieves all direct reports of the authenticated user
+     *
+     * @return object Returns an object containing all direct reports of the authenticated user
      */
     public function getAllDirectReports()
     {
@@ -118,8 +129,10 @@ class UserRepository implements UserRepositoryInterface
     /**
      * getAllDirectReportsById
      *
-     * @param  string $id
-     * @return object
+     * Retrieves all direct reports of a user by ID
+     *
+     * @param  string $id The ID of the user to retrieve direct reports for
+     * @return object Returns an object containing all direct reports of the user with the given ID
      */
     public function getAllDirectReportsById($id)
     {

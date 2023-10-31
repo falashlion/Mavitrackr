@@ -14,8 +14,10 @@ class KpiRepository implements KpiRepositoryInterface
     /**
      * getAll
      *
-     * @param  string $id
-     * @return object
+     * Retrieves all KPIs for a given user ID
+     *
+     * @param  string $id The ID of the user to retrieve KPIs for
+     * @return object Returns an object containing all KPIs for the given user ID
      */
     public function getAll( string $id): object
     {
@@ -33,8 +35,10 @@ class KpiRepository implements KpiRepositoryInterface
     /**
      * getById
      *
-     * @param  string $id
-     * @return object
+     * Retrieves a KPI by ID
+     *
+     * @param  string $id The ID of the KPI to retrieve
+     * @return object Returns an object containing the KPI data
      */
     public function getById(string $id)
     {
@@ -49,13 +53,24 @@ class KpiRepository implements KpiRepositoryInterface
     /**
      * create
      *
-     * @param  array $data
-     * @return object
+     * Creates a new KPI
+     *
+     * @param  array $data An array of data to create the KPI with
+     * @return object Returns an object containing the newly created KPI data
      */
     public function create( array $data): object
     {
         return Kpi::create($data);
     }
+        /**
+     * update
+     *
+     * Updates an existing KPI
+     *
+     * @param  string $id The ID of the KPI to update
+     * @param  array $data An array of data to update the KPI with
+     * @return object Returns an object containing the updated KPI data
+     */
     public function update(string $id, array $data)
     {
         $kpi = Kpi::findOrFail($id);
@@ -72,8 +87,10 @@ class KpiRepository implements KpiRepositoryInterface
     /**
      * delete
      *
-     * @param  string $id
-     * @return boolean
+     * Deletes a KPI by ID
+     *
+     * @param  string $id The ID of the KPI to delete
+     * @return boolean Returns true if the KPI was successfully deleted, false otherwise
      */
     public function delete(string $id)
     {
@@ -85,9 +102,11 @@ class KpiRepository implements KpiRepositoryInterface
     /**
      * createWeight
      *
-     * @param  string $id
-     * @param  array $data
-     * @return object
+     * Updates the weight of a KPI
+     *
+     * @param  string $id The ID of the KPI to update the weight for
+     * @param  array $data An array of data to update the KPI weight with
+     * @return object Returns an object containing the updated KPI data
      */
     public function createWeight(string $id, array $data)
     {
@@ -99,9 +118,11 @@ class KpiRepository implements KpiRepositoryInterface
     /**
      * createScore
      *
-     * @param  string $id
-     * @param  array $data
-     * @return object
+     * Updates the score of a KPI
+     *
+     * @param  string $id The ID of the KPI to update the score for
+     * @param  array $data An array of data to update the KPI score with
+     * @return object Returns an object containing the updated KPI data
      */
     public function createScore(string $id, array $data)
     {
@@ -118,7 +139,9 @@ class KpiRepository implements KpiRepositoryInterface
     /**
      * getAverageScore
      *
-     * @return object
+     * Retrieves the average score of all KPIs for the authenticated user
+     *
+     * @return object Returns an object containing the average score of all KPIs for the authenticated user
      */
     public function getAverageScore():object
     {
@@ -131,8 +154,10 @@ class KpiRepository implements KpiRepositoryInterface
     /**
      * getAverageScoreByUserId
      *
-     * @param  string $id
-     * @return object
+     * Retrieves the average score of all KPIs for a given user ID
+     *
+     * @param  string $id The ID of the user to retrieve the average score for
+     * @return object Returns an object containing the average score of all KPIs for the given user ID
      */
     public function getAverageScoreByUserId(string $id){
         $averages=Kpi::where('user_id', $id)->select('weighted_average_score')->first();
@@ -142,8 +167,10 @@ class KpiRepository implements KpiRepositoryInterface
     /**
      * getByUserId
      *
-     * @param  string $id
-     * @return object
+     * Retrieves all KPIs for a given user ID
+     *
+     * @param  string $id The ID of the user to retrieve KPIs for
+     * @return object Returns an object containing all KPIs for the given user ID
      */
     public function getByUserId(string $id)
     {
@@ -157,11 +184,12 @@ class KpiRepository implements KpiRepositoryInterface
 
         return $kpis;
     }
-
     /**
      * getDirectReportKpis
      *
-     * @return object
+     * Retrieves all KPIs for direct reports of the authenticated user
+     *
+     * @return object Returns an object containing all KPIs for direct reports of the authenticated user
      */
     public function getDirectReportKpis(): object
     {

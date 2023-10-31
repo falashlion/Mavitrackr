@@ -20,7 +20,7 @@ public function __construct(FeedbackRepositoryInterface $feedbackRepository)
 /**
  * getAllFeedbacks
  *
- * @return object
+ * @return ResponseBuilder::object
  */
 public function getAllFeedbacks()
 {
@@ -31,7 +31,7 @@ public function getAllFeedbacks()
  * getFeedbackByKpiId
  *
  * @param  string $id
- * @return object
+ * @return ResponseBuilder::object
  */
 public function getFeedbackByKpiId($id)
 {
@@ -47,7 +47,7 @@ public function getFeedbackByKpiId($id)
  * createFeedback
  *
  * @param  object $request
- * @return object
+ * @return ResponseBuilder::object
  */
 public function createFeedback(FeedbackRequest $request)
 {
@@ -60,7 +60,7 @@ public function createFeedback(FeedbackRequest $request)
  *
  * @param  object $request
  * @param  array $id
- * @return object
+ * @return ResponseBuilder::object
  */
 public function updateFeedbacks(FeedbackRequest $request, array $id)
 {
@@ -75,7 +75,7 @@ public function updateFeedbacks(FeedbackRequest $request, array $id)
  * deleteFeedback
  *
  * @param  string $id
- * @return object
+ * @return ResponseBuilder::object
  */
 public function deleteFeedback($id)
 {

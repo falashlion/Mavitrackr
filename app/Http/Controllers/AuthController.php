@@ -35,8 +35,11 @@ class AuthController extends Controller
     /**
      * login
      *
-     * @param  object $request login credetials passed in the request body
-     * @return object the object of the user's information is returned
+     * @param  LoginRequest $request login credetials passed in the request body
+     * @return ResponseBuilder::object the object of the user's information is returned
+     * @throws \Exception If the user's credentials are invalid.
+     * This method logs in the user by checking the user's credentials against the database. If the user's credentials are valid, the method returns an object containing the user's information.
+     * If the user's credentials are invalid, the method throws an exception.
      */
     public function login(LoginRequest $request)
     {
@@ -61,11 +64,13 @@ class AuthController extends Controller
         return ResponseBuilder::success($data, 200);
     }
     /**
-     * register
+     * Register method.
      *
-     * @param  object $request data required to create a new user passed in the body of the request.
-     *
-     * @return object the object of the user's information is returned
+     * @param  UserStoreRequest $request data required to create a new user passed in the body of the request.
+     * @throws \Exception If the request is not validated.
+     * @return ResponseBuilder::object the object of the user's information is returned
+     * This method creates a new user by validating the request and creating a new user in the database.
+     * If the request is not validated, the method throws an exception.
      */
     public function register(UserStoreRequest $request) {
         if(!$request->validated()){
@@ -94,9 +99,10 @@ class AuthController extends Controller
     }
     /**
      * getAUserByTheirId
+     * This method retrieves a user's information by their ID.
      *
-     * @param  string $id the user's id passed in the url
-     * @return object the object of the user's information is returned
+     * @param  string $id The user's ID passed in the URL
+     * @return ResponseBuilder::object The object of the user's information is returned
      */
     public function getUserById($id)
      {
@@ -108,8 +114,8 @@ class AuthController extends Controller
     /**
      * getAllUsers
      *
-     * @param  object $request
-     * @return object
+     * This method retrieves all users' information from the database.
+     * @return ResponseBuilder::object The object containing all users' information is returned.
      */
     public function getAllUsers()
     {
@@ -121,9 +127,9 @@ class AuthController extends Controller
     /**
      * updateUserDetails
      *
-     * @param  string $id user's id
-     * @param  object $request object of user data
-     * @return object user object
+     * @param  string $id The user's ID.
+     * @param  UserUpdateRequest $request The object of user data to be updated.
+     * @return ResponseBuilder::object user object
      * updates a particular user in the mavitrackr application
      */
     public function updateUserDetails( $id, UserUpdateRequest $request)
@@ -149,8 +155,8 @@ class AuthController extends Controller
     /**
      * deleteUser
      *
-     * @param  string $id
-     * @return object
+     * @param  string $id The user's ID.
+     * @return ResponseBuilder::void
      */
     public function deleteUser($id)
     {
@@ -161,7 +167,8 @@ class AuthController extends Controller
     /**
      * logout
      *
-     * @return object
+     * @return ResponseBuilder::object object indicating successfull logout
+     * This method logs out the user from the application.
      */
     public function logout()
     {
@@ -169,6 +176,11 @@ class AuthController extends Controller
 
         return ResponseBuilder::success(200 );
     }
+    /**
+    *Get all direct reports for authenticated user.
+    *@return ResponseBuilder::object The object containing all direct reports' information is returned.
+    *This method retrieves all direct reports' information for a user from the database.
+    */
     public function getAllDirectReportsForUser()
     {
         $kpis = $this->userRepository->getAllDirectReports();
@@ -179,8 +191,9 @@ class AuthController extends Controller
     /**
      * getAllDirectReportsByUserId
      *
-     * @param  string $id
-     * @return object
+     * @param  string $id The user's ID.
+     * @return ResponseBuilder::object  The object containing all direct reports' information is returned.
+     * This method retrieves all direct reports' information for a user by their ID from the database.
      */
     public function getAllDirectReportsByUserId($id)
     {
@@ -191,10 +204,11 @@ class AuthController extends Controller
     /**
      * storeProfileImage
      *
-     * @param  object $user
-     * @param  object $request user object parameters
-     * @return string it returns the path of the image
-     * @implements
+     * @param  object $user The user object.
+     * @param  object $request The user object parameters caring the image
+     * @return string The path of the image.
+     *
+     * This method stores the user's profile image to the database.
      */
     public function storeProfileImage($user, $request)
     {
@@ -214,6 +228,8 @@ class AuthController extends Controller
       *
       * @param  string $Path the image path
       * @return string Returns the image url with the aws url attached
+      *
+      * This method retrieves the image URL with the AWS URL attached.
       */
      public function getImageUrl($Path)
      {

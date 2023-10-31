@@ -24,7 +24,7 @@ class departmentController extends Controller {
      * getdepartmentsbyid
      *
      * @param  string $id The department id for the department whose information is to be gotten.
-     * @return object ResponseBuilder  The department object is returned
+     * @return ResponseBuilder::object ResponseBuilder  The department object is returned
      * @expectedException
      */
     public function getdepartmentsbyid($id) {
@@ -35,7 +35,7 @@ class departmentController extends Controller {
     /**
      * getAllDepartments
      *
-     * @return object returns an object containing the array of all departments
+     * @return ResponseBuilder::object returns an object containing the array of all departments
      */
     public function getAllDepartments() {
         $departments = $this->departmentRepository->getDepartments();
@@ -46,7 +46,7 @@ class departmentController extends Controller {
      * createNewDepartment
      *
      * @param  DepartmentRequest $request The parameters required to create a department
-     * @return object $department object this  returns the object of the created depart
+     * @return ResponseBuilder::object  This returns the object of the created department
      */
     public function createNewDepartment(DepartmentRequest $request) {
         $validatedData = $request->validated();
@@ -57,9 +57,9 @@ class departmentController extends Controller {
     /**
      * updateDepartmentDetails
      *
-     * @param  object $request
-     * @param  string $id
-     * @return object
+     * @param  DepartmentUpdateRequest $request The parameters required to update a department
+     * @param  string $id Department's ID
+     * @return ResponseBuilder::object This returns the object of the updated department
      */
     public function updateDepartmentDetails(DepartmentUpdateRequest $request, $id) {
         $validatedData = $request->validated();
@@ -70,8 +70,9 @@ class departmentController extends Controller {
     /**
      * deleteDepartmentDetails
      *
-     * @param  string $id
-     * @return object
+     * @param  string $id Department's ID
+     * @return ResponseBuilder::void
+     * This deletes the department from the database
      */
     public function deleteDepartmentDetails($id)
     {
@@ -82,8 +83,8 @@ class departmentController extends Controller {
     /**
      * getDepartmentMembers
      *
-     * @param  string $id
-     * @return object
+     * @param  string $id Department's ID
+     * @return ResponseBuilder::object This returns the object of the users in the Department
      */
     public function getDepartmentMembers($id)
     {
