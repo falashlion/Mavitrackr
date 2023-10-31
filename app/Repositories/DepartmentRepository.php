@@ -4,44 +4,81 @@ namespace App\Repositories;
 
 use App\Interfaces\DepartmentRepositoryInterface;
 use App\Models\Department;
-use PhpParser\Node\Stmt\Catch_;
 
 class DepartmentRepository implements DepartmentRepositoryInterface
 {
-    public function getDepartmentById($id ,$e) {
-        try {
-            $department = Department::find($id);
-            return $department;
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['error' => 'Record not found'], 404);
-        }
+    /**
+     * getDepartmentById
+     *
+     * @param  string $id
+     * @return object
+     */
+    public function getDepartmentById($id) {
+        $department = Department::findOrFail($id);
+
+        return $department;
     }
 
+    /**
+     * getDepartments
+     *
+     * @return object
+     *
+     */
     public function getDepartments() {
         $departments = Department::all('*');
+
         return $departments;
     }
 
+    /**
+     * createDepartment
+     *
+     * @param  array $data
+     * @return object
+     */
     public function createDepartment(array $data) {
         $department = Department::create($data);
+
         return $department;
     }
 
-    public function updateDepartment($id, array $data, $e) {
-
-        $department = Department::find($id);
+    /**
+     * updateDepartment
+     *
+     * @param  string $id
+     * @param  array $data
+     * @return object
+     */
+    public function updateDepartment($id, array $data) {
+        $department = Department::findOrFail($id);
         $department->update($data);
+
         return $department;
     }
 
-    public function deleteDepartment($id, $e) {
-            $department = Department::find($id);
+    /**
+     * deleteDepartment
+     *
+     * @param  string $id
+     * @return boolean
+     */
+    public function deleteDepartment($id) {
+            $department = Department::findOrFail($id);
             $department->delete();
+
             return true;
     }
-    public function getMembers($id, $e){
-            $department = Department::find($id);
+    /**
+     * getMembers
+     *
+     * @param  string $id
+     * @return object
+     */
+    public function getMembers($id){
+            $department = Department::findOrFail($id);
             $members = $department->users;
+
             return $members;
 
     }

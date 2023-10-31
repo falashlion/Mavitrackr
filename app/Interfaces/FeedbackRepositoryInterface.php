@@ -8,11 +8,11 @@ interface FeedbackRepositoryInterface
 
     public function getByKpiId($id);
 
-    public function create($data);
+    public function create(array $data);
 
-    public function updateFeedback(array $data, $id);
+    public function updateFeedback(array $data, string $id);
 
-    public function delete($id);
+    public function delete(string $id);
 
-    public function find($id);
+    public function find(string $id);
 }

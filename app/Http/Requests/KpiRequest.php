@@ -6,6 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as ApiResponseBuilder;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use Illuminate\Http\JsonResponse;
+
 class KpiRequest extends FormRequest
 {
     /**
@@ -23,16 +26,27 @@ class KpiRequest extends FormRequest
      */
     public function rules(): array
     {
+        $totalWeight = auth()->user()->keyPerformanceIndicators->sum('weight');
         return [
             'title' => 'required|string',
             'kpas_id' => 'exists:kpas,id',
-            'weight'=> 'string',
+            'weight'=> 'integer',
+            'max:'.(100 - $totalWeight),
         ];
     }
     protected function failedValidation(Validator $validator)
     {
-        $response = ApiResponseBuilder::error(400);
-        throw new HttpResponseException($response);
+        if ($this->expectsJson()) {
+            throw new HttpResponseException(response()->json([
+                'success' => false,
+                'code'=> 422,
+                'locale'=> 'en',
+                'message'=> 'Invalid request',
+                'data'=>$validator->errors()
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY));
+        }
+
+        parent::failedValidation($validator);
     }
 }
 

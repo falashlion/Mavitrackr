@@ -10,6 +10,7 @@ use App\Http\Controllers\KpaController;
 use App\Http\Controllers\KpiController;
 use App\Http\Controllers\KpiScoringController;
 use App\Http\Controllers\RolesController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,24 +28,20 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::group([
+Route::group(
+[
     'middleware' => 'api',
-    //prefix' => 'api',
 ],
-function () {
+function ()
+{
     Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/register', [AuthController::class, 'register']);
 });
-
-
-
 Route::group
 ([
     'middleware' => 'api',
-    // 'prefix' => 'auth'
-
-],
-function ()
+ ],
+    function ()
     {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/users', [AuthController::class, 'getAllUsers']);
@@ -59,7 +56,6 @@ Route::
 group([],
 function()
     {
-
         //departments endpoints
         Route::get('/departments', [departmentController::class, 'getAllDepartments']);
         Route::post('/departments', [departmentController::class, 'createNewDepartment']);
@@ -91,16 +87,12 @@ function()
         Route::put('/kpis/{id}', [KpiController::class,'updateKpi']);
         Route::delete('/kpis/{id}',[KpiController::class,'deleteKpiDetails']);
         Route::get('/kpis/{id}',[KpiController::class,'getKpiById']);
-        Route::get('/kpis/reports',[KpiController::class,'getKpisForAllDirectReports']);
+        Route::get('/reports/kpis',[KpiController::class,'getKpisForAllDirectReports']);
         Route::post('kpis/weights/{id}',[KpiController::class,'createKpiWeight']);
         Route::post('kpis/scores/{id}',[KpiController::class,'createKpiScore']);
         Route::get('/users/kpis/{id}',[KpiController::class,'getKpiByUserId']);
-        // key performance indicators scoring
-        Route::get('/kpis/scorings', [KpiScoringController::class,'getKpiScoring']);
-        Route::post('/kpis/{id}/scorings', [KpiScoringController::class,'updateKpiScoring']);
-        Route::put('/kpis/{id}/scorings', [KpiScoringController::class,'updateKpisScoring']);
-        Route::delete('/kpis/{id}/scorings',[KpiScoringController::class,'deleteKpiScoring']);
-        Route::get('/kpis/{id}/scorings',[KpiScoringController::class,'getKpiScoringbyid']);
+        Route::get('/weighted-average-score/kpis/',[KpiController::class,'averageScore']);
+        Route::get('/weighted-average-score/kpis/{id}/',[KpiController::class,'averageScoreByUserId']);
         // feedbacks endpoints
         Route::get('/feedbacks/kpis', [FeedbackController::class, 'getAllFeedbacks']);
         Route::post('/feedbacks/kpis', [FeedbackController::class, 'createFeedback']);
@@ -108,14 +100,20 @@ function()
         Route::delete('/feedbacks/kpis/{id}',[FeedbackController::class,'deleteFeedback']);
         Route::get('/feedbacks/kpis/{id}', [FeedbackController::class, 'getFeedbackByKpiId']);
         //password reset endpoints
-        Route::post('/forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
-        Route::post('/reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
+        Route::post('/forget-password', [ForgotPasswordController::class, 'forgotPassword']);
+        Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword']);
         // Roles endpoint
         Route::get('/roles', [RolesController::class, 'index']);
         Route::post('/roles', [RolesController::class, 'create']);
         Route::put('/roles/{id}', [RolesController::class,'update']);
         Route::delete('/roles/{id}',[RolesController::class,'destroy']);
         Route::get('/roles/{id}',[RolesController::class,'show']);
+        // Review endpoints
+        Route::post('/reviews', [ReviewController::class, 'store']);
+        Route::get('/reviews', [ReviewController::class, 'index']);
+        Route::get('/reviews/{id}', [ReviewController::class, 'show']);
+        Route::put('/reviews/{id}', [ReviewController::class, 'update']);
+        Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']);
     }
 );
 

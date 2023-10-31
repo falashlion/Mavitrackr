@@ -4,11 +4,15 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use PHPOpenSourceSaver\JWTAuth\Exceptions\TokenExpiredException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Spatie\Permission\Exceptions\UnauthorizedException;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Response;
+use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -46,7 +50,25 @@ class Handler extends ExceptionHandler
                 'locale'=> 'en',
                 'message'=> 'Unauthorized',
                 'data'=>''
-            ], 401);
+            ],Response::HTTP_UNAUTHORIZED);
+        }
+        if ($exception instanceof TokenExpiredException) {
+            return response()->json([
+                'success' => false,
+                'code'=> 401,
+                'locale'=> 'en',
+                'message'=> 'Unauthorized expired token',
+                'data'=>''
+            ],Response::HTTP_UNAUTHORIZED);
+        }
+        if ($exception instanceof JWTException) {
+            return response()->json([
+                'success' => false,
+                'code'=> 401,
+                'locale'=> 'en',
+                'message'=> 'Not Unauthorized',
+                'data'=>''
+            ],Response::HTTP_UNAUTHORIZED);
         }
         if ($exception instanceof UnauthorizedException) {
             return response()->json([
@@ -55,7 +77,7 @@ class Handler extends ExceptionHandler
                 'locale'=> 'en',
                 'message'=> 'You are not authorized to perform this action.',
                 'data'=>''
-            ], 403);
+            ], Response::HTTP_FORBIDDEN);
         }
         if ($exception instanceof ModelNotFoundException) {
             return response()->json([
@@ -64,9 +86,17 @@ class Handler extends ExceptionHandler
                 'locale'=> 'en',
                 'message'=> 'Resource not found',
                 'data'=>''
-            ], 404);
+            ], Response::HTTP_NOT_FOUND);
         }
-
+        if ($exception instanceof HttpResponseException) {
+            return response()->json([
+                'success' => false,
+                'code'=> 400,
+                'locale'=> 'en',
+                'message'=> 'Invalid request',
+                'data'=>''
+            ], Response::HTTP_BAD_REQUEST);
+        }
         return parent::render($request, $exception);
         //
     }

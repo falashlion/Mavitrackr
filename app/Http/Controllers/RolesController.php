@@ -6,13 +6,21 @@ use App\Http\Requests\RolesRequest;
 use App\Http\Requests\RolesUpdateRequest;
 use Illuminate\Http\Request;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-use Spatie\Permission\Contracts\Role as ContractsRole;
 use Spatie\Permission\Models\Role;
 
 class RolesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('jwt.auth');
+    }
     /**
      * Display a listing of the resource.
+     */
+    /**
+     * index
+     *
+     * @return object
      */
     public function index()
     {
@@ -23,13 +31,19 @@ class RolesController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+    /**
+     * create
+     *
+     * @param  object $request
+     * @return object
+     */
     public function create(RolesRequest $request)
     {
     $role = Role::create([
        'name'=> $request->input('name'),
     ]);
     $role->syncPermissions($request->input('permissions'));
-    return ResponseBuilder::success($role, 201);
+    return ResponseBuilder::success($role,201,null,201);
     }
 
     /**
@@ -41,11 +55,18 @@ class RolesController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the roles resource.
+     */
+    /**
+     * show
+     *
+     * @param  string $id
+     * @return object
      */
     public function show(string $id)
     {
         $role = Role::findOrFail($id);
+        $role->permissions;
         return ResponseBuilder::success($role,200);
     }
 
@@ -60,6 +81,13 @@ class RolesController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    /**
+     * update
+     *
+     * @param  object $request
+     * @param  string $id
+     * @return object
+     */
     public function update(RolesUpdateRequest $request, string $id)
     {
         $role = Role::findOrFail($id);
@@ -73,10 +101,16 @@ class RolesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    /**
+     * destroy
+     *
+     * @param  string $id
+     * @return object
+     */
     public function destroy(string $id)
     {
         $role = Role::findOrFail($id);
         $role->delete();
-        return ResponseBuilder::success(204);
+        return ResponseBuilder::success( [],204,null,204);
     }
 }

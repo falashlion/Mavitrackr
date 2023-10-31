@@ -13,13 +13,12 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table-> string('form_name');
+            $table-> string('form_name')->default('Manager Assessment Form');
             $table-> uuid('user_id');
-            $table-> string('status');
-            $table->dateTime('duedate_author');
-            $table->dateTime('duedate_manager');
+            $table-> enum('status',['Pending','Completed','Approved'])->default('Pending');
+            $table->dateTime('author_dueDate')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -28,6 +27,11 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('reviews', function (Blueprint $table) {
+            // Drop foreign key constraints
+            $table->dropForeign(['user_id']);
+            $table->dropColumn('user_id');
+        });
         Schema::dropIfExists('reviews');
     }
 };

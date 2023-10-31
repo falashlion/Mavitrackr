@@ -117,7 +117,6 @@ class RolesPermissionsSeeder extends Seeder
         'departments_id' => null,
         'positions_id' => null,
     ]);
-    $superAdmin->assignRole($role1,1);
-
+    $superAdmin->assignRole($role1,$role2,$role3,$role4);
 }
 }

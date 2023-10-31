@@ -3,13 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\interfaces\KpaRepositoryInterface;
-use App\Models\Kpa;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use App\Repositories\KpaRepository;
 use App\Http\Requests\KpaRequest;
 use App\Http\Controllers\Controller;
-use Exception;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 class KpaController extends Controller
@@ -19,47 +14,68 @@ class KpaController extends Controller
     {
         $this->KpaRepository = $KpaRepository;
         $this->middleware('jwt.auth');
+        $this->middleware('permission:kpas edit')->only('updateKpa');
+        $this->middleware('permission:kpas list')->only('getAllKpa');
+        $this->middleware('permission:kpas delete')->only('deleteKpa');
+        $this->middleware('permission:kpas create')->only('createKpa');
     }
+    /**
+     * getAllKpa
+     *
+     * @return object
+     */
     public function getAllKpa()
     {
         $kpas = $this->KpaRepository->getAll();
         return ResponseBuilder::success($kpas,200);
     }
 
-    public function getKpaById(Request $request, $id, Exception $e)
+    /**
+     * getKpaById
+     *
+     * @param  string $id
+     * @return object
+     */
+    public function getKpaById($id)
     {
-        try {
-            $kpa = $this->KpaRepository->getById($id, $e);
-            return ResponseBuilder::success($kpa,200);
-        } catch (\Throwable $th) {
-            return ResponseBuilder::error(400);
-        }
-    }
-
-    public function createKpa(KpaRequest $request)
-    {
-        $kpa = $this->KpaRepository->create($request->all());
+        $kpa = $this->KpaRepository->getById($id);
         return ResponseBuilder::success($kpa,200);
     }
 
-    public function updateKpa(KpaRequest $request, $id, Exception $e)
+    /**
+     * createKpa
+     *
+     * @param  object $request
+     * @return object
+     */
+    public function createKpa(KpaRequest $request)
     {
-        try {
-            $kpa = $this->KpaRepository->update($id, $request->all(), $e);
-            return ResponseBuilder::success($kpa,200);
-        } catch (\Throwable $th) {
-            return ResponseBuilder::error(400);
-        }
+        $kpa = $this->KpaRepository->create($request->all());
+        return ResponseBuilder::success($kpa,201,null,201);
     }
 
-    public function deleteKpa(Request $request, $id, Exception $e)
+    /**
+     * updateKpa
+     *
+     * @param  object $request
+     * @param  string $id
+     * @return object
+     */
+    public function updateKpa(KpaRequest $request, $id)
     {
-        try {
-            $kpa = $this->KpaRepository->delete($id, $e);
-            return ResponseBuilder::success($kpa,204);
-        } catch (\Throwable $th) {
-            return ResponseBuilder::error(400);
-        }
+        $kpa = $this->KpaRepository->update($id,$request->all());
+        return ResponseBuilder::success($kpa,200);
+    }
 
+    /**
+     * deleteKpa
+     *
+     * @param  string $id
+     * @return object
+     */
+    public function deleteKpa($id)
+    {
+        $kpa = $this->KpaRepository->delete($id);
+        return ResponseBuilder::success($kpa,204,null,204);
     }
 }

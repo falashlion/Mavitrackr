@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Kpi;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as ApiResponseBuilder;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\JsonResponse;
 class kpiScoreRequest extends FormRequest
 {
     /**
@@ -21,15 +23,37 @@ class kpiScoreRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
-    public function rules(): array
+    public function rules()
     {
-        return [
-            'score'=>'required|string'
+        $kpi = Kpi::find($this->route('id'));
+
+        $rules = [
+            'score' => 'required|integer|max:4',
         ];
+        if (!$kpi) {
+            $rules['score'] .= '|nullable';
+        } else {
+            $weight = $kpi->weight;
+            if (!$weight) {
+                $rules['score'] .= '|nullable';
+            } else {
+                $rules['score'] .= "|numeric|min:0|max:$weight";
+            }
+        }
+        return $rules;
     }
     protected function failedValidation(Validator $validator)
     {
-        $response = ApiResponseBuilder::error(400);
-        throw new HttpResponseException($response);
+        if ($this->expectsJson()) {
+            throw new HttpResponseException(response()->json([
+                'success' => false,
+                'code'=> 422,
+                'locale'=> 'en',
+                'message'=> 'Invalid request',
+                'data'=>$validator->errors()
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY));
+        }
+
+        parent::failedValidation($validator);
     }
 }

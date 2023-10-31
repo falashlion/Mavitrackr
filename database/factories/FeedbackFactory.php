@@ -22,6 +22,7 @@ class FeedbackFactory extends Factory
     public function definition()
     {
         return [
+            'id'=>$this->faker->uuid,
             'comment' => $this->faker->sentence,
             'kpis_id' => function () {
                 return \App\Models\Kpi::factory()->create()->id;

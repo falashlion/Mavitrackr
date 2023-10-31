@@ -4,13 +4,14 @@ namespace App\Interfaces;
 
 
 interface UserRepositoryInterface {
+
     public function createUser(array $data);
-    public function getUserById($id, $e);
-    public function updateUser($id, array $data, $e);
-    public function deleteUser($id, $e);
-    public function getUsers($request);
+    public function getUserById(string $id);
+    public function updateUser(string $id, array $data);
+    public function deleteUser(string $id);
+    public function getUsers();
     public function getAllDirectReports();
-    public function getAllDirectReportsById($id, $e);
+    public function getAllDirectReportsById($id);
     public function getDepartmentMembers();
 }
 

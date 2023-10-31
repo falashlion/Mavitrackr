@@ -22,7 +22,11 @@ class DepartmentFactory extends Factory
     public function definition()
     {
         return [
+            'id'=> $this->faker->uuid,
             'title' => $this->faker->sentence,
+            'manager_id'=>function () {
+                return \App\Models\User::factory()->create()->id;
+            },
         ];
     }
 }

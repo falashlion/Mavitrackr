@@ -23,8 +23,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['line_manager']);
+        $table->dropForeign(['line_manager']); // drop foreign key if exists?
         $table->dropColumn('line_manager');
         });
+        Schema::dropIfExists('users');
     }
 };

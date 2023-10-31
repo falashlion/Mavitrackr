@@ -17,8 +17,8 @@ use Illuminate\Support\Facades\Schema;
             $table->uuid('kpas_id');
             $table->uuid('user_id');
             $table->json('indicators')->nullable();
-            $table->integer('weight', 5, 2)->nullable();
-            $table->integer('weighted_average_score')->nullable();
+            $table->integer('weight')->nullable();
+            $table->float('weighted_average_score')->nullable();
             $table->integer('score')->nullable();
             $table->foreign('kpas_id')->references('id')->on('kpas');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
@@ -31,6 +31,11 @@ use Illuminate\Support\Facades\Schema;
      */
     public function down(): void
     {
+        Schema::table('kpis', function (Blueprint $table) {
+            // Drop foreign key constraints
+            $table->dropForeign(['user_id']);
+            $table->dropColumn('user_id');
+        });
         Schema::dropIfExists('kpis');
     }
 };
