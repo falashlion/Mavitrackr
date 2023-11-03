@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Department;
 use App\Models\User;
 use App\Interfaces\UserRepositoryInterface;
+use Illuminate\Http\Request;
 
 
 
@@ -79,12 +80,13 @@ class UserRepository implements UserRepositoryInterface
      * getUsers
      *
      * Retrieves all users
-     *
+     * @param Request $request
      * @return object Returns an object containing all users in the application
      */
-    public function getUsers()
+    public function getUsers($request)
     {
-            $users = User::paginate();
+            $page = $request->query('paginate') ?? '8';
+            $users = User::select()->paginate($page);
             foreach ($users as $user){
             $user->position;
             $user->department;

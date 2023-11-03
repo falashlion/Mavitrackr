@@ -11,7 +11,7 @@ class DepartmentRepository implements DepartmentRepositoryInterface
      * getDepartmentById
      *
      * @param  string $id
-     * @return object
+     * @return object $department
      */
     public function getDepartmentById($id) {
         $department = Department::findOrFail($id);
@@ -22,7 +22,7 @@ class DepartmentRepository implements DepartmentRepositoryInterface
     /**
      * getDepartments
      *
-     * @return object
+     * @return object Returns the array of department objects
      *
      */
     public function getDepartments() {
@@ -34,8 +34,8 @@ class DepartmentRepository implements DepartmentRepositoryInterface
     /**
      * createDepartment
      *
-     * @param  array $data
-     * @return object
+     * @param  array $data array of properties to create a department
+     * @return object Returns the object of the created departmnet
      */
     public function createDepartment(array $data) {
         $department = Department::create($data);
@@ -46,9 +46,9 @@ class DepartmentRepository implements DepartmentRepositoryInterface
     /**
      * updateDepartment
      *
-     * @param  string $id
-     * @param  array $data
-     * @return object
+     * @param  string $id ID of the Department
+     * @param  array $data data to update a department with
+     * @return object Returns the object of the updated department.
      */
     public function updateDepartment($id, array $data) {
         $department = Department::findOrFail($id);
@@ -60,8 +60,8 @@ class DepartmentRepository implements DepartmentRepositoryInterface
     /**
      * deleteDepartment
      *
-     * @param  string $id
-     * @return boolean
+     * @param  string $id ID of the departmnet
+     * @return boolean Returns a boolean true if the the department is successfully deleted and false otherwise.
      */
     public function deleteDepartment($id) {
             $department = Department::findOrFail($id);
@@ -72,8 +72,8 @@ class DepartmentRepository implements DepartmentRepositoryInterface
     /**
      * getMembers
      *
-     * @param  string $id
-     * @return object
+     * @param  string $id ID of the Department
+     * @return object Returns the array of users in this department
      */
     public function getMembers($id){
             $department = Department::findOrFail($id);

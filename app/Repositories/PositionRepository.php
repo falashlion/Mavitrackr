@@ -10,7 +10,7 @@ class PositionRepository implements PositionRepositoryInterface
     /**
      * getAllPositions
      *
-     * @return object
+     * @return object Returns the array of objects for all the positions
      */
     public function getAllPositions()
     {
@@ -19,8 +19,8 @@ class PositionRepository implements PositionRepositoryInterface
     /**
      * createPosition
      *
-     * @param  array $data
-     * @return object
+     * @param  array $data Contains data to create a position
+     * @return object Returns the object of the created position
      */
     public function createPosition($data)
     {
@@ -29,9 +29,9 @@ class PositionRepository implements PositionRepositoryInterface
     /**
      * updatePosition
      *
-     * @param  array $data
-     * @param  string $id
-     * @return object
+     * @param  array $data Contains data for the update of a position
+     * @param  string $id ID of the position
+     * @return object Returns the object of the updated position
      */
     public function updatePosition($data, $id)
     {

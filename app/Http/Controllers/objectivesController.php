@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Kpi;
-use App\Http\Requests\FeedbackRequest;
 use App\Http\Requests\StrategicDomainsRequest;
 use App\Repositories\StrategicDomainRepository;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use Symfony\Component\HttpFoundation\Response;
 
 
 
@@ -28,7 +26,7 @@ class objectivesController extends Controller
     /**
      * getStrategicDomains
      *
-     * @return object
+     * @return Response Returns the object of all the strategic domains
      */
     public function getStrategicDomains()
     {
@@ -43,8 +41,8 @@ class objectivesController extends Controller
     /**
      * getStrategicDomainById
      *
-     * @param  string $id
-     * @return object
+     * @param  string $id ID of Strategic Domain
+     * @return Response Returns the object of the Strategic domain with the ID
      */
     public function getStrategicDomainById($id)
     {
@@ -55,8 +53,8 @@ class objectivesController extends Controller
     /**
      * createStrategicDomain
      *
-     * @param  mixed $request
-     * @return object
+     * @param  StrategicDomainsRequest $request contains the data to create a new strategic domain
+     * @return Response Returns the object of the created strategic domain
      */
     public function createStrategicDomain(StrategicDomainsRequest $request)
     {
@@ -68,9 +66,9 @@ class objectivesController extends Controller
     /**
      * updateStrategicDomain
      *
-     * @param  mixed $request
-     * @param  string $id
-     * @return object
+     * @param  StrategicDomainsRequest $request contains the data for a strategic to be updated with
+     * @param  string $id ID of Strategic Domain
+     * @return Response Returns the object of the updated strategic domain
      */
     public function updateStrategicDomain(StrategicDomainsRequest $request, $id)
     {
@@ -82,8 +80,8 @@ class objectivesController extends Controller
     /**
      * deleteStrategicDomain
      *
-     * @param  string $id
-     * @return object
+     * @param  string $id ID of Strategic Domain
+     * @return Response Returns no content of the resource not found exception.
      */
     public function deleteStrategicDomain($id)
     {
@@ -91,84 +89,5 @@ class objectivesController extends Controller
 
        return ResponseBuilder::success($strategicDomain, 204, null,204);
     }
-    // enpoints for feeedback
-    /**
-     * getfeedback
-     *
-     * @return object
-     */
-    public function getfeedback()
-    {
-        $feedback = $this->feedbackRepository->all();
 
-        return ResponseBuilder::success( $feedback,200);
-    }
-    /**
-     * getfeedbackbyKpiid
-     *
-     * @param  mixed $request
-     * @param  string $id
-     * @return object
-     */
-    public function getfeedbackbyKpiid(FeedbackRequest $request, $id)
-    {
-        $feedback = $this->feedbackRepository->getByKpiId($id);
-        if (!$feedback) {
-            return ResponseBuilder::error(404);
-        }
-        return ResponseBuilder::success( $feedback,200);
-    }
-    /**
-     * createfeedback
-     *
-     * @param  mixed $request
-     * @param  string $id
-     * @return object
-     */
-    public function createfeedback(FeedbackRequest $request, $id)
-    {
-        $Kpi = Kpi::Find($id);
-        $feedback = $this->feedbackRepository->create([
-            "comment"   =>  $request['comment'],
-            "kpis_id" => $id,
-        ]);
-
-        return ResponseBuilder::success( $feedback,201,null,201);
-    }
-    /**
-     * updatefeedback
-     *
-     * @param  object $request
-     * @param  string $id
-     * @return object
-     */
-    public function updatefeedback(FeedbackRequest $request, $id)
-    {
-        $feedback = $this->feedbackRepository->update([
-            'comment'   =>  $request['comment'],
-        ], $id);
-        if (!$feedback) {
-
-            return ResponseBuilder::error(404);
-        }
-
-        return ResponseBuilder::success( $feedback,200);
-    }
-    /**
-     * deletefeedback
-     *
-     * @param  mixed $request
-     * @param  string $id
-     * @return object
-     */
-    public function deletefeedback(Request $request, $id)
-    {
-        $result = $this->feedbackRepository->delete($id);
-        if (!$result) {
-
-            return ResponseBuilder::success(404);
-        }
-
-        return ResponseBuilder::success($result,204,null,204);
-    }
 }

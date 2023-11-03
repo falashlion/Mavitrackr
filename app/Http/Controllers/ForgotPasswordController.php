@@ -8,6 +8,7 @@ use App\Repositories\PasswordResetRepository;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpFoundation\Response;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 class ForgotPasswordController extends Controller
@@ -23,8 +24,8 @@ class ForgotPasswordController extends Controller
     /**
      * forgotPassword
      *
-     * @param  object $request
-     * @return object
+     * @param  passwordResetRequest $request Contains the email for the password reset.
+     * @return Response Returns the success status with a message or the error status with an error.
      */
     public function forgotPassword(passwordResetRequest $request)
     {
@@ -46,8 +47,8 @@ class ForgotPasswordController extends Controller
     /**
      * resetPassword
      *
-     * @param  object $request
-     * @return object
+     * @param  passwordSetRequest $request contains the reseted password to be update din the database
+     * @return Response  Returns the status success with a message or the status error message.
      */
     public function resetPassword(passwordSetRequest $request)
     {

@@ -9,8 +9,8 @@ class PasswordResetRepository
     /**
      * findByEmail
      *
-     * @param  string $email
-     * @return object
+     * @param  string $email Contains the Email of the user whose password is to be reseted
+     * @return object Returns the user object of the user whose password is to be reseted.
      */
     public function findByEmail($email)
     {
@@ -20,8 +20,8 @@ class PasswordResetRepository
     /**
      * updatePassword
      *
-     * @param  object $user
-     * @param  string $password
+     * @param  object $user This is the user object
+     * @param  string $password This contains the updated password in the payload
      * @return void
      */
     public function updatePassword($user, $password)

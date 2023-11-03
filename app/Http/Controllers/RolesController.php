@@ -7,6 +7,7 @@ use App\Http\Requests\RolesUpdateRequest;
 use Illuminate\Http\Request;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Spatie\Permission\Models\Role;
+use Symfony\Component\HttpFoundation\Response;
 
 class RolesController extends Controller
 {
@@ -20,7 +21,7 @@ class RolesController extends Controller
     /**
      * index
      *
-     * @return object
+     * @return Response Returns the object of all the roles
      */
     public function index()
     {
@@ -34,8 +35,8 @@ class RolesController extends Controller
     /**
      * create
      *
-     * @param  object $request
-     * @return object
+     * @param  RolesRequest $request Contains the data to create the new role
+     * @return Response Returns the object of the new role.
      */
     public function create(RolesRequest $request)
     {
@@ -60,8 +61,8 @@ class RolesController extends Controller
     /**
      * show
      *
-     * @param  string $id
-     * @return object
+     * @param  string $id ID of the role
+     * @return Response Returns the object of the role with this.
      */
     public function show(string $id)
     {
@@ -84,9 +85,9 @@ class RolesController extends Controller
     /**
      * update
      *
-     * @param  object $request
-     * @param  string $id
-     * @return object
+     * @param  RolesUpdateRequest $request Contains the data to update the role with
+     * @param  string $id ID of the Role
+     * @return Response Returns the object of the updated role.
      */
     public function update(RolesUpdateRequest $request, string $id)
     {
@@ -104,8 +105,8 @@ class RolesController extends Controller
     /**
      * destroy
      *
-     * @param  string $id
-     * @return object
+     * @param  string $id Id of the Role
+     * @return Response Returns no content or the rourse not found exception
      */
     public function destroy(string $id)
     {

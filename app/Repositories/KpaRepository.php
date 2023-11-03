@@ -11,7 +11,7 @@ class KpaRepository implements KpaRepositoryInterface
     /**
      * getAll
      *
-     * @return object
+     * @return object Returns the array of objects for all the kpas
      */
     public function getAll()
     {
@@ -23,8 +23,8 @@ class KpaRepository implements KpaRepositoryInterface
     /**
      * getById
      *
-     * @param  string $id
-     * @return object
+     * @param  string $id ID of the kpa
+     * @return object Returns the object of the kpa with this ID
      */
     public function getById($id)
     {
@@ -36,8 +36,8 @@ class KpaRepository implements KpaRepositoryInterface
     /**
      * create
      *
-     * @param  array $data
-     * @return object
+     * @param  array $data Contains the data to create a new kpa
+     * @return object Returns the object of the created kpa
      */
     public function create($data)
     {
@@ -46,9 +46,9 @@ class KpaRepository implements KpaRepositoryInterface
     /**
      * update
      *
-     * @param  string $id
-     * @param  array $data
-     * @return object
+     * @param  string $id ID of the kpa
+     * @param  array $data Contains the data to update the kpa
+     * @return object Returns the object of the updated kpa
      */
     public function update($id,$data)
     {
@@ -61,8 +61,8 @@ class KpaRepository implements KpaRepositoryInterface
     /**
      * delete
      *
-     * @param  string $id
-     * @return boolean
+     * @param  string $id ID of the kpa
+     * @return boolean Returns a true for successsfully deleted kpa and false otherwise.
      */
     public function delete($id)
     {

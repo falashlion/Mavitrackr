@@ -56,8 +56,11 @@ class User extends Authenticatable  implements JWTSubject
     {
         return $this->belongsTo(Department::class, 'departments_id');
     }
+
     /**
-     * Summary of positions
+     * position
+     *
+     * @return
      */
     public function position()
     {

@@ -4,6 +4,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserUpdateRequest;
 use App\interfaces\UserRepositoryInterface;
 use App\Models\Department;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Database\Eloquent\ModelNotFoundException as Exception;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\LoginRequest;
@@ -25,7 +28,7 @@ class AuthController extends Controller
     public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;
-        $this->middleware('jwt.auth')->except('login','getAllUsers');
+        $this->middleware('jwt.auth')->except('login');
         // $this->middleware('permission:user create')->only('register');
         // $this->middleware('permission:user delete')->only('deleteUser');
         // $this->middleware('permission:user edit')->only('updateUserDetails');
@@ -36,8 +39,8 @@ class AuthController extends Controller
      * login
      *
      * @param  LoginRequest $request login credetials passed in the request body
-     * @return ResponseBuilder::object the object of the user's information is returned
-     * @throws \Exception If the user's credentials are invalid.
+     * @return Response the object of the user's information is returned
+     * @throws Exception If the user's credentials are invalid.
      * This method logs in the user by checking the user's credentials against the database. If the user's credentials are valid, the method returns an object containing the user's information.
      * If the user's credentials are invalid, the method throws an exception.
      */
@@ -67,8 +70,8 @@ class AuthController extends Controller
      * Register method.
      *
      * @param  UserStoreRequest $request data required to create a new user passed in the body of the request.
-     * @throws \Exception If the request is not validated.
-     * @return ResponseBuilder::object the object of the user's information is returned
+     * @throws Exception If the request is not validated.
+     * @return Response the object of the user's information is returned
      * This method creates a new user by validating the request and creating a new user in the database.
      * If the request is not validated, the method throws an exception.
      */
@@ -102,9 +105,9 @@ class AuthController extends Controller
      * This method retrieves a user's information by their ID.
      *
      * @param  string $id The user's ID passed in the URL
-     * @return ResponseBuilder::object The object of the user's information is returned
+     * @return Response The object of the user's information is returned
      */
-    public function getUserById($id)
+    public function getUserById(string $id)
      {
         $userData = $this->userRepository->getUserById($id);
         $userData =[ 'user'=> $userData];
@@ -113,13 +116,13 @@ class AuthController extends Controller
     }
     /**
      * getAllUsers
-     *
+     * the value to paginate the users with
      * This method retrieves all users' information from the database.
-     * @return ResponseBuilder::object The object containing all users' information is returned.
+     * @return Response The object containing all users' information is returned.
      */
-    public function getAllUsers()
+    public function getAllUsers(Request $request)
     {
-        $users = $this->userRepository->getUsers();
+        $users = $this->userRepository->getUsers($request);
 
         return ResponseBuilder::success($users,200);
     }
@@ -129,7 +132,7 @@ class AuthController extends Controller
      *
      * @param  string $id The user's ID.
      * @param  UserUpdateRequest $request The object of user data to be updated.
-     * @return ResponseBuilder::object user object
+     * @return Response user object
      * updates a particular user in the mavitrackr application
      */
     public function updateUserDetails( $id, UserUpdateRequest $request)
@@ -156,7 +159,7 @@ class AuthController extends Controller
      * deleteUser
      *
      * @param  string $id The user's ID.
-     * @return ResponseBuilder::void
+     * @return Response This returns no content
      */
     public function deleteUser($id)
     {
@@ -167,7 +170,7 @@ class AuthController extends Controller
     /**
      * logout
      *
-     * @return ResponseBuilder::object object indicating successfull logout
+     * @return Response object indicating successfull logout
      * This method logs out the user from the application.
      */
     public function logout()
@@ -178,7 +181,7 @@ class AuthController extends Controller
     }
     /**
     *Get all direct reports for authenticated user.
-    *@return ResponseBuilder::object The object containing all direct reports' information is returned.
+    *@return Response The object containing all direct reports' information is returned.
     *This method retrieves all direct reports' information for a user from the database.
     */
     public function getAllDirectReportsForUser()
@@ -192,7 +195,7 @@ class AuthController extends Controller
      * getAllDirectReportsByUserId
      *
      * @param  string $id The user's ID.
-     * @return ResponseBuilder::object  The object containing all direct reports' information is returned.
+     * @return Response The object containing all direct reports' information is returned.
      * This method retrieves all direct reports' information for a user by their ID from the database.
      */
     public function getAllDirectReportsByUserId($id)

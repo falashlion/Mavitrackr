@@ -11,7 +11,7 @@ class FeedbackRepository implements FeedbackRepositoryInterface
     /**
      * allFeedbacks
      *
-     * @return object
+     * @return object Returns the array of objects for all the feedbacks
      */
     public function allFeedbacks()
     {
@@ -20,8 +20,8 @@ class FeedbackRepository implements FeedbackRepositoryInterface
     /**
      * getByKpiId
      *
-     * @param  string $id
-     * @return object
+     * @param  string $id ID of the feedback
+     * @return object Returns the object of the feedback with the ID
      */
     public function getByKpiId($id)
     {
@@ -30,8 +30,8 @@ class FeedbackRepository implements FeedbackRepositoryInterface
     /**
      * create
      *
-     * @param  array $data
-     * @return object
+     * @param  array $data Contains data to create a feedback
+     * @return object Returns the object of the feedback.
      */
     public function create($data)
     {
@@ -40,9 +40,9 @@ class FeedbackRepository implements FeedbackRepositoryInterface
     /**
      * updateFeedback
      *
-     * @param  string $id
-     * @param  array $data
-     * @return object
+     * @param  string $id ID of the Feedback
+     * @param  array $data Contains data to update the feedback
+     * @return object Returns the object of the updated feedback.
      */
     public function updateFeedback($id, $data)
     {
@@ -53,8 +53,8 @@ class FeedbackRepository implements FeedbackRepositoryInterface
     /**
      * delete
      *
-     * @param  string $id
-     * @return boolean
+     * @param  string $id ID of the Feedback
+     * @return boolean Returns a true for successsfully deleted feedback and false otherwise.
      */
     public function delete($id)
     {

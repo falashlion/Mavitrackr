@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\interfaces\KpaRepositoryInterface;
 use App\Http\Requests\KpaRequest;
 use App\Http\Controllers\Controller;
+use Symfony\Component\HttpFoundation\Response;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 class KpaController extends Controller
@@ -14,15 +15,15 @@ class KpaController extends Controller
     {
         $this->KpaRepository = $KpaRepository;
         $this->middleware('jwt.auth');
-        $this->middleware('permission:kpas edit')->only('updateKpa');
-        $this->middleware('permission:kpas list')->only('getAllKpa');
-        $this->middleware('permission:kpas delete')->only('deleteKpa');
-        $this->middleware('permission:kpas create')->only('createKpa');
+        // $this->middleware('permission:kpas edit')->only('updateKpa');
+        // $this->middleware('permission:kpas list')->only('getAllKpa');
+        // $this->middleware('permission:kpaobjects delete')->only('deleteKpa');
+        // $this->middleware('permission:kpas create')->only('createKpa');
     }
     /**
      * getAllKpa
      *
-     * @return object
+     * @return Response Returns array of all the kpas in the database
      */
     public function getAllKpa()
     {
@@ -33,8 +34,8 @@ class KpaController extends Controller
     /**
      * getKpaById
      *
-     * @param  string $id
-     * @return object
+     * @param  string $id ID of the KeyperformanceArea
+     * @return Response Returns the object of the kpa with having the ID
      */
     public function getKpaById($id)
     {
@@ -45,8 +46,8 @@ class KpaController extends Controller
     /**
      * createKpa
      *
-     * @param  object $request
-     * @return object
+     * @param  KpaRequest $request Contains the data required to create a new kpa
+     * @return Response Returns the object of the created kpa
      */
     public function createKpa(KpaRequest $request)
     {
@@ -57,9 +58,9 @@ class KpaController extends Controller
     /**
      * updateKpa
      *
-     * @param  object $request
-     * @param  string $id
-     * @return object
+     * @param  KpaRequest $request Contains the data to update the kpa
+     * @param  string $id ID of the KeyperformanceArea
+     * @return Response Returns object of the updated kpa
      */
     public function updateKpa(KpaRequest $request, $id)
     {
@@ -70,8 +71,8 @@ class KpaController extends Controller
     /**
      * deleteKpa
      *
-     * @param  string $id
-     * @return object
+     * @param  string $id ID of the KeyperformanceArea
+     * @return Response Returns no content or the objecct for the content not found exception.
      */
     public function deleteKpa($id)
     {

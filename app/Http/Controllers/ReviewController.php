@@ -5,6 +5,7 @@ use App\Http\Requests\CreateReviewRequest;
 use App\Http\Requests\UpdateReviewRequest;
 use App\Models\Kpi;
 use App\Repositories\ReviewRepository;
+use Symfony\Component\HttpFoundation\Response;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 class ReviewController extends Controller
@@ -19,8 +20,8 @@ class ReviewController extends Controller
     /**
      * store
      *
-     * @param  object $request
-     * @return object
+     * @param  CreateReviewRequest $request Contains the data to create a new review with
+     * @return Response Returns the object of the created review.
      */
     public function store(CreateReviewRequest $request)
     {
@@ -32,8 +33,8 @@ class ReviewController extends Controller
     /**
      * show
      *
-     * @param  string $id
-     * @return object
+     * @param  string $id ID of the Review
+     * @return Response Returns the object of the review with this ID
      */
     public function show($id)
     {
@@ -44,9 +45,9 @@ class ReviewController extends Controller
     /**
      * update
      *
-     * @param  object $request
-     * @param  string $id
-     * @return object
+     * @param  CreateReviewRequest $request Contains the data for the review to be updated with
+     * @param  string $id ID of the review
+     * @return Response Returns the object of the updated review
      */
     public function update(UpdateReviewRequest $request, $id)
     {
@@ -68,8 +69,8 @@ class ReviewController extends Controller
     /**
      * destroy
      *
-     * @param  string $id
-     * @return object
+     * @param  string $id ID of the review
+     * @return Response Returns no content or the exception for recourse not found.
      */
     public function destroy($id)
     {
@@ -79,7 +80,7 @@ class ReviewController extends Controller
     /**
      * index
      * Get all reviews
-     * @return object
+     * @return Response Returns all the reviews in the database
      */
     public function index()
     {

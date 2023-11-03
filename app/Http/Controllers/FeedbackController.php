@@ -6,6 +6,7 @@ use App\interfaces\FeedbackRepositoryInterface;
 use App\Http\Requests\FeedbackRequest;
 use App\Http\Controllers\Controller;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class FeedbackController extends Controller
@@ -20,7 +21,7 @@ public function __construct(FeedbackRepositoryInterface $feedbackRepository)
 /**
  * getAllFeedbacks
  *
- * @return ResponseBuilder::object
+ * @return Response Returns an object of all the feedbacks in the system
  */
 public function getAllFeedbacks()
 {
@@ -30,8 +31,8 @@ public function getAllFeedbacks()
 /**
  * getFeedbackByKpiId
  *
- * @param  string $id
- * @return ResponseBuilder::object
+ * @param  string $id The Id of the  feedback
+ * @return Response Returns an object of the contents of this feedback
  */
 public function getFeedbackByKpiId($id)
 {
@@ -46,8 +47,8 @@ public function getFeedbackByKpiId($id)
 /**
  * createFeedback
  *
- * @param  object $request
- * @return ResponseBuilder::object
+ * @param  FeedbackRequest $request Object of the data required to create a feedback
+ * @return Response Returns the object of the created feedback
  */
 public function createFeedback(FeedbackRequest $request)
 {
@@ -58,13 +59,13 @@ public function createFeedback(FeedbackRequest $request)
 /**
  * updateFeedbacks
  *
- * @param  object $request
- * @param  array $id
- * @return ResponseBuilder::object
+ * @param  FeedbackRequest $request Object of the data required to update a feedback
+ * @param  string $id The ID of the feedback to be updated
+ * @return Response Returns object of the updated feedback
  */
-public function updateFeedbacks(FeedbackRequest $request, array $id)
+public function updateFeedbacks(FeedbackRequest $request, string $id)
 {
-    $feedback = $this->feedbackRepository->updateFeedback($id, $request->all());
+    $feedback = $this->feedbackRepository->updateFeedback($request->all(), $id);
     if (!$id)
     {
         return ResponseBuilder::error(404);
@@ -74,8 +75,8 @@ public function updateFeedbacks(FeedbackRequest $request, array $id)
 /**
  * deleteFeedback
  *
- * @param  string $id
- * @return ResponseBuilder::object
+ * @param  string $id Feedback Id
+ * @return Response Returns the object of the error if the feedback id is not found or a void response when succefully deleted.
  */
 public function deleteFeedback($id)
 {

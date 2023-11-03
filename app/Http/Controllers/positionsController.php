@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\interfaces\PositionRepositoryInterface;
-use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\PositionRequest;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
@@ -20,7 +20,7 @@ class positionsController extends Controller
     /**
      * getPositions
      *
-     * @return object
+     * @return Response Returns the object of all the positions in the database
      */
     public function getPositions()
     {
@@ -31,8 +31,8 @@ class positionsController extends Controller
     /**
      * createPositions
      *
-     * @param  object $request
-     * @return object
+     * @param  PositionRequest $request contains the data required to create a position
+     * @return Response Returns the object of the created position
      */
     public function createPositions(PositionRequest $request)
     {
@@ -43,9 +43,9 @@ class positionsController extends Controller
     /**
      * updatePositions
      *
-     * @param  object $request
-     * @param  string $id
-     * @return object
+     * @param  PositionRequest $request Contains the data required to update the position
+     * @param  string $id ID of the Position
+     * @return Response Return the object of the updated position.
      */
     public function updatePositions(PositionRequest $request, $id)
     {
@@ -59,11 +59,10 @@ class positionsController extends Controller
     /**
      * deletePositions
      *
-     * @param  object $request
-     * @param  string $id
-     * @return object
+     * @param  string $id ID of the Position
+     * @return Response Returns no content or the resoiurce not found exception.
      */
-    public function deletePositions(Request $request, $id)
+    public function deletePositions($id)
     {
         $result = $this->positionRepository->deletePosition($id);
         if (!$result) {
@@ -75,11 +74,10 @@ class positionsController extends Controller
     /**
      * getPositionsbyid
      *
-     * @param  object $request
-     * @param  string $id
-     * @return object
+     * @param  string $id ID of the position
+     * @return Response Returns the object of the position with this ID
      */
-    public function getPositionsbyid(Request $request, $id)
+    public function getPositionsbyid($id)
     {
         $position = $this->positionRepository->getPositionById($id);
         if (!$position) {
