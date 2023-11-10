@@ -22,7 +22,7 @@ class AuthController extends Controller
      * __construct
      *
      * @param  object $userRepository
-     * creates the connection between the controller and the repository the
+     * instatiates the userRepository,jwt auth and spaties permissions classes in the controller.
      * through the interfaces
      */
     public function __construct(UserRepositoryInterface $userRepository)

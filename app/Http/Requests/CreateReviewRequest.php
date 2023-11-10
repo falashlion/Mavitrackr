@@ -6,6 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 
 class CreateReviewRequest extends FormRequest
 {
@@ -39,9 +41,11 @@ class CreateReviewRequest extends FormRequest
     /**
      * failedValidation
      *
-     * @param  object $validator
-     * @return object
-     * @return mixed
+     * @var  Validator $validator
+     * @param Validator $validator
+     * @return JsonResponse
+     * @return null
+     * @throws ValidationException
      */
     protected function failedValidation(Validator $validator)
     {

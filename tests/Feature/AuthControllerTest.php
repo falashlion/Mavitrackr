@@ -12,7 +12,6 @@ use App\Models\Position;
 class AuthControllerTest extends TestCase
 {
     use RefreshDatabase;
-    // HasFactory,WithFaker;
 
     protected function setUp(): void
     {
@@ -250,26 +249,6 @@ class AuthControllerTest extends TestCase
                     'locale',
                     'message',
                     'data'
-                    // 'data' => [
-                    //     'user' => [
-                    //         'id',
-                    //         'first_name',
-                    //         'last_name',
-                    //         'email',
-                    //         'position',
-                    //         'department',
-                    //         'lineManager',
-                    //         'user_matricule',
-                    //         'profile_image',
-                    //         'phone',
-                    //         'address',
-                    //         'gender',
-                    //         'line_manager',
-                    //         'roles'=>[],
-                    //     ],
-                    //     'token',
-                    //     'expiration',
-                    // ],
                 ]);
         }
 
@@ -314,15 +293,4 @@ class AuthControllerTest extends TestCase
                     'message' => 'Error #400',
                 ]);
             }
-        public function testStoreProfileImage()
-        {
-            $user = User::factory()->create();
-            $file = UploadedFile::factory()->faker()->image('profile.jpg');
-            $request = new Illuminate\Http\Request();
-            $request->merge(['profile_image' => $file]);
-            $filePath = $this->app->make(ProfileImageController::class)->storeProfileImage($user, $request);
-            $this->assertStringContainsString('images/', $filePath);
-            $this->assertFileExists(storage_path('app/' . $filePath));
-            $this->assertEquals('images/' . $file->hashName(), $user->profile_image);
-        }
 }

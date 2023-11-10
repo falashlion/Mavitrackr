@@ -2,7 +2,6 @@
 
 namespace App\interfaces;
 
-use App\Models\Department;
 
 interface DepartmentRepositoryInterface {
     public function getDepartmentById($id);
