@@ -85,16 +85,11 @@ class UserRepository implements UserRepositoryInterface
      */
     public function getUsers($request)
     {
-            $page = $request->query('paginate') ?? '8';
-            $users = User::select()->paginate($page);
-            foreach ($users as $user){
-            $user->position;
-            $user->department;
-            $user->lineManager;
-            $user->roles;
-            }
-            return $users;
+    $page = $request->input('paginate', 8);
+    $users = User::with('position', 'department', 'lineManager', 'roles')->paginate($page);
+    return $users;
     }
+
     /**
      * getDepartmentMembers
      *
