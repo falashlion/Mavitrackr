@@ -3,14 +3,11 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\TokenExpiredException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Spatie\Permission\Exceptions\UnauthorizedException;
 use Illuminate\Http\Exceptions\HttpResponseException;
-
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Response;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
 use Throwable;

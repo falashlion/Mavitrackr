@@ -32,24 +32,23 @@ class KpiController extends Controller
 
     /**
      * getAllKpis
-     * @param   $id The id of the authenticated use
-     * @return Responses response builder object with an array of the kpis for the authenticated user
+     * @return Response response builder object with an array of the kpis for the authenticated user
      */
-    public function getAllKpis()
+    public function getAllKpis():Response
     {
-    Auth::user();
-    $id = auth()->id();
-    $kpis = $this->KpiRepository->getAll($id);
+        Auth::user();
+        $id = auth()->id();
+        $kpis = $this->KpiRepository->getAll($id);
 
-    return ResponseBuilder::success($kpis, 200);
+        return ResponseBuilder::success($kpis, 200);
     }
     /**
      * getKpiById
      *
      * @param  string $id user id of the whose kpis are to be gotten
-     * @return Responses response builder object with an array of the kpis for the user with the user id
+     * @return Response response builder object with an array of the kpis for the user with the user id
      */
-    public function getKpiById($id)
+    public function getKpiById(string $id):Response
     {
         $kpi = $this->KpiRepository->getById($id);
 
@@ -59,9 +58,9 @@ class KpiController extends Controller
      * createKpi
      *
      * @param  KpiRequest $request object of the properties required to create a kpi
-     * @return Responses The response builder object with an object of the created kpi
+     * @return Response The response builder object with an object of the created kpi
      */
-    public function createKpi(KpiRequest $request)
+    public function createKpi(KpiRequest $request):Response
     {
         $data = $request->validated();
         $data['user_id'] = auth()->user()->id;
@@ -75,10 +74,10 @@ class KpiController extends Controller
      *
      * @param  kpiUpdateRequest $request object of the properties required to update a kpi
      * @param  string $id The uuid of the kpi to be updated
-     * @return Responses The response builder object with an object of the updated kpi
+     * @return Response The response builder object with an object of the updated kpi
      */
 
-    public function updateKpi(kpiUpdateRequest $request, $id)
+    public function updateKpi(kpiUpdateRequest $request, string $id):Response
     {
         $kpi = $this->KpiRepository->update($id,$request->all());
 
@@ -88,9 +87,9 @@ class KpiController extends Controller
      * deleteKpiDetails
      *
      * @param  string $id uuid of the kpi to be deleted
-     * @return Responses no conntent http response returned by the reponse builder
+     * @return Response no conntent http response returned by the reponse builder
      */
-    public function deleteKpiDetails($id)
+    public function deleteKpiDetails($id):Response
     {
         $kpi = Kpi::findOrFail($id);
         $kpiUserId = $kpi->user_id;
@@ -116,9 +115,10 @@ class KpiController extends Controller
      *
      * @param  kpiStoreRequest $request object carrying the value of the weight to be created
      * @param  string $id uuid of the kpi to be given a weight value
-     * @return Responses Response builder object with the updated kpi with its weight
+     * @return Response Response builder object with the updated kpi with its weight
      */
-    public function createKpiWeight(kpiStoreRequest $request, $id){
+    public function createKpiWeight(kpiStoreRequest $request, string $id):Response
+    {
         $kpi = $this->KpiRepository->createWeight($id, $request->all());
         $this->weightedAverageScore();
 
@@ -131,9 +131,9 @@ class KpiController extends Controller
      * @param  string $id uuid of the kpi to be given a score value
      * @return Responses Response builder object with the updated kpi with its score
      */
-    public function createKpiScore(kpiScoreRequest $request, $id){
+    public function createKpiScore(kpiScoreRequest $request, string $id):Response
+    {
         $kpi = Kpi::findOrFail($id);
-
         if (!$kpi->weight) {
             return response()->json([
                 'success' => false,
@@ -144,7 +144,7 @@ class KpiController extends Controller
             ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }
         $kpi = $this->KpiRepository->createScore($id, $request->all());
-         $this->weightedAverageScore();
+        $this->weightedAverageScore();
 
         return ResponseBuilder::success($kpi,201,null,201);
     }
@@ -153,9 +153,9 @@ class KpiController extends Controller
      * getKpiByUserId
      *
      * @param  string $id user id of the user whose kpis are to be retrieved
-     * @return Responses Response builder object with the  kpis for this user
+     * @return Response Response builder object with the  kpis for this user
      */
-    public function getKpiByUserId($id)
+    public function getKpiByUserId(string $id):Response
     {
         $kpi = $this->KpiRepository->getByUserId($id);
 
@@ -165,9 +165,10 @@ class KpiController extends Controller
     /**
      * averageScore
      *
-     * @return Responses Response builder object with the weighted average score for the authenticated user
+     * @return Response Response builder object with the weighted average score for the authenticated user
      */
-    public function averageScore(){
+    public function averageScore():Response
+    {
         $average = $this->KpiRepository->getAverageScore();
         $this->weightedAverageScore();
 
@@ -178,9 +179,10 @@ class KpiController extends Controller
      * averageScoreByUserId
      *
      * @param  string $id the user id of the the user whose weighted average score is to be retrieved
-     * @return Responses Response builder object with the weighted average score for the users whose id is passed in the parameters
+     * @return Response Response builder object with the weighted average score for the users whose id is passed in the parameters
      */
-    public function averageScoreByUserId($id){
+    public function averageScoreByUserId(string $id):Response
+    {
         $average = $this->KpiRepository->getAverageScoreByUserId($id);
         $this->weightedAverageScore();
 
@@ -191,9 +193,10 @@ class KpiController extends Controller
      * getKpisForAllDirectReports
      *
      *  Retrieves all KPIs for direct reports of the authenticated user
-     * @return Responses Returns an object containing all KPIs for direct reports of the authenticated user
+     * @return Response Returns an object containing all KPIs for direct reports of the authenticated user
      */
-    public function getKpisForAllDirectReports(){
+    public function getKpisForAllDirectReports():Response
+    {
         $kpis = $this->KpiRepository->getDirectReportKpis();
         $this->weightedAverageScore();
 
@@ -203,10 +206,10 @@ class KpiController extends Controller
      * weightedAverageScore
      *
      * Calculates the weighted average score per user ID
-     *
-     *
+     * @return void
      */
-    public function weightedAverageScore () {
+    public function weightedAverageScore():void
+    {
 
         $kpis = Kpi::select('user_id')->distinct()->get();
         foreach ($kpis as $kpi_user)

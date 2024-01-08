@@ -8,10 +8,6 @@ use App\Repositories\StrategicDomainRepository;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Symfony\Component\HttpFoundation\Response;
 
-
-
-
-
 class objectivesController extends Controller
 {
     //endpoints for StrategicDomain
@@ -28,7 +24,7 @@ class objectivesController extends Controller
      *
      * @return Response Returns the object of all the strategic domains
      */
-    public function getStrategicDomains()
+    public function getStrategicDomains():Response
     {
         $strategicDomains = $this->strategicDomainRepository->getAll();
         $data=
@@ -44,7 +40,7 @@ class objectivesController extends Controller
      * @param  string $id ID of Strategic Domain
      * @return Response Returns the object of the Strategic domain with the ID
      */
-    public function getStrategicDomainById($id)
+    public function getStrategicDomainById(string $id):Response
     {
         $strategicDomain = $this->strategicDomainRepository->getById($id);
 
@@ -56,7 +52,7 @@ class objectivesController extends Controller
      * @param  StrategicDomainsRequest $request contains the data to create a new strategic domain
      * @return Response Returns the object of the created strategic domain
      */
-    public function createStrategicDomain(StrategicDomainsRequest $request)
+    public function createStrategicDomain(StrategicDomainsRequest $request):Response
     {
         $strategicDomain = $this->strategicDomainRepository->create($request->all());
 
@@ -70,7 +66,7 @@ class objectivesController extends Controller
      * @param  string $id ID of Strategic Domain
      * @return Response Returns the object of the updated strategic domain
      */
-    public function updateStrategicDomain(StrategicDomainsRequest $request, $id)
+    public function updateStrategicDomain(StrategicDomainsRequest $request, string $id):Response
     {
         $strategicDomain = $this->strategicDomainRepository->update($id, $request->all());
 
@@ -83,7 +79,7 @@ class objectivesController extends Controller
      * @param  string $id ID of Strategic Domain
      * @return Response Returns no content of the resource not found exception.
      */
-    public function deleteStrategicDomain($id)
+    public function deleteStrategicDomain(string $id):Response
     {
        $strategicDomain = $this->strategicDomainRepository->delete($id);
 

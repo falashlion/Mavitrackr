@@ -7,7 +7,7 @@ namespace App\Repositories;
 use App\Models\Kpi;
 use App\Models\User;
 use App\Interfaces\KpiRepositoryInterface;
-
+use Illuminate\Database\Eloquent\Collection;
 
 class KpiRepository implements KpiRepositoryInterface
 {
@@ -17,9 +17,9 @@ class KpiRepository implements KpiRepositoryInterface
      * Retrieves all KPIs for a given user ID
      *
      * @param  string $id The ID of the user to retrieve KPIs for
-     * @return object Returns an object containing all KPIs for the given user ID
+     * @return Collection Returns an object containing all KPIs for the given user ID
      */
-    public function getAll( string $id): object
+    public function getAll( string $id): Collection
     {
         $kpis = Kpi::where('user_id', $id)->get();
         foreach ($kpis as $user)
@@ -38,9 +38,9 @@ class KpiRepository implements KpiRepositoryInterface
      * Retrieves a KPI by ID
      *
      * @param  string $id The ID of the KPI to retrieve
-     * @return object Returns an object containing the KPI data
+     * @return Kpi Returns an object containing the KPI data
      */
-    public function getById(string $id)
+    public function getById(string $id):Kpi
     {
             $kpi = Kpi::findOrFail($id);
             $kpi->user;
@@ -51,27 +51,21 @@ class KpiRepository implements KpiRepositoryInterface
             return $kpi;
     }
     /**
-     * create
-     *
      * Creates a new KPI
-     *
      * @param  array $data An array of data to create the KPI with
-     * @return object Returns an object containing the newly created KPI data
+     * @return Kpi Returns an object containing the newly created KPI data
      */
-    public function create( array $data): object
+    public function create( array $data): Kpi
     {
         return Kpi::create($data);
     }
-        /**
-     * update
-     *
+    /**
      * Updates an existing KPI
-     *
      * @param  string $id The ID of the KPI to update
      * @param  array $data An array of data to update the KPI with
-     * @return object Returns an object containing the updated KPI data
+     * @return Kpi Returns an object containing the updated KPI data
      */
-    public function update(string $id, array $data)
+    public function update(string $id, array $data):Kpi
     {
         $kpi = Kpi::findOrFail($id);
         $kpiUserId = $kpi->user_id;
@@ -85,14 +79,11 @@ class KpiRepository implements KpiRepositoryInterface
     }
 
     /**
-     * delete
-     *
      * Deletes a KPI by ID
-     *
      * @param  string $id The ID of the KPI to delete
-     * @return boolean Returns true if the KPI was successfully deleted, false otherwise
+     * @return bool Returns true if the KPI was successfully deleted, false otherwise
      */
-    public function delete(string $id)
+    public function delete(string $id): bool
     {
         $kpi = Kpi::findOrFail($id);
         $kpi->delete();
@@ -106,9 +97,9 @@ class KpiRepository implements KpiRepositoryInterface
      *
      * @param  string $id The ID of the KPI to update the weight for
      * @param  array $data An array of data to update the KPI weight with
-     * @return object Returns an object containing the updated KPI data
+     * @return Kpi  Returns an object containing the updated KPI data
      */
-    public function createWeight(string $id, array $data)
+    public function createWeight(string $id, array $data):Kpi
     {
         $kpi = Kpi::findOrFail($id);
         $kpi -> update($data);
@@ -116,15 +107,12 @@ class KpiRepository implements KpiRepositoryInterface
         return $kpi;
     }
     /**
-     * createScore
-     *
      * Updates the score of a KPI
-     *
      * @param  string $id The ID of the KPI to update the score for
      * @param  array $data An array of data to update the KPI score with
-     * @return object Returns an object containing the updated KPI data
+     * @return Kpi Returns an object containing the updated KPI data
      */
-    public function createScore(string $id, array $data)
+    public function createScore(string $id, array $data):Kpi
     {
         $kpi = Kpi::findOrFail($id);
         $kpiUserId = $kpi->user_id;
@@ -141,38 +129,32 @@ class KpiRepository implements KpiRepositoryInterface
      *
      * Retrieves the average score of all KPIs for the authenticated user
      *
-     * @return object Returns an object containing the average score of all KPIs for the authenticated user
+     * @return Kpi Returns an object containing the average score of all KPIs for the authenticated user
      */
-    public function getAverageScore():object
+    public function getAverageScore():Kpi
     {
         $user_id = auth()->user()->id;
         $averages=Kpi::where('user_id', $user_id)->select('weighted_average_score')->first();
 
         return $averages;
-
     }
     /**
-     * getAverageScoreByUserId
-     *
      * Retrieves the average score of all KPIs for a given user ID
-     *
      * @param  string $id The ID of the user to retrieve the average score for
-     * @return object Returns an object containing the average score of all KPIs for the given user ID
+     * @return Kpi Returns an object containing the average score of all KPIs for the given user ID
      */
-    public function getAverageScoreByUserId(string $id){
+    public function getAverageScoreByUserId(string $id):Kpi
+    {
         $averages=Kpi::where('user_id', $id)->select('weighted_average_score')->first();
 
         return $averages;
     }
     /**
-     * getByUserId
-     *
      * Retrieves all KPIs for a given user ID
-     *
      * @param  string $id The ID of the user to retrieve KPIs for
-     * @return object Returns an object containing all KPIs for the given user ID
+     * @return Kpi Returns an object containing all KPIs for the given user ID
      */
-    public function getByUserId(string $id)
+    public function getByUserId(string $id):Kpi
     {
         $user = User::findOrFail($id);
         $kpis = Kpi::where('user_id',$id)->get();
@@ -185,13 +167,10 @@ class KpiRepository implements KpiRepositoryInterface
         return $kpis;
     }
     /**
-     * getDirectReportKpis
-     *
      * Retrieves all KPIs for direct reports of the authenticated user
-     *
-     * @return object Returns an object containing all KPIs for direct reports of the authenticated user
+     * @return Collection Returns an object containing all KPIs for direct reports of the authenticated user
      */
-    public function getDirectReportKpis(): object
+    public function getDirectReportKpis(): Collection
     {
         $directReports = auth()->user()->employees->pluck('id')->toArray();
         $kpis = Kpi::with('user')->whereIn('user_id', $directReports)->orderBy('created_at','DESC')->get();

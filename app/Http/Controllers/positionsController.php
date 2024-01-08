@@ -22,7 +22,7 @@ class positionsController extends Controller
      *
      * @return Response Returns the object of all the positions in the database
      */
-    public function getPositions()
+    public function getPositions():Response
     {
         $positions = $this->positionRepository->getAllPositions();
 
@@ -34,7 +34,7 @@ class positionsController extends Controller
      * @param  PositionRequest $request contains the data required to create a position
      * @return Response Returns the object of the created position
      */
-    public function createPositions(PositionRequest $request)
+    public function createPositions(PositionRequest $request):Response
     {
         $position = $this->positionRepository->createPosition($request->all());
 
@@ -47,9 +47,9 @@ class positionsController extends Controller
      * @param  string $id ID of the Position
      * @return Response Return the object of the updated position.
      */
-    public function updatePositions(PositionRequest $request, $id)
+    public function updatePositions(array $request, string $id)
     {
-        $position = $this->positionRepository->updatePosition($request, $id);
+        $position = $this->positionRepository->updatePosition( $id, $request->all());
         if (!$position) {
             return ResponseBuilder::error(404);
         }
@@ -58,11 +58,10 @@ class positionsController extends Controller
     }
     /**
      * deletePositions
-     *
      * @param  string $id ID of the Position
      * @return Response Returns no content or the resoiurce not found exception.
      */
-    public function deletePositions($id)
+    public function deletePositions($id):Response
     {
         $result = $this->positionRepository->deletePosition($id);
         if (!$result) {
@@ -73,11 +72,10 @@ class positionsController extends Controller
     }
     /**
      * getPositionsbyid
-     *
      * @param  string $id ID of the position
      * @return Response Returns the object of the position with this ID
      */
-    public function getPositionsbyid($id)
+    public function getPositionsbyid(string $id):Response
     {
         $position = $this->positionRepository->getPositionById($id);
         if (!$position) {

@@ -4,13 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
-use Spatie\Permission\Contracts\Role;
+
 
 class User extends Authenticatable  implements JWTSubject
 {
@@ -42,17 +44,26 @@ class User extends Authenticatable  implements JWTSubject
         'remember_token',
         'email_verified_at',
     ];
-
-
-    public function setPasswordAttribute($value)
+    public function setPasswordAttribute($value):void
     {
         $this->attributes['password'] = Hash::make($value);
     }
-    public function keyPerformanceIndicators(){
+    /**
+     * keyPerformanceIndicators
+     *
+     * @return HasMany
+     */
+    public function keyPerformanceIndicators():HasMany
+    {
         return $this->hasMany(Kpi::class, 'user_id');
     }
 
-    public function department()
+    /**
+     * department
+     *
+     * @return belongsTo
+     */
+    public function department():BelongsTo
     {
         return $this->belongsTo(Department::class, 'departments_id');
     }
@@ -60,18 +71,28 @@ class User extends Authenticatable  implements JWTSubject
     /**
      * position
      *
-     * @return
+     * @return BelongsTo
      */
-    public function position()
+    public function position():BelongsTo
     {
         return $this->belongsTo(Position::class, 'positions_id');
     }
 
-    public function employees()
+    /**
+     * employees
+     *
+     * @return HasMany
+     */
+    public function employees():HasMany
     {
         return $this->hasMany(User::class, 'line_manager');
     }
-    public function lineManager()
+    /**
+     * lineManager
+     *
+     * @return BelongsTo
+     */
+    public function lineManager():BelongsTo
     {
         return $this->belongsTo(User::class, 'line_manager')->select(['id', 'first_name', 'profile_image','last_name','user_matricule']);
     }

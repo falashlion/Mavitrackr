@@ -2,15 +2,14 @@
 
 namespace App\Interfaces;
 
+use App\Models\Review;
+use Illuminate\Database\Eloquent\Collection;
+
 interface ReviewInterface
 {
-    public function createReview($data);
-
-    public function find($id);
-
-    public function update($id, $data);
-
-    public function delete($id);
-
-    public function getAll();
+    public function createReview(array $data):Review;
+    public function find(string $id): Review;
+    public function update(string $id, array $data):Review;
+    public function delete(string $id):bool;
+    public function getAll():Collection;
 }

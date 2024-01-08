@@ -10,18 +10,20 @@ use Illuminate\Database\Eloquent\ModelNotFoundException as Exception;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\LoginRequest;
+use App\Models\User;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Storage;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    private $userRepository;
+    private UserRepositoryInterface $userRepository;
 
     /**
      * __construct
-     *
-     * @param  object $userRepository
+     *UserRepositoryInterface
+     * @param  UserRepositoryInterface $userRepository
      * instatiates the userRepository,jwt auth and spaties permissions classes in the controller.
      * through the interfaces
      */
@@ -44,7 +46,7 @@ class AuthController extends Controller
      * This method logs in the user by checking the user's credentials against the database. If the user's credentials are valid, the method returns an object containing the user's information.
      * If the user's credentials are invalid, the method throws an exception.
      */
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request):Response
     {
         $credentials = $request->all();
         if(!$token = JWTAuth::attempt($credentials) )
@@ -75,7 +77,8 @@ class AuthController extends Controller
      * This method creates a new user by validating the request and creating a new user in the database.
      * If the request is not validated, the method throws an exception.
      */
-    public function register(UserStoreRequest $request) {
+    public function register(UserStoreRequest $request):Response
+    {
         if(!$request->validated()){
 
             return ResponseBuilder::error(400);
@@ -107,7 +110,7 @@ class AuthController extends Controller
      * @param  string $id The user's ID passed in the URL
      * @return Response The object of the user's information is returned
      */
-    public function getUserById(string $id)
+    public function getUserById(string $id):Response
      {
         $userData = $this->userRepository->getUserById($id);
         $userData =[ 'user'=> $userData];
@@ -115,12 +118,11 @@ class AuthController extends Controller
         return ResponseBuilder::success($userData,200);
     }
     /**
-     * getAllUsers
-     * the value to paginate the users with
+     * The value to paginate the users with
      * This method retrieves all users' information from the database.
      * @return Response The object containing all users' information is returned.
      */
-    public function getAllUsers(Request $request)
+    public function getAllUsers(Request $request):Response
     {
         $users = $this->userRepository->getUsers($request);
 
@@ -135,7 +137,7 @@ class AuthController extends Controller
      * @return Response user object
      * updates a particular user in the mavitrackr application
      */
-    public function updateUserDetails( $id, UserUpdateRequest $request)
+    public function updateUserDetails( string $id, UserUpdateRequest $request):Response
     {
         $user = $this->userRepository->updateUser($id,$request->all());
         $filePath = $this->storeProfileImage($user, $request);
@@ -161,7 +163,7 @@ class AuthController extends Controller
      * @param  string $id The user's ID.
      * @return Response This returns no content
      */
-    public function deleteUser($id)
+    public function deleteUser(string $id): Response
     {
        $user = $this->userRepository->deleteUser($id);
 
@@ -173,7 +175,7 @@ class AuthController extends Controller
      * @return Response object indicating successfull logout
      * This method logs out the user from the application.
      */
-    public function logout()
+    public function logout():Response
     {
         Auth::logout();
 
@@ -207,13 +209,13 @@ class AuthController extends Controller
     /**
      * storeProfileImage
      *
-     * @param  object $user The user object.
+     * @param  User $user The user object.
      * @param  object $request The user object parameters caring the image
      * @return string The path of the image.
      *
      * This method stores the user's profile image to the database.
      */
-    public function storeProfileImage($user, $request)
+    public function storeProfileImage(User $user, FormRequest $request)
     {
         if ($request->hasFile('profile_image')) {
             $file = $request->file('profile_image');

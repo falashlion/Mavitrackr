@@ -2,15 +2,14 @@
 
 namespace App\interfaces;
 
-interface RoleRepository
+use App\Models\Role;
+use Illuminate\Database\Eloquent\Collection;
+
+interface RoleRepositoryInterface
 {
-    public function getAllRoles();
-
-    public function getRoleById($id);
-
-    public function createRole($data);
-
-    public function updateRole($id, $data);
-
-    public function deleteRole($id);
+    public function getAllRoles():Collection;
+    public function getRoleById(string $id):Role;
+    public function createRole(array $data):Role ;
+    public function updateRole(string $id, array $data):Role;
+    public function deleteRole(string $id):bool;
 }

@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Interfaces\KpaRepositoryInterface;
 use App\Models\Kpa;
-
+use Illuminate\Database\Eloquent\Collection;
 
 class KpaRepository implements KpaRepositoryInterface
 {
@@ -13,7 +13,7 @@ class KpaRepository implements KpaRepositoryInterface
      *
      * @return object Returns the array of objects for all the kpas
      */
-    public function getAll()
+    public function getAll():Collection
     {
         $kpas = Kpa::all();
 
@@ -26,7 +26,7 @@ class KpaRepository implements KpaRepositoryInterface
      * @param  string $id ID of the kpa
      * @return object Returns the object of the kpa with this ID
      */
-    public function getById($id)
+    public function getById($id):Kpa
     {
         $kpa = Kpa::findOrFail($id);
 
@@ -37,9 +37,9 @@ class KpaRepository implements KpaRepositoryInterface
      * create
      *
      * @param  array $data Contains the data to create a new kpa
-     * @return object Returns the object of the created kpa
+     * @return Kpa  Returns the object of the created kpa
      */
-    public function create($data)
+    public function create($data):Kpa
     {
         return Kpa::create($data);
     }
@@ -48,9 +48,9 @@ class KpaRepository implements KpaRepositoryInterface
      *
      * @param  string $id ID of the kpa
      * @param  array $data Contains the data to update the kpa
-     * @return object Returns the object of the updated kpa
+     * @return Kpa Returns the object of the updated kpa
      */
-    public function update($id,$data)
+    public function update(string $id,array $data):Kpa
     {
         $kpa = Kpa::findOrFail($id);
         $kpa->update($data);
@@ -59,12 +59,11 @@ class KpaRepository implements KpaRepositoryInterface
     }
 
     /**
-     * delete
-     *
+     * deletes a Key performance indicator from the database 
      * @param  string $id ID of the kpa
-     * @return boolean Returns a true for successsfully deleted kpa and false otherwise.
+     * @return bool Returns a true for successsfully deleted kpa and false otherwise.
      */
-    public function delete($id)
+    public function delete(string $id):bool
     {
         $kpa = Kpa::findOrFail($id);
         $kpa->delete();

@@ -5,12 +5,7 @@ namespace Tests\Feature;
 use App\Models\Kpa;
 use App\Models\Kpi;
 use App\Models\User;
-use Database\Factories\KpaFactory;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class KpiControllerTest extends TestCase

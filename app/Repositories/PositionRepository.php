@@ -4,61 +4,63 @@ namespace App\Repositories;
 
 use App\Interfaces\PositionRepositoryInterface;
 use App\Models\Position;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Foundation\Http\FormRequest;
 
 class PositionRepository implements PositionRepositoryInterface
 {
     /**
-     * getAllPositions
+     * gets All Positions
      *
-     * @return object Returns the array of objects for all the positions
+     * @return Collection Returns the array of objects for all the positions
      */
-    public function getAllPositions()
+    public function getAllPositions():Collection
     {
         return Position::all();
     }
     /**
-     * createPosition
+     * creates a new Position in the database
      *
      * @param  array $data Contains data to create a position
-     * @return object Returns the object of the created position
+     * @return Position Returns the object of the created position
      */
-    public function createPosition($data)
+    public function createPosition($data):Position
     {
         return Position::create($data);
     }
     /**
-     * updatePosition
+     * updates a Position in the database
      *
      * @param  array $data Contains data for the update of a position
      * @param  string $id ID of the position
-     * @return object Returns the object of the updated position
+     * @return Position Returns the object of the updated position
      */
-    public function updatePosition($data, $id)
+    public function updatePosition($data, $id):Position
     {
         $position = Position::find($id);
         $position->update($data);
+
         return $position;
     }
     /**
-     * deletePosition
+     * deletes a Position in the database
      *
      * @param  string $id
-     * @return boolean
+     * @return bool
      */
-    public function deletePosition($id)
+    public function deletePosition(string $id):bool
     {
         $position = Position::find($id);
         $position->delete();
         return true;
     }
     /**
-     * getPositionById
+     * gets a Position from the database by its Id
      *
      * @param  string $id
-     * @return object
-     * @
+     * @return Position
      */
-    public function getPositionById($id)
+    public function getPositionById($id):Position
     {
         return Position::find($id);
     }

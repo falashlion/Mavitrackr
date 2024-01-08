@@ -4,63 +4,66 @@ namespace App\Repositories;
 
 use App\Interfaces\StrategicDomainRepositoryInterface;
 use App\Models\StrategicDomain;
+use Illuminate\Database\Eloquent\Collection;
 
 class StrategicDomainRepository implements StrategicDomainRepositoryInterface
 {
     /**
-     * getAll
+     * gets All strategic domains in the database
      *
-     * @return object
+     * @return Collection
      */
-    public function getAll()
+    public function getAll(): Collection
     {
         return StrategicDomain::all();
     }
     /**
-     * getById
+     * get strategic domain by id
      *
      * @param  string $id
-     * @return object
+     * @return StrategicDomain
      */
-    public function getById($id)
+    public function getById(string $id): StrategicDomain
     {
         $strategicDomain = StrategicDomain::findOrFail($id);
+
         return $strategicDomain;
     }
 
     /**
-     * create
+     * creates a new strategic domain
      *
      * @param  array $data
-     * @return object
+     * @return StrategicDomain
      */
-    public function create(array $data)
+    public function create(array $data): StrategicDomain
     {
         return StrategicDomain::create($data);
     }
     /**
-     * update
+     * updates a strategic domain
      *
      * @param  string $id
      * @param  array $data
-     * @return object
+     * @return StrategicDomain
      */
-    public function update($id, array $data)
+    public function update(string $id, array $data): StrategicDomain
     {
         $strategicDomain = StrategicDomain::findOrFail($id);
         $strategicDomain->update($data);
+
         return $strategicDomain;
     }
     /**
-     * delete
-     *
+     * deletes a startegic domain using it's id
      * @param  string $id
-     * @return  object
+     * @return  bool
      */
-    public function delete($id)
+    public function delete($id): bool
     {
         $strategicDomain = StrategicDomain::findOrFail($id);
         $strategicDomain->delete();
-        return $strategicDomain;
+
+        return true;
     }
 }

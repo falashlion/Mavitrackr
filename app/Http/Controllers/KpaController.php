@@ -10,7 +10,7 @@ use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 class KpaController extends Controller
 {
-    protected $KpaRepository;
+    protected KpaRepositoryInterface $KpaRepository;
     public function __construct(KpaRepositoryInterface $KpaRepository)
     {
         $this->KpaRepository = $KpaRepository;
@@ -25,9 +25,10 @@ class KpaController extends Controller
      *
      * @return Response Returns array of all the kpas in the database
      */
-    public function getAllKpa()
+    public function getAllKpa():Response
     {
         $kpas = $this->KpaRepository->getAll();
+
         return ResponseBuilder::success($kpas,200);
     }
 
@@ -37,9 +38,10 @@ class KpaController extends Controller
      * @param  string $id ID of the KeyperformanceArea
      * @return Response Returns the object of the kpa with having the ID
      */
-    public function getKpaById($id)
+    public function getKpaById(string $id):Response
     {
         $kpa = $this->KpaRepository->getById($id);
+
         return ResponseBuilder::success($kpa,200);
     }
 
@@ -49,20 +51,21 @@ class KpaController extends Controller
      * @param  KpaRequest $request Contains the data required to create a new kpa
      * @return Response Returns the object of the created kpa
      */
-    public function createKpa(KpaRequest $request)
+    public function createKpa(KpaRequest $request):Response
     {
         $kpa = $this->KpaRepository->create($request->all());
+
         return ResponseBuilder::success($kpa,201,null,201);
     }
 
     /**
-     * updateKpa
+     * updates Kpa through repository
      *
      * @param  KpaRequest $request Contains the data to update the kpa
      * @param  string $id ID of the KeyperformanceArea
      * @return Response Returns object of the updated kpa
      */
-    public function updateKpa(KpaRequest $request, $id)
+    public function updateKpa(KpaRequest $request, string $id):Response
     {
         $kpa = $this->KpaRepository->update($id,$request->all());
         return ResponseBuilder::success($kpa,200);
@@ -74,9 +77,10 @@ class KpaController extends Controller
      * @param  string $id ID of the KeyperformanceArea
      * @return Response Returns no content or the objecct for the content not found exception.
      */
-    public function deleteKpa($id)
+    public function deleteKpa(string $id):Response
     {
         $kpa = $this->KpaRepository->delete($id);
+
         return ResponseBuilder::success($kpa,204,null,204);
     }
 }

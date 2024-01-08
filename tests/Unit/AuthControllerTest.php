@@ -1,50 +1,43 @@
 <?php
-use GuzzleHttp\Psr7\UploadedFile;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Tests\TestCase;
 use App\Models\User;
-use App\Models\Department;
 use App\Models\Position;
+use App\Models\Department;
+use Tests\CreatesApplication;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 
 class AuthControllerTest extends TestCase
 {
     use RefreshDatabase;
+    use CreatesApplication;
 
+    /**
+     * sets up the seeders for the test
+     * @return void
+     */
     protected function setUp(): void
     {
         parent::setUp();
-        // Add any necessary setup code here, like creating roles or permissions.
-
+        $this->artisan('migrate');
+        $this->artisan("db:seed");
     }
 
-    public function testLoginWithValidCredentials()
+    /**
+     * testLoginWithValidCredentials
+     *
+     * @return void
+     */
+    public function testLoginWithValidCredentials():void
     {
-        // Create a department for testing
-         $department = Department::factory()->create();
-        // Create a position for testing
-         $position = Position::factory()->create();
-        // Create a user for testing
-        $user = $this->postJson('/api/register',[
-                'user_matricule' => '789012',
-                'password' => 'password',
-                'first_name' => 'John',
-                'last_name' => 'Doe',
-                'phone' => '1234567890',
-                'email' => 'john.doe@example.com',
-                'departments_id' => $department->id,
-                'positions_id' => $position->id,
-                'gender' => 'Male',
-                'roles'=> 'Admin'
-        ]);
-
+        $this->setUp();
         // Make a POST request to the login endpoint
-        $response = $this->postJson('/api/login', [
-            'user_matricule' => '789012',
-            'password' => 'password',
-        ]);
+        $response = $this->post('/api/login', [
+            'user_matricule' => 'Admin123',
+            'password' => 'Admin123',
+         ]);
         $response->assertStatus(200)
         ->assertJsonStructure(['success',
             'code',
@@ -66,7 +59,12 @@ class AuthControllerTest extends TestCase
 
     }
 
-    public function testLoginWithInvalidCredentials()
+    /**
+     * testLoginWithInvalidCredentials
+     *
+     * @return void
+     */
+    public function testLoginWithInvalidCredentials():void
     {
 
         // Make a POST request to the login endpoint with incorrect password
@@ -91,7 +89,12 @@ class AuthControllerTest extends TestCase
                 ]);
     }
 
-    public function testRegister()
+    /**
+     * testRegisterMethod
+     *
+     * @return void
+     */
+    public function testRegisterMethod():void
     {
         // Create a department for testing
         $department = Department::factory()->create();
@@ -101,17 +104,16 @@ class AuthControllerTest extends TestCase
 
         // Make a POST request to the register endpoint
         $response = $this->postJson('/api/register', [
-            'user_matricule' => '789012',
+            'user_matricule' => 'johndoe123',
             'password' => 'password',
             'first_name' => 'John',
             'last_name' => 'Doe',
-            'phone' => '1234567890',
+            'phone' => '6567890986',
             'email' => 'john.doe@example.com',
             'departments_id' => $department->id,
             'positions_id' => $position->id,
             'gender' => 'Male',
             'roles'=>'Admin'
-            // Add other required fields
         ]);
 
         $response->assertStatus(200)
@@ -123,9 +125,13 @@ class AuthControllerTest extends TestCase
                 'data'
             ]);
     }
-    // Add test cases for other controller methods...
 
-        public function testJWTAuthAttemptCalledWithCorrectCredentials()
+        /**
+         * testJWTAuthAttemptCalledWithCorrectCredentials
+         *
+         * @return void
+         */
+        public function testJWTAuthAttemptCalledWithCorrectCredentials():void
         {
             $credentials = [
                 'user_matricule' => '789012',
@@ -293,4 +299,15 @@ class AuthControllerTest extends TestCase
                     'message' => 'Error #400',
                 ]);
             }
+
+    /**
+     * tearDown
+     *
+     * @return void
+     */
+    protected function tearDown():void
+    {
+        $this->artisan('migrate:reset');
+        parent::tearDown();
+    }
 }

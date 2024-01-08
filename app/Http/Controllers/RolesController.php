@@ -23,22 +23,18 @@ class RolesController extends Controller
      *
      * @return Response Returns the object of all the roles
      */
-    public function index()
+    public function index():Response
     {
         $roles = Role::all();
         return ResponseBuilder::success($roles, 200);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
     /**
      * create
      *
      * @param  RolesRequest $request Contains the data to create the new role
      * @return Response Returns the object of the new role.
      */
-    public function create(RolesRequest $request)
+    public function create(RolesRequest $request):Response
     {
     $role = Role::create([
        'name'=> $request->input('name'),
@@ -48,23 +44,12 @@ class RolesController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the roles resource.
-     */
-    /**
      * show
      *
      * @param  string $id ID of the role
      * @return Response Returns the object of the role with this.
      */
-    public function show(string $id)
+    public function show(string $id):Response
     {
         $role = Role::findOrFail($id);
         $role->permissions;
@@ -72,24 +57,13 @@ class RolesController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    /**
      * update
      *
      * @param  RolesUpdateRequest $request Contains the data to update the role with
      * @param  string $id ID of the Role
      * @return Response Returns the object of the updated role.
      */
-    public function update(RolesUpdateRequest $request, string $id)
+    public function update(RolesUpdateRequest $request, string $id):Response
     {
         $role = Role::findOrFail($id);
 
@@ -108,7 +82,7 @@ class RolesController extends Controller
      * @param  string $id Id of the Role
      * @return Response Returns no content or the rourse not found exception
      */
-    public function destroy(string $id)
+    public function destroy(string $id):Response
     {
         $role = Role::findOrFail($id);
         $role->delete();
