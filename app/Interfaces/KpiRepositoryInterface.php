@@ -14,7 +14,7 @@ interface KpiRepositoryInterface
     public function delete(string $id):bool;
     public function createWeight(string $id, array $data):Kpi;
     public function createScore(string $id, array $data):Kpi;
-    public function getByUserId(string $id):Kpi;
+    public function getByUserId(string $id):Collection;
     public function getAverageScore():Kpi;
     public function getAverageScoreByUserId(string $id):Kpi;
     public function getDirectReportKpis():Collection;

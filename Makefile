@@ -7,3 +7,6 @@ composer-dump-autoload: docker-compose exec laravel-docker "composer dump-autolo
 migrate:    docker-compose exec laravel-docker "php artisan migrate"
 data:   docker-compose exec laravel-docker "php artisan migrate"
 start: ./commands.sh
+
+compose: docker-compose start 
+

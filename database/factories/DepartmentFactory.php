@@ -25,7 +25,7 @@ class DepartmentFactory extends Factory
             'id'=> $this->faker->uuid,
             'title' => $this->faker->sentence,
             'manager_id'=>function () {
-                return \App\Models\User::factory()->create()->id;
+                return \App\Models\User::all()->random()->id;
             },
         ];
     }

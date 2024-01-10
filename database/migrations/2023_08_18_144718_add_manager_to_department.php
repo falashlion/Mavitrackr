@@ -25,6 +25,11 @@ return new class extends Migration
             $table->dropForeign(['manager_id']);
             $table->dropColumn('manager_id');
         });
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropForeign(['departments_id']);
+            $table->dropColumn('departments_id');
+
+        });
         Schema::dropIfExists('departments');
     }
 };

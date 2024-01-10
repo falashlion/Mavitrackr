@@ -26,6 +26,6 @@ return new class extends Migration
         $table->dropForeign(['line_manager']); // drop foreign key if exists?
         $table->dropColumn('line_manager');
         });
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('line_manager');
     }
 };

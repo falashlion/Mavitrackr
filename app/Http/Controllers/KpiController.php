@@ -5,14 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Requests\kpiScoreRequest;
 use App\Http\Requests\kpiUpdateRequest;
 use App\Models\Kpi;
-use Illuminate\Http\JsonResponse;
+// use Illuminate\Http\JsonResponse;
 use App\interfaces\KpiRepositoryInterface;
 use App\Http\Requests\KpiRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\kpiStoreRequest;
-use Illuminate\Http\Response;
+use Illuminate\Http\Response as Responses;
+use APP\Exceptions\NonWeightException;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpFoundation\Response as Responses;
+use Symfony\Component\HttpFoundation\Response as Response;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 
@@ -129,19 +130,20 @@ class KpiController extends Controller
      *
      * @param  kpiScoreRequest $request object carrying the value of the score to be created
      * @param  string $id uuid of the kpi to be given a score value
-     * @return Responses Response builder object with the updated kpi with its score
+     * @return Response Response builder object with the updated kpi with its score
      */
-    public function createKpiScore(kpiScoreRequest $request, string $id):Response
+    public function createKpiScore(kpiScoreRequest $request, string $id):?Response
     {
         $kpi = Kpi::findOrFail($id);
-        if (!$kpi->weight) {
+        if ($kpi->weight = null) {
+            // throw new NonWeightException("KPI does not have a weight");
             return response()->json([
                 'success' => false,
-                'code' => 422,
-                'locale' => 'en',
-                'message' => 'Invalid request',
-                'data' => 'KPI does not have a weight',
-            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+                'code'=> 403,
+                'locale'=> 'en',
+                'message'=> 'KPI does not have a weight Can not assign score',
+                'data'=>''
+        ], Responses::HTTP_FORBIDDEN);
         }
         $kpi = $this->KpiRepository->createScore($id, $request->all());
         $this->weightedAverageScore();

@@ -24,6 +24,6 @@ return new class extends Migration
         Schema::table('kpis', function (Blueprint $table) {
             $table->dropColumn('reviews');
         });
-        Schema::dropIfExists('users');
+        // Schema::dropIfExists('users');
     }
 };

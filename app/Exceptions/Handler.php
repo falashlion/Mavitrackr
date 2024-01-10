@@ -94,7 +94,23 @@ class Handler extends ExceptionHandler
                 'data'=>''
             ], Response::HTTP_BAD_REQUEST);
         }
+        if ($exception instanceof NonWeightException) {
+            // try{
+
+            // }
+            // catch(NonWeightException $e){
+                return response()->json([
+                    'success' => false,
+                    'code'=> 403,
+                    'locale'=> 'en',
+                    'message'=> 'KPI does not have a weight Can not assign score',
+                    'data'=>''
+            ], Response::HTTP_FORBIDDEN);
+            // }
+
+        }
         return parent::render($request, $exception);
         //
+
     }
 }

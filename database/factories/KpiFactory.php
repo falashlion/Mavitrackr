@@ -25,14 +25,14 @@ class KpiFactory extends Factory
             'id'=>$this->faker->uuid,
             'title' => $this->faker->sentence,
             'kpas_id' => function () {
-                return \App\Models\Kpa::factory()->create()->id;
+                return \App\Models\Kpa::all()->random()->id;
             },
-            'users_id' => function () {
-                return \App\Models\User::factory()->create()->id;
+            'user_id' => function () {
+                return \App\Models\User::all()->random()->id;
             },
-            'weight' => $this->faker->numberBetween(0, 100),
-            'weighted_average_score' => $this->faker->numberBetween(0, 4),
-            'score' => $this->faker->numberBetween(0, 4),
+            // 'weight' => $this->faker->numberBetween(0, 100),
+            // 'weighted_average_score' => $this->faker->numberBetween(0, 4),
+            // 'score' => $this->faker->numberBetween(0, 4),
         ];
     }
 }

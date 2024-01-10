@@ -26,7 +26,7 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->uuid('departments_id')->nullable();
             $table->uuid('positions_id')->nullable();
-            $table->foreign('departments_id')->references('id')->on('departments')->onDelete('cascade');
+            $table->foreign('departments_id')->references('id')->on('departments');
             $table->foreign('positions_id')->references('id')->on('positions');
             $table->timestamps();
         });
@@ -38,12 +38,11 @@ class CreateUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             // Drop foreign key constraints
-            $table->dropForeign(['departments_id']);
             $table->dropForeign(['positions_id']);
             // Drop columns
-            $table->dropColumn('departments_id');
             $table->dropColumn('positions_id');
         });
+
         Schema::dropIfExists('users');
     }
 }

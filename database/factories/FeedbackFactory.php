@@ -25,7 +25,7 @@ class FeedbackFactory extends Factory
             'id'=>$this->faker->uuid,
             'comment' => $this->faker->sentence,
             'kpis_id' => function () {
-                return \App\Models\Kpi::factory()->create()->id;
+                return \App\Models\Kpi::all()->random()->id;
             },
         ];
     }

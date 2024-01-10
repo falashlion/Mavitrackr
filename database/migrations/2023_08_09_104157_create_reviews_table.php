@@ -33,5 +33,6 @@ return new class extends Migration
             $table->dropColumn('user_id');
         });
         Schema::dropIfExists('reviews');
+
     }
 };

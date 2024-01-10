@@ -12,19 +12,19 @@ class KpasTableSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    use HasUuids;
+    // use HasUuids;
     public function run()
     {
-        $strategicDomains = StrategicDomain::OrderBy('id')->get();
+     $strategicDomains = StrategicDomain::OrderBy('id')->get();
 
-    $titles = ['Event Organization','Onboarding and Integration','Recruitment','Learning & Development'
+    $titles = ['Event Organization','Onboarding and Integration','Recruitment','Learning & Development'];
+    $i = 0;
+    foreach ($strategicDomains as $domain) {
 
-    ];
-
-    foreach ($strategicDomains as $i => $domain) {
+        // var_dump($i.'-'.$domain->id,);
         $kpa = Kpa::create([
-            'strategic_domain_id' => $domain->id,
-            'title' => $titles[$i],
+            'strategic_domain_id' =>$domain->id,
+            'title' => $titles[$i++],
         ]);
         $kpa->save();
     }

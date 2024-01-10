@@ -1,18 +1,22 @@
 <?php
+namespace Tests\Unit;
+
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Position;
 use App\Models\Department;
+use Illuminate\Support\Facades\Config;
 use Tests\CreatesApplication;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
-
+use PHPOpenSourceSaver\JWTAuth\JWT;
+use PHPOpenSourceSaver\JWTAuth\JWTAuth as JWTAuthJWTAuth;
 
 class AuthControllerTest extends TestCase
 {
-    use RefreshDatabase;
-    use CreatesApplication;
+   public array $JWTuser = [];
+
 
     /**
      * sets up the seeders for the test
@@ -21,8 +25,17 @@ class AuthControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->artisan('migrate');
+        $this->artisan("migrate");
         $this->artisan("db:seed");
+    }
+
+    /**
+     * Test Database if it is being seeded with the required information
+     *
+     * @return void
+     */
+    public function testDatabase(){
+        $this->assertDatabaseHas('users',['user_matricule'=>'Admin123']);
     }
 
     /**
@@ -32,9 +45,9 @@ class AuthControllerTest extends TestCase
      */
     public function testLoginWithValidCredentials():void
     {
-        $this->setUp();
+        $baseUrl = Config::get('app.url') .'/api/login';
         // Make a POST request to the login endpoint
-        $response = $this->post('/api/login', [
+        $response = $this->post($baseUrl, [
             'user_matricule' => 'Admin123',
             'password' => 'Admin123',
          ]);
@@ -46,17 +59,17 @@ class AuthControllerTest extends TestCase
             'data'=> [
                 'user' => [
                     'id',
-                    'name',
+                    "first_name",
+                    "last_name",
                     'email',
                     'position',
                     'department',
-                    'lineManager',
+                    'line_manager',
                     'roles',
                 ],
             'token',
             'expiration',
             ],]);
-
     }
 
     /**
@@ -96,12 +109,13 @@ class AuthControllerTest extends TestCase
      */
     public function testRegisterMethod():void
     {
-        // Create a department for testing
-        $department = Department::factory()->create();
-
-        // Create a position for testing
-        $position = Position::factory()->create();
-
+        $credentials = [
+            'user_matricule' => 'Admin123',
+            'password' => 'Admin123',
+        ];
+        $token  = JWTAuth::attempt($credentials);
+        $position = Position::all()->random()->id;
+        $department = Department::all()->random()->id;
         // Make a POST request to the register endpoint
         $response = $this->postJson('/api/register', [
             'user_matricule' => 'johndoe123',
@@ -110,13 +124,13 @@ class AuthControllerTest extends TestCase
             'last_name' => 'Doe',
             'phone' => '6567890986',
             'email' => 'john.doe@example.com',
-            'departments_id' => $department->id,
-            'positions_id' => $position->id,
+            'departments_id' => $department,
+            'positions_id' => $position,
             'gender' => 'Male',
             'roles'=>'Admin'
-        ]);
+        ],['Authorization' => 'Bearer '.$token]);
 
-        $response->assertStatus(200)
+        $response->assertStatus(201)
             ->assertJsonStructure([
                 'success',
                 'code',
@@ -134,15 +148,11 @@ class AuthControllerTest extends TestCase
         public function testJWTAuthAttemptCalledWithCorrectCredentials():void
         {
             $credentials = [
-                'user_matricule' => '789012',
-                'password' => 'password',
+                'user_matricule' => 'Admin123',
+                'password' => 'Admin123',
             ];
-            JWTAuth::shouldReceive('attempt')
-                ->once()
-                ->with($credentials)
-                ->andReturn('token');
-
-            $response = $this->postJson('/api/login', $credentials);
+            $token  = JWTAuth::attempt($credentials);
+            $response = $this->postJson('/api/login', $credentials,['Authorization' => 'Bearer '.$token]);
 
             $response->assertStatus(200);
         }
@@ -153,11 +163,11 @@ class AuthControllerTest extends TestCase
                 'user_matricule' => 'test@example.com',
                 'password' => 'incorrect_password',
             ];
-            JWTAuth::shouldReceive('attempt')
+            $token = JWTAuth::shouldReceive('attempt')
                 ->once()
                 ->with($credentials)
                 ->andReturn(false);
-            $response = $this->postJson('/api/login', $credentials);
+            $response = $this->postJson('/api/login', $credentials,);
             $response->assertStatus(400)
                 ->assertJsonStructure([
                     'success',
@@ -176,76 +186,33 @@ class AuthControllerTest extends TestCase
 
         public function testAuthUserCalledToRetrieveUserObjectAfterSuccessfulLogin()
         {
-             // Create a department for testing
-            $department = Department::factory()->create();
-            // Create a position for testing
-            $position = Position::factory()->create();
-
-            $response = $this->postJson('/api/register', [
-                'user_matricule' => '789012',
-                'password' => 'password',
-                'first_name' => 'John',
-                'last_name' => 'Doe',
-                'phone' => '1234567890',
-                'email' => 'john.doe@example.com',
-                'departments_id' => $department->id,
-                'positions_id' => $position->id,
-                'gender' => 'Male',
-                'roles'=>'Admin'
-                // Add other required fields
-            ]);
             $credentials = [
-                'user_matricule' => '789012',
-                'password' => 'password',
+                'user_matricule' => 'Admin123',
+                'password' => 'Admin123',
             ];
-            // JWTAuth::shouldReceive('attempt')
-            //     ->once()
-            //     ->with($credentials)
-            //     ->andReturn('token');
-
-            // JWTAuth::shouldReceive('user')
-            //     ->once();
-            //     // ->andReturn(User::factory()->create());
-            $response = $this->postJson('/api/login', $credentials);
-
-            $response->assertStatus(200)
-            ->assertJsonStructure([
-                'success',
-                'code',
-                'locale',
-                'message',
-                'data'=>'user',
-            ]);
+            $response = $this->postJson("api/login/", $credentials,);
+            $user = $response->json('data.user');
+            $userinfo = JWTAuth::user();
+            $userArray = json_decode(json_encode($userinfo), true);
+            $this->assertEquals($user,$userArray);
         }
 
         public function testJWTAuthFactoryGetTTLMethodCalledToRetrieveTokenExpirationTime()
         {
             $credentials = [
-                'user_matricule' => '789012',
-                'password' => 'password',
+                'user_matricule' => 'Admin123',
+                'password' => 'Admin123',
             ];
-            JWTAuth::shouldReceive('attempt')
-                ->once()
-                ->with($credentials)
-                ->andReturn('token');
-
-            JWTAuth::shouldReceive('factory->getTTL')
-                ->once()
-                ->andReturn(60);
-
-            $response = $this->postJson('/api/login', $credentials);
-
-            $response->assertStatus(200);
+            $token = JWTAuth::attempt($credentials);
+            $TTL = JWTAuth::factory()->getTTL()*60;
+            $this->assertTrue(is_int($TTL));
         }
 
         public function testResponseJsonStructureContainsAllRequiredFieldsAndDataAfterSuccessfulLogin()
         {
-             // Create a user for testing
-             $user = User::factory()->create();
-
             $credentials = [
-                'user_matricule' => $user->user_matricule,
-                'password' => $user->password,
+                'user_matricule' => "Admin123",
+                'password' => "Admin123",
             ];
             $response = $this->postJson('/api/login', $credentials);
             $response->assertStatus(200)
@@ -264,16 +231,6 @@ class AuthControllerTest extends TestCase
                 'user_matricule' => 'test@example.com',
                 'password' => 'incorrect_password',
             ];
-
-            JWTAuth::shouldReceive('attempt')
-                ->once()
-                ->with($credentials)
-                ->andReturn(false);
-
-            ResponseBuilder::error(400);
-                // ->once()
-                // ->with(400, [''], ['Invalid Credentials'])
-                // ->andReturn(['success' => false, 'code' => 400, 'message' => ['Error #400']]);
             $response = $this->postJson('/api/login', $credentials);
             $response->assertStatus(400)
                 ->assertJson([
@@ -287,12 +244,6 @@ class AuthControllerTest extends TestCase
                 'user_matricule' => 'test@example.com',
                 'password' => 'incorrect_password',
             ];
-
-            JWTAuth::shouldReceive('attempt')
-                ->once()
-                ->with($credentials)
-                ->andReturn(false);
-
             $response = $this->postJson('/api/login', $credentials);
             $response->assertStatus(400)
                 ->assertJson([

@@ -152,9 +152,9 @@ class KpiRepository implements KpiRepositoryInterface
     /**
      * Retrieves all KPIs for a given user ID
      * @param  string $id The ID of the user to retrieve KPIs for
-     * @return Kpi Returns an object containing all KPIs for the given user ID
+     * @return Collection Returns an object containing all KPIs for the given user ID
      */
-    public function getByUserId(string $id):Kpi
+    public function getByUserId(string $id): Collection
     {
         $user = User::findOrFail($id);
         $kpis = Kpi::where('user_id',$id)->get();

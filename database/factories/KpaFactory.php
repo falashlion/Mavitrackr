@@ -24,8 +24,8 @@ class KpaFactory extends Factory
         return [
             'id'=>$this->faker->uuid,
             'title' => $this->faker->sentence,
-            'strategic_domains_id' => function () {
-                return \App\Models\StrategicDomain::factory()->create()->id;
+            'strategic_domain_id' => function () {
+                return \App\Models\StrategicDomain::all()->random()->id;
             },
         ];
     }
